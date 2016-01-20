@@ -15,10 +15,12 @@
 
 namespace ch {
 
+  //! [part1]
 void BuildRooMorphing(RooWorkspace& ws, CombineHarvester& cb,
                       std::string const& bin, std::string const& process,
                       RooAbsReal& mass_var, std::string norm_postfix,
-                      bool allow_morph, bool verbose, TFile * file) {
+                      bool allow_morph, bool verbose, bool force_template_limit, TFile * file) {
+  //! [part1]
   // To keep the code concise we'll make some using-declarations here
   using std::set;
   using std::vector;
@@ -47,6 +49,7 @@ void BuildRooMorphing(RooWorkspace& ws, CombineHarvester& cb,
   // turn into a RooMorphingPdf
   CombineHarvester cb_bp = cb.cp().bin({bin}).process({process});
 
+  //! [part2]
   // Get a vector of the mass values
   vector<string> m_str_vec = Set2Vec(cb_bp.SetFromProcs(
       std::mem_fn(&ch::Process::mass)));
@@ -67,11 +70,22 @@ void BuildRooMorphing(RooWorkspace& ws, CombineHarvester& cb,
   }
   // So, we have m mass points to consider
   unsigned m = m_vec.size();
+  //! [part2]
 
   // ss = "shape systematic"
   // Make a list of the names of shape systematics affecting this process
   vector<string> ss_vec =
       Set2Vec(cb_bp.cp().syst_type({"shape"}).syst_name_set());
+  // Now check if all shape systematics are present for all mass points
+  for (auto const& s : m_str_vec) {
+    if (cb_bp.cp().syst_type({"shape"}).mass({s}).syst_name_set().size() !=
+        ss_vec.size()) {
+      throw std::runtime_error(FNERROR(
+          "Some mass points do not have the full set of shape systematics, "
+          "this is currently unsupported"));
+    }
+  }
+
   unsigned ss = ss_vec.size();  // number of shape systematics
 
   // ls = "lnN systematic"
@@ -139,6 +153,7 @@ void BuildRooMorphing(RooWorkspace& ws, CombineHarvester& cb,
     }
   }
 
+  //! [part3]
   // We need to build a RooArgList of the vertical morphing parameters for the
   // vertical-interpolation pdf - this will be the same for each mass point so
   // we only build it once
@@ -186,6 +201,7 @@ void BuildRooMorphing(RooWorkspace& ws, CombineHarvester& cb,
       }
     }
   }
+  //! [part3]
 
   // Summarise the info on the shape systematics and scale factors
   if (verbose) {
@@ -318,6 +334,12 @@ void BuildRooMorphing(RooWorkspace& ws, CombineHarvester& cb,
       // Store the uncertainty ("kappa") values for the shape systematics
       ss_k_hi_arr[ssi][mi] = ss_arr[ssi][mi]->value_u();
       ss_k_lo_arr[ssi][mi] = ss_arr[ssi][mi]->value_d();
+      // For the normalisation we scale the kappa instead of putting the scaling
+      // parameter as the variable
+      if (std::fabs(ss_scale_arr[ssi] - 1.0) > 1E-6) {
+        ss_k_hi_arr[ssi][mi] = std::pow(ss_arr[ssi][mi]->value_u(), ss_scale_arr[ssi]);
+        ss_k_lo_arr[ssi][mi] = std::pow(ss_arr[ssi][mi]->value_d(), ss_scale_arr[ssi]);
+      }
     }
     // And now the uncertainty values for the lnN systematics that vary with mass
     // We'll force these to be asymmetric even if they're not
@@ -366,12 +388,45 @@ void BuildRooMorphing(RooWorkspace& ws, CombineHarvester& cb,
   // Can do more sophistical spline interpolation if we want, but let's use
   // simple LINEAR interpolation for now
   TString interp = "LINEAR";
+  
+  // Here when the force_template_limit option is requested 
+  // we have to add some extra terms to the vector of masses to ensure that 
+  // the signal pdf goes to 0 outside of the MC template range.
+
+  vector<double> new_m_vec(m_vec);
+  // Insert an entry at either end of the vector for a mass just slightly
+  // outside of the range
+  new_m_vec.insert(new_m_vec.begin(),m_vec[0]-1E-6);
+  new_m_vec.push_back(m_vec[m-1]+1E-6);
+  // Create a corresponding rate array with 0 entries for these new masses
+  multi_array<double, 1> new_rate_arr(extents[m+2]);
+  new_rate_arr[0] = 0.0;
+  for(unsigned i = 0; i < m; ++i) new_rate_arr[i+1] = rate_arr[i] ;
+  new_rate_arr[m+1] = 0.0;
+ 
+  if (verbose && force_template_limit) {
+     std::cout << ">>>> Forcing rate to 0 outside of template range:" << "\n";
+     for(unsigned mi = 0; mi < m+2; ++mi) {
+        std::cout << boost::format("%-10.5g") % new_m_vec[mi];
+     }
+     std::cout << "\n";
+     for(unsigned mi = 0; mi < m+2; ++mi) {
+        std::cout << boost::format("%-10.5g") % new_rate_arr[mi];
+     }
+     std::cout << "\n";
+  }
   // Create the 1D spline directly from the rate array
-  RooSpline1D rate_spline("interp_rate_"+key, "", mass_var, m, m_vec.data(),
-                          rate_arr.data(), interp);
+  //! [part4]
+  RooSpline1D rate_spline("interp_rate_"+key, "", mass_var, 
+                        force_template_limit ? m+2 : m, 
+                        force_template_limit ? new_m_vec.data() : m_vec.data(),
+                        force_template_limit ? new_rate_arr.data() : rate_arr.data(),
+                        interp);
+  //! [part4]
+
   if (file) {
     TGraph tmp(m, m_vec.data(), rate_arr.data());
-    gDirectory->WriteTObject(&tmp, "interp_rate_"+key);
+    file->WriteTObject(&tmp, "interp_rate_"+key);
   }
   // Collect all terms that will go into the total normalisation:
   //   nominal * systeff_1 * systeff_2 * ... * systeff_N
@@ -386,16 +441,16 @@ void BuildRooMorphing(RooWorkspace& ws, CombineHarvester& cb,
         ss_k_lo_arr[ssi].origin(), interp);
     if (file) {
       TGraph tmp_hi(m, m_vec.data(), ss_k_hi_arr[ssi].origin());
-      gDirectory->WriteTObject(&tmp_hi, "spline_hi_" + key + "_" + ss_vec[ssi]);
+      file->WriteTObject(&tmp_hi, "spline_hi_" + key + "_" + ss_vec[ssi]);
       TGraph tmp_lo(m, m_vec.data(), ss_k_lo_arr[ssi].origin());
-      gDirectory->WriteTObject(&tmp_lo, "spline_lo_" + key + "_" + ss_vec[ssi]);
+      file->WriteTObject(&tmp_lo, "spline_lo_" + key + "_" + ss_vec[ssi]);
     }
     // Then build the AsymPow object for each systematic as a function of the
     // kappas and the nuisance parameter
     ss_asy_arr[ssi] = std::make_shared<AsymPow>("systeff_" +
         key + "_" + ss_vec[ssi], "",
         *(ss_spl_lo_arr[ssi]), *(ss_spl_hi_arr[ssi]),
-         *(reinterpret_cast<RooAbsReal*>(ss_list.at(ssi))));
+         *(ss_scale_var_arr[ssi]));
     rate_prod.add(*(ss_asy_arr[ssi]));
   }
   // Same procedure for the lms normalisation systematics: build the splines
@@ -450,12 +505,19 @@ void BuildRooMorphing(RooWorkspace& ws, CombineHarvester& cb,
 
   TString vert_name = key + "_";
 
+  // Follow what ShapeTools.py does and set the smoothing region
+  // to the minimum of all of the shape scales
+  double qrange = 1.;
+  for (unsigned ssi = 0; ssi < ss; ++ssi) {
+    if (ss_scale_arr[ssi] < qrange) qrange = ss_scale_arr[ssi];
+  }
+
   for (unsigned mi = 0; mi < m; ++mi) {
     // Construct it with the right binning, the right histograms and the right
     // scaling parameters
     vpdf_arr[mi] = std::make_shared<FastVerticalInterpHistPdf2>(
         vert_name + m_str_vec[mi] + "_vmorph", "", morph_xvar, *(list_arr[mi]),
-        ss_list, 1, 0);
+        ss_list, qrange, 0);
     // Add it to a list that we'll supply to the RooMorphingPdf
     vpdf_list.add(*(vpdf_arr[mi]));
   }
@@ -468,16 +530,20 @@ void BuildRooMorphing(RooWorkspace& ws, CombineHarvester& cb,
   //   allow_morph: if false will just evaluate to the closest pdf in mass
   //   data_hist.GetXaxis(): The original (non-uniform) target binning
   //   proc_hist.GetXaxis(): The original (non-uniform) morphing binning
+  //! [part5]
   RooMorphingPdf morph_pdf(morph_name, "", xvar, mass_var, vpdf_list,
                            m_vec, allow_morph, *(data_hist.GetXaxis()),
                            *(proc_hist.GetXaxis()));
+  //! [part5]
   // And we can make the final normalisation product
   // The value of norm_postfix is very important. text2workspace will only look
   // for for a term with the pdf name + "_norm". But it might be the user wants
   // to add even more terms to this total normalisation, so we give them the option
   // of using some other suffix.
+  //! [part6]
   RooProduct morph_rate(morph_name + "_" + TString(norm_postfix), "",
                         rate_prod);
+  //! [part6]
 
   // Dump even more plots
   if (file) MakeMorphDebugPlots(&morph_pdf, &mass_var, m_vec, file, &data_hist);
