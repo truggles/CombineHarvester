@@ -1,3 +1,5 @@
+<bin file="UW_ztt_em.cpp" name="UW_ztt_em"></bin>
+<bin file="UW_ztt_tt.cpp" name="UW_ztt_tt"></bin>
 <bin file="Example1.cpp" name="Example1"></bin>
 <bin file="Example2.cpp" name="Example2"></bin>
 <bin file="Example3.cpp" name="Example3"></bin>
