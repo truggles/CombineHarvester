@@ -29,7 +29,7 @@ int main() {
   // Here we will just define two categories for an 8TeV analysis. Each entry in
   // the vector below specifies a bin name and corresponding bin_id.
   ch::Categories cats = {
-      //{1, "tt_inclusive"},
+      //{1, "em_inclusive"},
       {1, "em_inclusive"}
     };
   // ch::Categories is just a typedef of vector<pair<int, string>>
@@ -40,6 +40,7 @@ int main() {
   //vector<string> masses = ch::MassesFromRange("120-135:5");
   // Or equivalently, specify the mass points explicitly:
   //vector<string> masses = {"125",};
+  vector<string> masses = {"90",};
   //! [part2]
 
   //! [part3]
@@ -47,11 +48,13 @@ int main() {
   //! [part3]
 
   //! [part4]
-  vector<string> bkg_procs = {"ZTT", "W", "QCD", "TT", "VV"};
+  //vector<string> bkg_procs = {"ZTT", "W", "QCD", "TT", "VV"};
+  vector<string> bkg_procs = {"W", "QCD", "TT", "VV"};
   cb.AddProcesses({"*"}, {"htt"}, {"13TeV"}, {"em"}, bkg_procs, cats, false);
 
-  //vector<string> sig_procs = {"ggH", "qqH"};
-  //cb.AddProcesses(masses, {"htt"}, {"13TeV"}, {"em"}, sig_procs, cats, true);
+  //vector<string> sig_procs = {"ggH", "vbfH"};
+  vector<string> sig_procs = {"ZTT"};
+  cb.AddProcesses(masses, {"htt"}, {"13TeV"}, {"em"}, sig_procs, cats, true);
   //! [part4]
 
 
@@ -64,41 +67,73 @@ int main() {
 
 
 //  //! [part5]
-//  cb.cp().signals()
-//      .AddSyst(cb, "lumi_$ERA", "lnN", SystMap<era>::init
-//      ({"7TeV"}, 1.022)
-//      ({"8TeV"}, 1.026));
-//  //! [part5]
-//
-//  //! [part6]
-//  cb.cp().process({"ggH"})
-//      .AddSyst(cb, "pdf_gg", "lnN", SystMap<>::init(1.097));
-//
-//  cb.cp().process(ch::JoinStr({sig_procs, {"ZTT", "TT"}}))
-//      .AddSyst(cb, "CMS_eff_m", "lnN", SystMap<>::init(1.02));
-//
-//  cb.cp()
-//      .AddSyst(cb,
-//        "CMS_scale_j_$ERA", "lnN", SystMap<era, bin_id, process>::init
-//        ({"8TeV"}, {1},     {"ggH"},        1.04)
-//        ({"8TeV"}, {1},     {"qqH"},        0.99)
-//        ({"8TeV"}, {2},     {"ggH"},        1.10)
-//        ({"8TeV"}, {2},     {"qqH"},        1.04)
-//        ({"8TeV"}, {2},     {"TT"},         1.05));
-//
-//  cb.cp().process(ch::JoinStr({sig_procs, {"ZTT"}}))
-//      .AddSyst(cb, "CMS_scale_t_mutau_$ERA", "shape", SystMap<>::init(1.00));
-//  //! [part6]
+  //cb.cp().signals()
+  cb.cp().backgrounds()
+      .AddSyst(cb, "lumi_$ERA", "lnN", SystMap<era>::init
+      ({"13TeV"}, 1.05));
+  cb.cp().signals()
+      .AddSyst(cb, "lumi_$ERA", "lnN", SystMap<era>::init
+      ({"13TeV"}, 1.05));
+  //! [part5]
+
+  //! [part6]
+  cb.cp().backgrounds()
+      .AddSyst(cb, "CMS_electron_id_eff_$ERA", "lnN", SystMap<era>::init
+      ({"13TeV"}, 1.03));
+  cb.cp().signals()
+      .AddSyst(cb, "CMS_electron_id_eff_$ERA", "lnN", SystMap<era>::init
+      ({"13TeV"}, 1.03));
+  cb.cp().backgrounds()
+      .AddSyst(cb, "CMS_muon_id_eff_$ERA", "lnN", SystMap<era>::init
+      ({"13TeV"}, 1.03));
+  cb.cp().signals()
+      .AddSyst(cb, "CMS_muon_id_eff_$ERA", "lnN", SystMap<era>::init
+      ({"13TeV"}, 1.03));
+  //cb.cp().backgrounds()
+  //    .AddSyst(cb, "CMS_trig_eff_$ERA", "lnN", SystMap<era>::init
+  //    ({"13TeV"}, 1.03));
+  //cb.cp().signals()
+  //    .AddSyst(cb, "CMS_trig_eff_$ERA", "lnN", SystMap<era>::init
+  //    ({"13TeV"}, 1.03));
+  //cb.cp().process({"ggH"})
+  //cb.cp().process({"ZTT"})
+  //    .AddSyst(cb, "pdf_gg", "lnN", SystMap<>::init(1.097));
+  cb.cp().process({"TT"})
+      .AddSyst(cb, "tt_norm", "lnN", SystMap<>::init(1.1));
+  cb.cp().process({"W"})
+      .AddSyst(cb, "w_norm", "lnN", SystMap<>::init(1.15));
+  cb.cp().process({"QCD"})
+      .AddSyst(cb, "qcd_norm", "lnN", SystMap<>::init(1.5));
+  cb.cp().process({"VV"})
+      .AddSyst(cb, "vv_norm", "lnN", SystMap<>::init(1.2));
+  //cb.cp().process({"ZTT"})
+  //    .AddSyst(cb, "ztt_norm", "lnN", SystMap<>::init(1.1));
+
+  //cb.cp().process(ch::JoinStr({sig_procs, {"ZTT", "TT"}}))
+  //    .AddSyst(cb, "CMS_eff_m", "lnN", SystMap<>::init(1.02));
+
+  //cb.cp()
+  //    .AddSyst(cb,
+  //      "CMS_bkgNormalization_$ERA", "lnN", SystMap<era, bin_id, process>::init
+  //      ({"13TeV"}, {1},     {"W"},        1.20)
+  //      ({"13TeV"}, {1},     {"QCD"},        1.30)
+  //      ({"13TeV"}, {1},     {"VV"},        1.10)
+  //      ({"13TeV"}, {1},     {"ZTT"},        1.10)
+  //      ({"13TeV"}, {1},     {"TT"},         1.20));
+
+  //cb.cp().process(ch::JoinStr({sig_procs, {"ZTT"}}))
+  //    .AddSyst(cb, "CMS_scale_t_mutau_$ERA", "shape", SystMap<>::init(1.00));
+  //! [part6]
 
   //! [part7]
   cb.cp().backgrounds().ExtractShapes(
-      aux_shapes + "Wisconsin/htt_em.inputs-sm-13TeV.root",
+      aux_shapes + "Wisconsin/ztt_em.inputs-sm-13TeV.root",
       "$BIN/$PROCESS",
       "$BIN/$PROCESS_$SYSTEMATIC");
-//  cb.cp().signals().ExtractShapes(
-//      aux_shapes + "Imperial/htt_mt.inputs-sm-8TeV-hcg.root",
-//      "$BIN/$PROCESS$MASS",
-//      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+  cb.cp().signals().ExtractShapes(
+      aux_shapes + "Wisconsin/ztt_em.inputs-sm-13TeV.root",
+      "$BIN/$PROCESS$MASS",
+      "$BIN/$PROCESS$MASS_$SYSTEMATIC");
   //! [part7]
 
   //! [part8]
@@ -112,7 +147,7 @@ int main() {
 //  // the form: {analysis}_{channel}_{bin_id}_{era}
 //  // which is commonly used in the htt analyses
 //  ch::SetStandardBinNames(cb);
-//  //! [part8]
+  //! [part8]
 
   //! [part9]
   // First we generate a set of bin names:
@@ -127,16 +162,16 @@ int main() {
   // Finally we iterate through each bin,mass combination and write a
   // datacard.
   for (auto b : bins) {
-    //for (auto m : masses) {
+    for (auto m : masses) {
       //cout << ">> Writing datacard for bin: " << b << " and mass: " << m
-      cout << ">> Writing datacard for bin: " << b
+      cout << ">> Writing datacard for bin: " << b << " and mass: " << m
            << "\n";
       // We need to filter on both the mass and the mass hypothesis,
       // where we must remember to include the "*" mass entry to get
       // all the data and backgrounds.
-      cb.cp().bin({b}).mass({"*"}).WriteDatacard(
-          b + ".txt", output);
-    //}
+      cb.cp().bin({b}).mass({m, "*"}).WriteDatacard(
+          b + "_" + m + ".txt", output);
+    }
   }
   //! [part9]
 
