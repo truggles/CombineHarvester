@@ -29,8 +29,8 @@ int main() {
   // Here we will just define two categories for an 8TeV analysis. Each entry in
   // the vector below specifies a bin name and corresponding bin_id.
   ch::Categories cats = {
-      //{1, "tt_inclusive"},
-      {1, "tt_inclusive"}
+      //{1, "em_inclusive"},
+      {1, "em_inclusive"}
     };
   // ch::Categories is just a typedef of vector<pair<int, string>>
   //! [part1]
@@ -39,22 +39,20 @@ int main() {
   //! [part2]
   //vector<string> masses = ch::MassesFromRange("120-135:5");
   // Or equivalently, specify the mass points explicitly:
-  //vector<string> masses = {"125",};
-  vector<string> masses = {"90",};
+  vector<string> masses = {"125",};
   //! [part2]
 
   //! [part3]
-  cb.AddObservations({"*"}, {"htt"}, {"13TeV"}, {"tt"}, cats);
+  cb.AddObservations({"*"}, {"htt"}, {"13TeV"}, {"em"}, cats);
   //! [part3]
 
   //! [part4]
-  //vector<string> bkg_procs = {"ZTT", "W", "QCD", "TT", "VV"};
-  vector<string> bkg_procs = {"W", "QCD", "TT", "VV"};
-  cb.AddProcesses({"*"}, {"htt"}, {"13TeV"}, {"tt"}, bkg_procs, cats, false);
+  vector<string> bkg_procs = {"ZTT", "W", "QCD", "TT", "VV"};
+  cb.AddProcesses({"*"}, {"htt"}, {"13TeV"}, {"em"}, bkg_procs, cats, false);
 
-  //vector<string> sig_procs = {"ggH", "vbfH"};
-  vector<string> sig_procs = {"ZTT"};
-  cb.AddProcesses(masses, {"htt"}, {"13TeV"}, {"tt"}, sig_procs, cats, true);
+  vector<string> sig_procs = {"ggH", "vbfH"};
+  //vector<string> sig_procs = {"ggH", "qqH"};
+  cb.AddProcesses(masses, {"htt"}, {"13TeV"}, {"em"}, sig_procs, cats, true);
   //! [part4]
 
 
@@ -70,44 +68,38 @@ int main() {
   //cb.cp().signals()
   cb.cp().backgrounds()
       .AddSyst(cb, "lumi_$ERA", "lnN", SystMap<era>::init
-      ({"13TeV"}, 1.05));
+      ({"13TeV"}, 1.04));
   cb.cp().signals()
       .AddSyst(cb, "lumi_$ERA", "lnN", SystMap<era>::init
-      ({"13TeV"}, 1.05));
+      ({"13TeV"}, 1.04));
   //! [part5]
 
   //! [part6]
   cb.cp().backgrounds()
       .AddSyst(cb, "CMS_electron_id_eff_$ERA", "lnN", SystMap<era>::init
-      ({"13TeV"}, 1.03));
+      ({"13TeV"}, 1.02));
   cb.cp().signals()
       .AddSyst(cb, "CMS_electron_id_eff_$ERA", "lnN", SystMap<era>::init
-      ({"13TeV"}, 1.03));
+      ({"13TeV"}, 1.02));
   cb.cp().backgrounds()
       .AddSyst(cb, "CMS_muon_id_eff_$ERA", "lnN", SystMap<era>::init
-      ({"13TeV"}, 1.03));
+      ({"13TeV"}, 1.01));
   cb.cp().signals()
       .AddSyst(cb, "CMS_muon_id_eff_$ERA", "lnN", SystMap<era>::init
-      ({"13TeV"}, 1.03));
-  cb.cp().backgrounds()
-      .AddSyst(cb, "CMS_trig_eff_$ERA", "lnN", SystMap<era>::init
-      ({"13TeV"}, 1.03));
-  cb.cp().signals()
-      .AddSyst(cb, "CMS_trig_eff_$ERA", "lnN", SystMap<era>::init
-      ({"13TeV"}, 1.03));
+      ({"13TeV"}, 1.01));
   //cb.cp().process({"ggH"})
   //cb.cp().process({"ZTT"})
   //    .AddSyst(cb, "pdf_gg", "lnN", SystMap<>::init(1.097));
   cb.cp().process({"TT"})
       .AddSyst(cb, "tt_norm", "lnN", SystMap<>::init(1.1));
   cb.cp().process({"W"})
-      .AddSyst(cb, "w_norm", "lnN", SystMap<>::init(1.15));
+      .AddSyst(cb, "w_norm", "lnN", SystMap<>::init(1.2));
   cb.cp().process({"QCD"})
       .AddSyst(cb, "qcd_norm", "lnN", SystMap<>::init(1.3));
   cb.cp().process({"VV"})
-      .AddSyst(cb, "vv_norm", "lnN", SystMap<>::init(1.2));
-  //cb.cp().process({"ZTT"})
-  //    .AddSyst(cb, "ztt_norm", "lnN", SystMap<>::init(1.1));
+      .AddSyst(cb, "vv_norm", "lnN", SystMap<>::init(1.1));
+  cb.cp().process({"ZTT"})
+      .AddSyst(cb, "ztt_norm", "lnN", SystMap<>::init(1.1));
 
   //cb.cp().process(ch::JoinStr({sig_procs, {"ZTT", "TT"}}))
   //    .AddSyst(cb, "CMS_eff_m", "lnN", SystMap<>::init(1.02));
@@ -127,11 +119,11 @@ int main() {
 
   //! [part7]
   cb.cp().backgrounds().ExtractShapes(
-      aux_shapes + "Wisconsin/ztt_tt.inputs-sm-13TeV.root",
+      aux_shapes + "Wisconsin/htt_em.inputs-sm-13TeV.root",
       "$BIN/$PROCESS",
       "$BIN/$PROCESS_$SYSTEMATIC");
   cb.cp().signals().ExtractShapes(
-      aux_shapes + "Wisconsin/ztt_tt.inputs-sm-13TeV.root",
+      aux_shapes + "Wisconsin/htt_em.inputs-sm-13TeV.root",
       "$BIN/$PROCESS$MASS",
       "$BIN/$PROCESS$MASS_$SYSTEMATIC");
   //! [part7]
@@ -157,7 +149,7 @@ int main() {
   // instance.
 
   // We create the output root file that will contain all the shapes.
-  TFile output("htt_tt.input.root", "RECREATE");
+  TFile output("htt_em.input.root", "RECREATE");
 
   // Finally we iterate through each bin,mass combination and write a
   // datacard.
