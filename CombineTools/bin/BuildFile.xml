@@ -1,3 +1,4 @@
+<bin file="UW_mssm_dataCards.cpp" name="UW_mssm_dataCards"></bin>
 <bin file="UW_ztt_em.cpp" name="UW_ztt_em"></bin>
 <bin file="UW_ztt_tt.cpp" name="UW_ztt_tt"></bin>
 <bin file="UW_htt_em.cpp" name="UW_htt_em"></bin>
