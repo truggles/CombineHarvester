@@ -51,16 +51,16 @@ int main(int argc, char *argv[]) {
   //! [part2]
 
   //! [part3]
-  cb.AddObservations({"*"}, {"htt"}, {"13TeV"}, {channel}, cats);
+  cb.AddObservations({"*"}, {"mssm"}, {"13TeV"}, {channel}, cats);
   //! [part3]
 
   //! [part4]
   vector<string> bkg_procs = {"ZTT", "W", "QCD", "TT", "VV"};
-  cb.AddProcesses({"*"}, {"htt"}, {"13TeV"}, {channel}, bkg_procs, cats, false);
+  cb.AddProcesses({"*"}, {"mssm"}, {"13TeV"}, {channel}, bkg_procs, cats, false);
 
   vector<string> sig_procs = {"SUSYggH", "SUSYbbH"};
   //vector<string> sig_procs = {"SUSYggH", "qqH"};
-  cb.AddProcesses(masses, {"htt"}, {"13TeV"}, {channel}, sig_procs, cats, true);
+  cb.AddProcesses(masses, {"mssm"}, {"13TeV"}, {channel}, sig_procs, cats, true);
   //! [part4]
 
 
@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
   // instance.
 
   // We create the output root file that will contain all the shapes.
-  std::string outNameStr = "htt_"+channel+".input.root";
+  std::string outNameStr = "mssm_"+channel+".input.root";
   const char * outName = outNameStr.c_str();
   TFile output(outName, "RECREATE");
 
@@ -172,7 +172,7 @@ int main(int argc, char *argv[]) {
       // where we must remember to include the "*" mass entry to get
       // all the data and backgrounds.
       cb.cp().bin({b}).mass({m, "*"}).WriteDatacard(
-          b + "_mssm_" + m + ".txt", output);
+          channel + "/" + m + "/" + b + "_mssm_" + m + ".txt", output);
     }
   }
   //! [part9]

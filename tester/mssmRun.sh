@@ -26,7 +26,7 @@ do
     for mass in 80 90 100 110 120 130 140 160 180 600 900 1000 1200 1500 2900 3200;
     do
         pushd ${mass}
-        ln -s $DIR/mssm_${channel}.input.root $DIR/${channel}/${mass}mssm_${channel}.input.root
+        ln -s $DIR/mssm_${channel}.input.root $DIR/${channel}/${mass}/mssm_${channel}.input.root
         combine -M Asymptotic -m ${mass} ${channel}_inclusive_mssm_${mass}.txt
         popd
     done
