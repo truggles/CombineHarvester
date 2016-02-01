@@ -381,7 +381,7 @@ void CombineHarvester::LoadShapes(Process* entry,
       if (HasNegativeBins(h.get())) {
         LOGLINE(log(), "Warning: process shape has negative bins");
         log() << Process::PrintHeader << *entry << "\n";
-        // ZeroNegativeBins(h.get());
+        ZeroNegativeBins(h.get());
       }
     }
     // Post-conditions #1 and #2
@@ -518,19 +518,19 @@ void CombineHarvester::LoadShapes(Systematic* entry,
       if (HasNegativeBins(h.get())) {
         LOGLINE(log(), "Warning: Systematic shape has negative bins");
         log() << Systematic::PrintHeader << *entry << "\n";
-        // ZeroNegativeBins(h.get());
+        ZeroNegativeBins(h.get());
       }
 
       if (HasNegativeBins(h_u.get())) {
         LOGLINE(log(), "Warning: Systematic shape_u has negative bins");
         log() << Systematic::PrintHeader << *entry << "\n";
-        // ZeroNegativeBins(h_u.get());
+        ZeroNegativeBins(h_u.get());
       }
 
       if (HasNegativeBins(h_d.get())) {
         LOGLINE(log(), "Warning: Systematic shape_d has negative bins");
         log() << Systematic::PrintHeader << *entry << "\n";
-        // ZeroNegativeBins(h_d.get());
+        ZeroNegativeBins(h_d.get());
       }
     }
     entry->set_shapes(std::move(h_u), std::move(h_d), h.get());
