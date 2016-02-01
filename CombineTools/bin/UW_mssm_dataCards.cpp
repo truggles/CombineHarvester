@@ -15,13 +15,23 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  if (argc != 2)
+  if (argc != 3)
   {
     std::cout<<"ERROR: You must provide"<<std::endl;
     std::cout<<"    --- a channel in the format 'em' or 'tt'"<<std::endl;
+    std::cout<<"    --- a MSSM signal type 'ggH' or 'bbH'"<<std::endl;
   }
   std::string channel = argv[1];
   std::cout<<"Provided channel is: "<<channel<<std::endl;
+  std::string sigType = argv[2];
+  std::cout<<"Provided signal type is: "<<sigType<<std::endl;
+  //if (sigType == "gg") const char* signal = "SUSYggH";
+  //else if (sigType == "bb") const char* signal = "SUSYbbH";
+  if ((sigType == "ggH") || (sigType == "bbH")) std::cout << "Good signal selection" << std::endl;
+  else {
+    std::cout<<"Signal type must be either 'bbH' or 'ggH'";
+    return -1;
+  }
 
   //! [part1]
   // First define the location of the "auxiliaries" directory where we can
@@ -36,11 +46,22 @@ int main(int argc, char *argv[]) {
 
   // Here we will just define two categories for an 8TeV analysis. Each entry in
   // the vector below specifies a bin name and corresponding bin_id.
-  ch::Categories cats = {
-      //{1, "em_inclusive"},
-      {1, channel+"_inclusive"}
-    };
-  // ch::Categories is just a typedef of vector<pair<int, string>>
+  ch::Categories cats;
+  if ((channel == "em") || (channel == "tt")) {
+    ch::Categories cats_tmp = {
+        //{1, "em_inclusive"},
+        {1, channel+"_inclusive"}
+      };
+    for (auto cat : cats_tmp) { cats.push_back( cat ); }
+    }//if
+  if ((channel == "et") || (channel == "mt")) {
+    ch::Categories cats_tmp = {
+        //{1, "em_inclusive"},
+        {1, channel+"_inclusivemtnotwoprong"}
+      };
+    for (auto cat : cats_tmp) { cats.push_back( cat ); }
+    }//if
+  //ch::Categories is just a typedef of vector<pair<int, string>>
   //! [part1]
 
 
@@ -55,10 +76,20 @@ int main(int argc, char *argv[]) {
   //! [part3]
 
   //! [part4]
-  vector<string> bkg_procs = {"ZTT", "W", "QCD", "TT", "VV"};
+  vector<string> bkg_procs;
+  if ((channel == "em") || (channel == "tt")) {
+    vector<string> bkg_tmp = {"ZTT", "W", "QCD", "TT", "VV"};
+    for ( auto n : bkg_tmp ) { bkg_procs.push_back( n );}
+  }
+  if ((channel == "et") || (channel == "mt")) {
+    vector<string> bkg_tmp = {"ZTT", "W", "QCD", "TT", "VV", "ZL", "ZJ", "ggH125", "qqH125"};
+    for ( auto n : bkg_tmp ) { bkg_procs.push_back( n );}
+  }
+
+
   cb.AddProcesses({"*"}, {"mssm"}, {"13TeV"}, {channel}, bkg_procs, cats, false);
 
-  vector<string> sig_procs = {"SUSYggH", "SUSYbbH"};
+  vector<string> sig_procs = {sigType,};
   //vector<string> sig_procs = {"SUSYggH", "qqH"};
   cb.AddProcesses(masses, {"mssm"}, {"13TeV"}, {channel}, sig_procs, cats, true);
   //! [part4]
@@ -127,11 +158,11 @@ int main(int argc, char *argv[]) {
 
   //! [part7]
   cb.cp().backgrounds().ExtractShapes(
-      aux_shapes + "Wisconsin/mssm_"+channel+".inputs-sm-13TeV.root",
+      aux_shapes + "Wisconsin/htt_"+channel+".inputs-mssm-13TeV.root",
       "$BIN/$PROCESS",
       "$BIN/$PROCESS_$SYSTEMATIC");
   cb.cp().signals().ExtractShapes(
-      aux_shapes + "Wisconsin/mssm_"+channel+".inputs-sm-13TeV.root",
+      aux_shapes + "Wisconsin/htt_"+channel+".inputs-mssm-13TeV.root",
       "$BIN/$PROCESS$MASS",
       "$BIN/$PROCESS$MASS_$SYSTEMATIC");
   //! [part7]
@@ -157,7 +188,7 @@ int main(int argc, char *argv[]) {
   // instance.
 
   // We create the output root file that will contain all the shapes.
-  std::string outNameStr = "mssm_"+channel+".input.root";
+  std::string outNameStr = sigType+"/mssm_"+channel+".input.root";
   const char * outName = outNameStr.c_str();
   TFile output(outName, "RECREATE");
 
@@ -172,7 +203,7 @@ int main(int argc, char *argv[]) {
       // where we must remember to include the "*" mass entry to get
       // all the data and backgrounds.
       cb.cp().bin({b}).mass({m, "*"}).WriteDatacard(
-          channel + "/" + m + "/" + b + "_mssm_" + m + ".txt", output);
+          sigType + "/" + channel + "/" + m + "/" + b + "_mssm_" + m + ".txt", output);
     }
   }
   //! [part9]
