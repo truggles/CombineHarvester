@@ -117,10 +117,10 @@ int main(int argc, char** argv) {
   RooRealVar mh("mh", "mh", 90., 3200.);
 
   map<string, VString> bkg_procs;
-  bkg_procs["et"] = {"W", "QCD", "ZL", "ZJ", "TT", "VV","ZTT"};
-  bkg_procs["mt"] = {"W", "QCD", "ZL", "ZJ", "TT", "VV","ZTT"};
+  //bkg_procs["et"] = {"W", "QCD", "ZL", "ZJ", "TT", "VV","ZTT"};
+  //bkg_procs["mt"] = {"W", "QCD", "ZL", "ZJ", "TT", "VV","ZTT"};
   bkg_procs["tt"] = {"W", "QCD", "ZL", "ZJ", "TT", "VV","ZTT"};
-  bkg_procs["em"] = {"W", "QCD", "ZLL", "TT", "VV", "ZTT"};
+  //bkg_procs["em"] = {"W", "QCD", "ZLL", "TT", "VV", "ZTT"};
 
   VString SM_procs = {"ggH_SM125", "qqH_SM125", "ZH_SM125", "WminusH_SM125","WplusH_SM125"};
 
@@ -146,25 +146,25 @@ int main(int argc, char** argv) {
   // the vector below specifies a bin name and corresponding bin_id.
   //
   map<string,Categories> cats;
-  cats["et_13TeV"] = {
-    {8, "et_nobtag"},
-    {9, "et_btag"}
-    };
+  //cats["et_13TeV"] = {
+  //  {8, "et_nobtag"},
+  //  {9, "et_btag"}
+  //  };
 
-  cats["em_13TeV"] = {
-    {8, "em_nobtag"},
-    {9, "em_btag"}
-    };
+  //cats["em_13TeV"] = {
+  //  {8, "em_nobtag"},
+  //  {9, "em_btag"}
+  //  };
 
   cats["tt_13TeV"] = {
     {8, "tt_nobtag"},
     {9, "tt_btag"}
     };
 
-  cats["mt_13TeV"] = {
-    {8, "mt_nobtag"},
-    {9, "mt_btag"}
-    };
+  //cats["mt_13TeV"] = {
+  //  {8, "mt_nobtag"},
+  //  {9, "mt_btag"}
+  //  };
 
   if (control_region > 0){
       // for each channel use the categories >= 10 for the control regions
@@ -240,6 +240,7 @@ int main(int argc, char** argv) {
         input_dir[chn] + "htt_"+chn+".inputs-mssm-13TeV"+postfix+".root",
         "$BIN/bbH$MASS",
         "$BIN/bbH$MASS_$SYSTEMATIC");
+//<<<<<<< Updated upstream
   }
 
 
@@ -390,6 +391,17 @@ int main(int argc, char** argv) {
     }
   }
 
+//=======
+//   }
+//   //Replacing observation with the sum of the backgrounds (asimov) - nice to ensure blinding 
+//   auto bins = cb.cp().bin_set();
+//   // for (auto b : bins) {
+//   //     cb.cp().bin({b}).ForEachObs([&](ch::Observation *obs) {
+//   //     obs->set_shape(cb.cp().bin({b}).backgrounds().GetShape(), true);
+//   //     });
+//   // } 
+  
+//>>>>>>> Stashed changes
 
   auto rebin = ch::AutoRebin()
     .SetBinThreshold(0.)

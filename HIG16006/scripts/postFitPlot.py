@@ -363,6 +363,7 @@ if args.ratio and not fractions:
   if(log_x): pads[1].SetLogx(1)
   axish = createAxisHists(2,bkghist,bkghist.GetXaxis().GetXmin(),bkghist.GetXaxis().GetXmax()-0.01)
   axish[1].GetXaxis().SetTitle(args.x_title)
+  #axish[1].GetXaxis().SetTitle("svFit MT_{#tau#tau} (GeV)")
   axish[1].GetYaxis().SetNdivisions(4)
   if not soverb_plot: axish[1].GetYaxis().SetTitle("Obs/Exp")
   else: axish[1].GetYaxis().SetTitle("S/#sqrt(B)")

@@ -28,7 +28,8 @@ PAD_DICT = {
 
 
 for MODE in ['prefit', 'postfit']:
-    for CHN in ['et', 'mt', 'em', 'tt']:
+    #for CHN in ['et', 'mt', 'em', 'tt']:
+    for CHN in ['tt',]:
         for CAT in ['8', '9']:
             LABEL = "%s %s" % (CHN_DICT[CHN], CAT_DICT[CAT])
             YMIN = "%s" % RANGE_DICT[CHN]

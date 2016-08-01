@@ -135,11 +135,16 @@ if args.auto_style is not None:
 
 # Process each input argument
 has_band = False
+itr = 0
 for src in args.input:
+    print src
     splitsrc = src.split(':')
+    print splitsrc
     file = splitsrc[0]
+    print file
     # limit.json => Draw as full obs + exp limit band
     if len(splitsrc) == 1:
+        print "single item"
         graph_sets.append(plot.StandardLimitsFromJSONFile(file, args.show.split(',')))
         if axis is None:
             axis = plot.CreateAxisHists(len(pads), graph_sets[-1].values()[0], True)
@@ -148,13 +153,20 @@ for src in args.input:
             plot.StyleLimitBand(graph_sets[-1],overwrite_style_dict=style_dict["style"])
             plot.DrawLimitBand(pads[0], graph_sets[-1], legend=legend,legend_overwrite=style_dict["legend"])
         else:
+            print "else"
+            print graph_sets[-1]
             plot.StyleLimitBand(graph_sets[-1])
-            plot.DrawLimitBand(pads[0], graph_sets[-1],legend=legend)
+            if itr == 0 :
+                plot.DrawLimitBand(pads[0], graph_sets[-1],legend=legend)
+            else :
+                graph_sets[-1]['exp0'].SetLineColor( ROOT.kBlue )
+                plot.DrawLimitBand(pads[0], graph_sets[-1],draw=['exp0'],legend=legend,itr=1)
         pads[0].RedrawAxis()
         pads[0].RedrawAxis('g')
         pads[0].GetFrame().Draw()
         has_band = True  # useful to know later if we want to do style settings
                          # based on whether or not the expected band has been drawn
+        itr += 1
 
     # limit.json:X => Draw a single graph for entry X in the json file 
     # 'limit.json:X:Title="Blah",LineColor=4,...' =>

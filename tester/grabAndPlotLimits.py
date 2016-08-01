@@ -3,7 +3,8 @@ import array
 from ROOT import gPad
 
 
-masses1 = [80, 90, 100, 110, 120, 130, 140, 160, 180, 600, 900, 1000, 1200, 1500, 2900, 3200]
+#masses1 = [80, 90, 100, 110, 120, 130, 140, 160, 180, 600, 900, 1000, 1200, 1500, 2900, 3200]
+masses1 = [80, 100, 110, 120, 130, 140, 160, 180, 600, 900, 1000, 1200, 1500, 2900]
 ROOT.gROOT.SetBatch(True)
 
 
@@ -67,7 +68,7 @@ def plotLimits( signal, channel ) :
     med.SetLineStyle(2)
     outShade.GetXaxis().SetTitle('Visible Mass (GeV)')
     outShade.GetXaxis().SetTitleOffset( outShade.GetXaxis().GetTitleOffset() * 1.3 )
-    outShade.GetYaxis().SetTitle('95% CL limit on #sigma(gg#phi) x BR(#phi#rightarrow #tau#tau) [pb]')
+    outShade.GetYaxis().SetTitle('%s CL limit on #sigma(%s#phi) x BR(#phi#rightarrow #tau#tau) [pb]' % ('95%', signal[:2]) )
     outShade.GetYaxis().SetTitleOffset( outShade.GetYaxis().GetTitleOffset() * 1.3 )
     outShade.SetTitle('Expected Limits A/H #rightarrow #tau#tau: Channel %s' % channel)
     
@@ -87,7 +88,7 @@ def plotLimits( signal, channel ) :
 
 
 
-channels = ['em', 'tt', 'mt', 'll']
+channels = ['em', 'tt',]# 'mt', 'll']
 signals = ['ggH', 'bbH']
 for signal in signals :
     for channel in channels :

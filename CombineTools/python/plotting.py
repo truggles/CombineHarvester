@@ -1454,13 +1454,20 @@ def StyleLimitBand(graph_dict, overwrite_style_dict=None):
         Set(graph_dict[key],**style_dict[key])
 
 def DrawLimitBand(pad, graph_dict, draw=['exp2', 'exp1', 'exp0', 'obs'], draw_legend=None,
-                  legend=None, legend_overwrite=None):
+                  legend=None, legend_overwrite=None, itr=0):
     legend_dict = {
         'obs' : { 'Label' : 'Observed', 'LegendStyle' : 'LP', 'DrawStyle' : 'PLSAME'},
         'exp0' : { 'Label' : 'Expected', 'LegendStyle' : 'L', 'DrawStyle' : 'LSAME'},
         'exp1' : { 'Label' : '#pm1#sigma Expected', 'LegendStyle' : 'F', 'DrawStyle' : '3SAME'},
         'exp2' : { 'Label' : '#pm2#sigma Expected', 'LegendStyle' : 'F', 'DrawStyle' : '3SAME'}
     }
+    if itr > 0 :
+        legend_dict = {
+            'obs' : { 'Label' : 'Observed', 'LegendStyle' : 'LP', 'DrawStyle' : 'PLSAME'},
+            'exp0' : { 'Label' : 'Expected  2016 40fb^{-1}', 'LegendStyle' : 'L', 'DrawStyle' : 'LSAME'},
+            'exp1' : { 'Label' : '#pm1#sigma Expected', 'LegendStyle' : 'F', 'DrawStyle' : '3SAME'},
+            'exp2' : { 'Label' : '#pm2#sigma Expected', 'LegendStyle' : 'F', 'DrawStyle' : '3SAME'}
+        }
     if legend_overwrite is not None:
         for key in legend_overwrite:
             if key in legend_dict:

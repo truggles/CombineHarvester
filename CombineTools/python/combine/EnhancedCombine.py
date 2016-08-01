@@ -129,9 +129,15 @@ class EnhancedCombine(CombineToolBase):
             #  { 'PAR1' : [(MASS, LOWER, UPER), ...], ...}
             bound_vals = {}
             for par in bound_pars:
+                print 'par',par
+                print 'bound_pars'
+                print bound_pars
                 bound_vals[par] = list()
                 for mass, bounds in bnd[par].iteritems():
+                    print 'mass',mass
+                    print 'bound',bounds
                     bound_vals[par].append((float(mass), bounds[0], bounds[1]))
+                    #bound_vals[par].append((float(mass), 0.01, bounds))
                 bound_vals[par].sort(key=lambda x: x[0])
             # find the subbed_vars entry containing the mass
             # We will extend it to also specify the ranges
@@ -158,6 +164,10 @@ class EnhancedCombine(CombineToolBase):
                     # point
                     if lower_bound == 0:
                         lower_bound += 1
+                    print 'lower bound'
+                    print lower_bound
+                    print 'bound_vals'
+                    print bound_vals
                     command.append('%s=%g,%g' % (par, bound_vals[par][lower_bound-1][1], bound_vals[par][lower_bound-1][2]))
                 new_list.append(entry + (str(':'.join(command)),))
             # now remove the current mass information from subbed_vars

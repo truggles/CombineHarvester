@@ -35,7 +35,7 @@ graph_plus2sigma  = ROOT.TGraph()
 if ".root" in args.file :
     file = ROOT.TFile(args.file, 'r')
     if not args.expected_only:
-       graph_obs         = plot.SortGraph(file.Get("observed"))
+       graph_obs         = plot.SortGraph(file.Get("obs"))
     graph_minus2sigma = plot.SortGraph(file.Get("minus2sigma"))
     graph_minus1sigma = plot.SortGraph(file.Get("minus1sigma"))
     graph_exp         = plot.SortGraph(file.Get("expected"))
@@ -47,12 +47,12 @@ else :
     with open(args.file) as jsonfile:
         data = json.load(jsonfile)
     if not args.expected_only:
-        graph_obs         = plot.LimitTGraphFromJSON(data, 'observed')
-    graph_minus2sigma = plot.LimitTGraphFromJSON(data, '-2')
-    graph_minus1sigma = plot.LimitTGraphFromJSON(data, '-1')
-    graph_exp         = plot.LimitTGraphFromJSON(data, 'expected')
-    graph_plus1sigma  = plot.LimitTGraphFromJSON(data, '+1')
-    graph_plus2sigma  = plot.LimitTGraphFromJSON(data, '+2')
+        graph_obs         = plot.LimitTGraphFromJSON(data, 'obs')
+    graph_minus2sigma = plot.LimitTGraphFromJSON(data, 'exp-2')
+    graph_minus1sigma = plot.LimitTGraphFromJSON(data, 'exp-1')
+    graph_exp         = plot.LimitTGraphFromJSON(data, 'exp0')
+    graph_plus1sigma  = plot.LimitTGraphFromJSON(data, 'exp+1')
+    graph_plus2sigma  = plot.LimitTGraphFromJSON(data, 'exp+2')
     maketable.TablefromJson(args.file, "mssm_limit_table.txt")
 
 process_label=args.process

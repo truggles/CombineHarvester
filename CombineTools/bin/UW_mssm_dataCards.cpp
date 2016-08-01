@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
   //! [part2]
   //vector<string> masses = ch::MassesFromRange("120-135:5");
   // Or equivalently, specify the mass points explicitly:
-  vector<string> masses = {"80", "90", "100", "110", "120", "130", "140", "160", "180", "600", "900", "1000", "1200", "1500", "2900", "3200"};
+  vector<string> masses = {"80", "100", "110", "120", "130", "140", "160", "180", "600", "900", "1000", "1200", "1500", "2900"};
   //! [part2]
 
   //! [part3]
@@ -114,6 +114,7 @@ int main(int argc, char *argv[]) {
   //! [part5]
 
   //! [part6]
+  if (channel == "em") {
   cb.cp().backgrounds()
       .AddSyst(cb, "CMS_electron_id_eff_$ERA", "lnN", SystMap<era>::init
       ({"13TeV"}, 1.02));
@@ -126,6 +127,7 @@ int main(int argc, char *argv[]) {
   cb.cp().signals()
       .AddSyst(cb, "CMS_muon_id_eff_$ERA", "lnN", SystMap<era>::init
       ({"13TeV"}, 1.01));
+  }
   //cb.cp().process({"SUSYggH"})
   //cb.cp().process({"ZTT"})
   //    .AddSyst(cb, "pdf_gg", "lnN", SystMap<>::init(1.097));
