@@ -96,7 +96,21 @@ int main(int argc, char** argv) {
     
     VString chns = {"eeet", "eemt", "eeem", "eett", "emmt", "mmmt", "emmm", "mmtt"};
     
-    VString bkg_procs = {"RedBkg", "ZZ", "TriBoson", "WH125", "ZHWW125"};
+    VString bkg_procs;
+    vector<string> sig_procs;
+    vector<string> masses;
+
+    if (!azh) {
+        bkg_procs = {"RedBkg", "ZZ", "TriBoson", "WH125", "HZZ125", "ZHWW125"};
+        sig_procs = {"ZH"};
+        //masses = {"110","120","125","130","140"};
+        masses = {"125"};
+    }
+    if (azh) {
+        bkg_procs = {"RedBkg", "ZZ", "TriBoson", "WH125", "HZZ125", "ZHWW125", "ZH125"};
+        sig_procs = {"azh"};
+        masses = {"220", "240", "260", "280", "300", "320", "340", "350", "400"};
+    }
     
     
     
@@ -112,13 +126,6 @@ int main(int argc, char** argv) {
     
     
     
-
-    
-    // Or equivalently, specify the mass points explicitly:
-    //vector<string> sig_procs = {"ggH","qqH","WH","ZH"};
-    vector<string> sig_procs = {"ZH"};
-    vector<string> masses = {"110","120","125","130","140"};
-    //vector<string> masses = {"125"};
     
     using ch::syst::bin_id;
     
@@ -148,20 +155,24 @@ int main(int argc, char** argv) {
     
     
     
-    ch::AddZHRun2Systematics(cb);
+    ch::AddZHRun2Systematics(cb, azh);
     
     
         
     
     
     //! [part7]
+    string analysis;
+    if (azh) analysis = "mssm";
+    if (!azh) analysis = "sm";
+    
     for (string chn:chns){
         cb.cp().channel({chn}).backgrounds().ExtractShapes(
-                input_dir + "htt_zh.inputs-sm-13TeV"+postfix+".root",
+                input_dir + "htt_zh.inputs-"+analysis+"-13TeV"+postfix+".root",
                 "$BIN/$PROCESS",
                 "$BIN/$PROCESS_$SYSTEMATIC");
         cb.cp().channel({chn}).process(sig_procs).ExtractShapes(
-                input_dir + "htt_zh.inputs-sm-13TeV"+postfix+".root",
+                input_dir + "htt_zh.inputs-"+analysis+"-13TeV"+postfix+".root",
                 "$BIN/$PROCESS$MASS",
                 "$BIN/$PROCESS$MASS_$SYSTEMATIC");
     }

@@ -18,11 +18,15 @@ namespace ch {
     using ch::syst::bin;
     using ch::JoinStr;
     
-    void AddZHRun2Systematics(CombineHarvester & cb) {
+    void AddZHRun2Systematics(CombineHarvester & cb, bool & azh) {
         
-        
-        //std::vector<std::string> sig_procs = {"ggH","qqH","WH","ZH"};
-        std::vector<std::string> sig_procs = {"ZH"};
+        std::vector<std::string> sig_procs;
+        if (azh) {
+            sig_procs = {"azh"};
+        }
+        if (!azh) {
+            sig_procs = {"ZH"};
+        }
         
         // N.B. when adding this list of backgrounds to a nuisance, only
         // the backgrounds that are included in the background process
@@ -34,11 +38,13 @@ namespace ch {
             "ZZ",
             "TriBoson",
             "WH125",
+            "HZZ125",
             "ZHWW125"};
         std::vector<std::string> all_mc_bkgs = {
             "ZZ",
             "TriBoson",
             "WH125",
+            "HZZ125",
             "ZHWW125"};
         std::vector<std::string> eeChans = {
             "eeet",
@@ -80,6 +86,13 @@ namespace ch {
         cb.cp().process({"ZHWW125"}).AddSyst(cb,
                 "CMS_htt_zh_zh_hww_scale_$ERA", "lnN", SystMap<>::init(1.2));
 
+        cb.cp().process({"HZZ125"}).AddSyst(cb,
+                "CMS_htt_zh_hzz_scale_$ERA", "lnN", SystMap<>::init(1.2));
+
+        if (azh) {
+            cb.cp().process({"ZH125"}).AddSyst(cb,
+                    "CMS_htt_zh_zh_scale_$ERA", "lnN", SystMap<>::init(1.2));
+        }
 
         //##############################################################################
         //  trigger   ##FIXME   the values have been chosen rather arbitrarily
