@@ -58,15 +58,15 @@ namespace ch {
         //##############################################################################
         
         cb.cp().process(JoinStr({sig_procs, {"VV","VVT","VVJ","ggH_hww125","qqH_hww125"}})).AddSyst(cb,
-                                            "lumi_13TeV", "lnN", SystMap<>::init(1.025));
-        cb.cp().process({"W_rest", "ZJ_rest", "TTJ_rest", "VVJ_rest"}).channel({"tt"}).AddSyst(cb,"lumi_13TeV", "lnN", SystMap<>::init(1.025));
+                                            "lumi_13TeV_2016", "lnN", SystMap<>::init(1.025));
+        cb.cp().process({"W_rest", "ZJ_rest", "TTJ_rest", "VVJ_rest"}).channel({"tt"}).AddSyst(cb,"lumi_13TeV_2016", "lnN", SystMap<>::init(1.025));
         
         //Add luminosity uncertainty for W in em, tt, ttbar and the mm region as norm is from MC
         cb.cp().process({"W"}).channel({"tt","em","mm","ttbar"}).AddSyst(cb,
-                                            "lumi_13TeV", "lnN", SystMap<>::init(1.025));
+                                            "lumi_13TeV_2016", "lnN", SystMap<>::init(1.025));
 
 	if (!ttbar_fit){
-          cb.cp().process({"TTT","TTJ"}).AddSyst(cb,"lumi_13TeV", "lnN", SystMap<>::init(1.025));
+          cb.cp().process({"TTT","TTJ"}).AddSyst(cb,"lumi_13TeV_2016", "lnN", SystMap<>::init(1.025));
 	}
         
         //##############################################################################
@@ -148,12 +148,12 @@ namespace ch {
         //  b tag and mistag rate  efficiencies
         //##############################################################################
         
-        cb.cp().AddSyst(cb, "CMS_htt_eff_b_$ERA", "lnN", SystMap<channel, bin_id, process>::init
+        cb.cp().AddSyst(cb, "CMS_eff_b_$ERA", "lnN", SystMap<channel, bin_id, process>::init
                         ({"em"}, {1}, {"TTJ","TTT","TT"}, 1.035));
-        cb.cp().AddSyst(cb, "CMS_htt_eff_b_$ERA", "lnN", SystMap<channel, bin_id, process>::init
+        cb.cp().AddSyst(cb, "CMS_eff_b_$ERA", "lnN", SystMap<channel, bin_id, process>::init
                         ({"em"}, {2,3}, {"TTJ","TTT","TT"}, 1.05));
 
-        cb.cp().AddSyst(cb, "CMS_htt_eff_b_$ERA", "lnN", SystMap<channel, bin_id, process>::init
+        cb.cp().AddSyst(cb, "CMS_eff_b_$ERA", "lnN", SystMap<channel, bin_id, process>::init
                         ({"em"}, {2, 3}, {"VV","VVT","VVJ"}, 1.015)); // Mainly SingleTop
         
         
@@ -1608,8 +1608,13 @@ namespace ch {
         
         
         
-        
-        cb.cp().AddSyst(cb, "CMS_ggH_UEPS", "lnN", SystMap<channel, bin_id, process>::init
+        // Other analyses split by CMS_ggH_UE & CMS_ggH_PS
+        // We do not have those numbers split out
+        // According to Andrew, the vast majority of this
+        // measured nuisance is the Parton Shower component
+        // so rename this to align with PS
+        //cb.cp().AddSyst(cb, "CMS_ggH_UEPS", "lnN", SystMap<channel, bin_id, process>::init
+        cb.cp().AddSyst(cb, "CMS_ggH_PS", "lnN", SystMap<channel, bin_id, process>::init
                         ({"em"},{1},{"ggH_htt"}, 1.015)
                         ({"et"},{1},{"ggH_htt"}, 1.015)
                         ({"mt"},{1},{"ggH_htt"}, 1.015)
@@ -1695,15 +1700,15 @@ namespace ch {
         cb.cp().process({"ggH_hww125","qqH_hww125"}).AddSyst(cb,"BR_hww_PU_alphas", "lnN", SystMap<>::init(1.0066));
         
         
-        cb.cp().process({"ggH_htt","ggH_hww125"}).AddSyst(cb,"QCDScale_ggH", "lnN", SystMap<>::init(1.039));
-        cb.cp().process({"qqH_htt","qqH_hww125"}).AddSyst(cb,"QCDScale_qqH", "lnN", SystMap<>::init(1.004));
-        cb.cp().process({"WH_htt"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.007));
-        cb.cp().process({"ZH_htt"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.038));
+        cb.cp().process({"ggH_htt","ggH_hww125"}).AddSyst(cb,"QCDscale_ggH", "lnN", SystMap<>::init(1.039));
+        cb.cp().process({"qqH_htt","qqH_hww125"}).AddSyst(cb,"QCDscale_qqH", "lnN", SystMap<>::init(1.004));
+        cb.cp().process({"WH_htt"}).AddSyst(cb,"QCDscale_VH", "lnN", SystMap<>::init(1.007));
+        cb.cp().process({"ZH_htt"}).AddSyst(cb,"QCDscale_VH", "lnN", SystMap<>::init(1.038));
         
         cb.cp().process({"ggH_htt","ggH_hww125"}).AddSyst(cb,"pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
-        cb.cp().process({"qqH_htt","qqH_hww125"}).AddSyst(cb,"pdf_Higgs_qq", "lnN", SystMap<>::init(1.021));
-        cb.cp().process({"WH_htt"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.019));
-        cb.cp().process({"ZH_htt"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.016));
+        cb.cp().process({"qqH_htt","qqH_hww125"}).AddSyst(cb,"pdf_Higgs_qqbar", "lnN", SystMap<>::init(1.021));
+        cb.cp().process({"WH_htt"}).AddSyst(cb,"pdf_Higgs_qqbar", "lnN", SystMap<>::init(1.019));
+        cb.cp().process({"ZH_htt"}).AddSyst(cb,"pdf_Higgs_qqbar", "lnN", SystMap<>::init(1.016));
         
         
         
@@ -1797,7 +1802,7 @@ namespace ch {
             cb.SetFlag("filters-use-regex", false);
             
             cb.FilterSysts([](ch::Systematic *syst) {
-                return syst->name() == "lumi_13TeV" &&
+                return syst->name() == "lumi_13TeV_2016" &&
                 (
                  (syst->channel() == "mm" && syst->process() == "ZL") ||
                  (syst->channel() != "mm" && syst->process() == "ZTT" &&
