@@ -82,6 +82,9 @@ int main(int argc, char** argv) {
     bool mm_fit = false;
     bool ttbar_fit = false;
     bool do_jetfakes = false;
+    bool do_nominal_signals = false;
+    bool do_stage0_signals = false;
+    bool do_stage1_signals = false;
     po::variables_map vm;
     po::options_description config("configuration");
     config.add_options()
@@ -106,12 +109,22 @@ int main(int argc, char** argv) {
     ("jetfakes", po::value<bool>(&do_jetfakes)->default_value(false))
     ("check_neg_bins", po::value<bool>(&check_neg_bins)->default_value(false))
     ("poisson_bbb", po::value<bool>(&poisson_bbb)->default_value(false))
-    ("w_weighting", po::value<bool>(&do_w_weighting)->default_value(false));
+    ("w_weighting", po::value<bool>(&do_w_weighting)->default_value(false))
+    ("do_nominal_signals", po::value<bool>(&do_nominal_signals)->default_value(true))
+    ("do_stage0_signals", po::value<bool>(&do_stage0_signals)->default_value(false))
+    ("do_stage1_signals", po::value<bool>(&do_stage1_signals)->default_value(false));
+
     po::store(po::command_line_parser(argc, argv).options(config).run(), vm);
     po::notify(vm);
-    
-    
-    
+   
+ 
+    // Check only 1 signal interpretation was selected
+    if (do_nominal_signals)
+        assert( !do_stage0_signals && !do_stage1_signals );
+    if (do_stage0_signals)
+        assert( !do_nominal_signals && !do_stage1_signals );
+    if (do_stage1_signals)
+        assert( !do_nominal_signals && !do_stage0_signals );
     
     
     typedef vector<string> VString;
@@ -235,10 +248,53 @@ int main(int argc, char** argv) {
     
     
     // Or equivalently, specify the mass points explicitly:
+    // Add 3 versions of signal categories:
+    //  - nominal signal categories used in SM-HTT HIG-16-043
+    //  - HTXS Stage 0 categorization
+    //  - HTXS Stage 1 categorization
+    // HTXS details see https://svnweb.cern.ch/cern/wsvn/lhchiggsxs/repository/TemplateXS/HiggsTemplateCrossSections.h for rivet code mappings
     vector<string> sig_procs = {"ggH_htt","qqH_htt","WH_htt","ZH_htt"};
-    vector<string> masses = {"110","120","125","130","140"};
+    vector<string> sig_procs_stage0 = {"ggH_htt_GG2H","qqH_htt_VBF",
+        "WH_htt_VH2HQQ","WH_htt_QQ2HLNU","ZH_htt_VH2HQQ","ZH_htt_QQ2HLL"};
+    vector<string> sig_procs_stage1 = {
+        "ggH_htt_GG2H_VBFTOPO_JET3VETO",
+        "ggH_htt_GG2H_VBFTOPO_JET3",
+        "ggH_htt_GG2H_0J",
+        "ggH_htt_GG2H_1J_PTH_0_60",
+        "ggH_htt_GG2H_1J_PTH_60_120",
+        "ggH_htt_GG2H_1J_PTH_120_200",
+        "ggH_htt_GG2H_1J_PTH_GT200",
+        "ggH_htt_GG2H_GE2J_PTH_0_60",
+        "ggH_htt_GG2H_GE2J_PTH_60_120",
+        "ggH_htt_GG2H_GE2J_PTH_120_200",
+        "ggH_htt_GG2H_GE2J_PTH_GT200",
+        
+        "qqH_htt_QQ2HQQ_VBFTOPO_JET3VETO",
+        "qqH_htt_QQ2HQQ_VBFTOPO_JET3",
+        "qqH_htt_QQ2HQQ_VH2JET",
+        "qqH_htt_QQ2HQQ_REST",
+        "qqH_htt_QQ2HQQ_PTJET1_GT200",
+        
+        "WH_htt_QQ2HQQ_VH2JET",
+        "WH_htt_QQ2HQQ_REST",
+        "WH_htt_QQ2HQQ_PTJET1_GT200",
+        "WH_htt_QQ2HLNU_PTV_0_150",
+        "WH_htt_QQ2HLNU_PTV_150_250_0J",
+        "WH_htt_QQ2HLNU_PTV_150_250_GE1J",
+        "WH_htt_QQ2HLNU_PTV_GT250",
+        
+        "ZH_htt_QQ2HQQ_VH2JET",
+        "ZH_htt_QQ2HQQ_REST",
+        "ZH_htt_QQ2HQQ_PTJET1_GT200",
+        "ZH_htt_QQ2HLL_PTV_0_150",
+        "ZH_htt_QQ2HLL_PTV_150_250_0J",
+        "ZH_htt_QQ2HLL_PTV_150_250_GE1J",
+        "ZH_htt_QQ2HLL_PTV_GT250",
+    };
+
+//    vector<string> masses = {"110","120","125","130","140"};
 //    vector<string> masses = {"120","125","130"};
-//            vector<string> masses = {"125"};
+    vector<string> masses = {"125"};
     
     using ch::syst::bin_id;
     
@@ -246,9 +302,18 @@ int main(int argc, char** argv) {
     for (auto chn : chns) {
         cb.AddObservations({"*"}, {"htt"}, {"13TeV"}, {chn}, cats[chn]);
         cb.AddProcesses(   {"*"}, {"htt"}, {"13TeV"}, {chn}, bkg_procs[chn], cats[chn], false);
-        cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, sig_procs, cats[chn], true);
+        if (chn != "tt") {
+            cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, sig_procs, cats[chn], true);
+        }
         //Needed to add ewkz and W as these are not not available/Negative in qcd cR
     }
+    // HTXS signals are only in hadronic channel right now
+    if (do_nominal_signals)
+        cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {"tt"}, sig_procs, cats["tt"], true);
+    if (do_stage0_signals)
+        cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {"tt"}, sig_procs_stage0, cats["tt"], true);
+    if (do_stage1_signals)
+        cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {"tt"}, sig_procs_stage1, cats["tt"], true);
     
 //    //Add EWKZ and W manually !!!!!!
 //    
@@ -303,13 +368,34 @@ int main(int argc, char** argv) {
     //! [part7]
     for (string chn:chns){
         cb.cp().channel({chn}).backgrounds().ExtractShapes(
-                                                           input_dir[chn] + "htt_"+chn+".inputs-sm-13TeV"+postfix+".root",
-                                                           "$BIN/$PROCESS",
-                                                           "$BIN/$PROCESS_$SYSTEMATIC");
-        cb.cp().channel({chn}).process(sig_procs).ExtractShapes(
-                                                                input_dir[chn] + "htt_"+chn+".inputs-sm-13TeV"+postfix+".root",
-                                                                "$BIN/$PROCESS$MASS",
-                                                                "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+                input_dir[chn] + "htt_"+chn+".inputs-sm-13TeV"+postfix+".root",
+                "$BIN/$PROCESS",
+                "$BIN/$PROCESS_$SYSTEMATIC");
+        // Add HTXS signals if tt
+        if (chn == "tt") {
+            if (do_nominal_signals)
+                cb.cp().channel({chn}).process(sig_procs).ExtractShapes(
+                        input_dir[chn] + "htt_"+chn+".inputs-sm-13TeV"+postfix+".root",
+                        "$BIN/$PROCESS$MASS",
+                        "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+            if (do_stage0_signals)
+                cb.cp().channel({chn}).process(sig_procs_stage0).ExtractShapes(
+                        input_dir[chn] + "htt_"+chn+".inputs-sm-13TeV"+postfix+".root",
+                        "$BIN/$PROCESS$MASS",
+                        "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+            if (do_stage1_signals)
+                cb.cp().channel({chn}).process(sig_procs_stage1).ExtractShapes(
+                        input_dir[chn] + "htt_"+chn+".inputs-sm-13TeV"+postfix+".root",
+                        "$BIN/$PROCESS$MASS",
+                        "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+        }
+        // Not ready for HTXS signals yet
+        else {
+            cb.cp().channel({chn}).process(sig_procs).ExtractShapes(
+                    input_dir[chn] + "htt_"+chn+".inputs-sm-13TeV"+postfix+".root",
+                    "$BIN/$PROCESS$MASS",
+                    "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+        }
     }
     
     

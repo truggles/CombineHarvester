@@ -34,6 +34,73 @@ namespace ch {
         
         
         std::vector<std::string> sig_procs = {"ggH_htt","qqH_htt","WH_htt","ZH_htt"};
+        std::vector<std::string> sig_procs_stage0 = {"ggH_htt_GG2H","qqH_htt_VBF",
+            "WH_htt_VH2HQQ","WH_htt_QQ2HLNU","ZH_htt_VH2HQQ","ZH_htt_QQ2HLL"};
+        std::vector<std::string> sig_procs_stage1 = {
+            "ggH_htt_GG2H_VBFTOPO_JET3VETO",
+            "ggH_htt_GG2H_VBFTOPO_JET3",
+            "ggH_htt_GG2H_0J",
+            "ggH_htt_GG2H_1J_PTH_0_60",
+            "ggH_htt_GG2H_1J_PTH_60_120",
+            "ggH_htt_GG2H_1J_PTH_120_200",
+            "ggH_htt_GG2H_1J_PTH_GT200",
+            "ggH_htt_GG2H_GE2J_PTH_0_60",
+            "ggH_htt_GG2H_GE2J_PTH_60_120",
+            "ggH_htt_GG2H_GE2J_PTH_120_200",
+            "ggH_htt_GG2H_GE2J_PTH_GT200",
+            
+            "qqH_htt_QQ2HQQ_VBFTOPO_JET3VETO",
+            "qqH_htt_QQ2HQQ_VBFTOPO_JET3",
+            "qqH_htt_QQ2HQQ_VH2JET",
+            "qqH_htt_QQ2HQQ_REST",
+            "qqH_htt_QQ2HQQ_PTJET1_GT200",
+            
+            "WH_htt_QQ2HQQ_VH2JET",
+            "WH_htt_QQ2HQQ_REST",
+            "WH_htt_QQ2HQQ_PTJET1_GT200",
+            "WH_htt_QQ2HLNU_PTV_0_150",
+            "WH_htt_QQ2HLNU_PTV_150_250_0J",
+            "WH_htt_QQ2HLNU_PTV_150_250_GE1J",
+            "WH_htt_QQ2HLNU_PTV_GT250",
+            
+            "ZH_htt_QQ2HQQ_VH2JET",
+            "ZH_htt_QQ2HQQ_REST",
+            "ZH_htt_QQ2HQQ_PTJET1_GT200",
+            "ZH_htt_QQ2HLL_PTV_0_150",
+            "ZH_htt_QQ2HLL_PTV_150_250_0J",
+            "ZH_htt_QQ2HLL_PTV_150_250_GE1J",
+            "ZH_htt_QQ2HLL_PTV_GT250"
+        };
+        std::vector<std::string> ggH_sig_procs = {
+            "ggH_htt",
+            "ggH_htt_GG2H",
+            "ggH_htt_GG2H_VBFTOPO_JET3VETO",
+            "ggH_htt_GG2H_VBFTOPO_JET3",
+            "ggH_htt_GG2H_0J",
+            "ggH_htt_GG2H_1J_PTH_0_60",
+            "ggH_htt_GG2H_1J_PTH_60_120",
+            "ggH_htt_GG2H_1J_PTH_120_200",
+            "ggH_htt_GG2H_1J_PTH_GT200",
+            "ggH_htt_GG2H_GE2J_PTH_0_60",
+            "ggH_htt_GG2H_GE2J_PTH_60_120",
+            "ggH_htt_GG2H_GE2J_PTH_120_200",
+            "ggH_htt_GG2H_GE2J_PTH_GT200"
+        };
+        std::vector<std::string> ggH_sig_procs_125 = {
+            "ggH_htt125",
+            "ggH_htt_GG2H125",
+            "ggH_htt_GG2H_VBFTOPO_JET3VETO125",
+            "ggH_htt_GG2H_VBFTOPO_JET3125",
+            "ggH_htt_GG2H_0J125",
+            "ggH_htt_GG2H_1J_PTH_0_60125",
+            "ggH_htt_GG2H_1J_PTH_60_120125",
+            "ggH_htt_GG2H_1J_PTH_120_200125",
+            "ggH_htt_GG2H_1J_PTH_GT200125",
+            "ggH_htt_GG2H_GE2J_PTH_0_60125",
+            "ggH_htt_GG2H_GE2J_PTH_60_120125",
+            "ggH_htt_GG2H_GE2J_PTH_120_200125",
+            "ggH_htt_GG2H_GE2J_PTH_GT200125"
+        };
         
         // N.B. when adding this list of backgrounds to a nuisance, only
         // the backgrounds that are included in the background process
@@ -57,7 +124,7 @@ namespace ch {
         //  lumi
         //##############################################################################
         
-        cb.cp().process(JoinStr({sig_procs, {"VV","VVT","VVJ","ggH_hww125","qqH_hww125"}})).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, {"VV","VVT","VVJ","ggH_hww125","qqH_hww125"}})).AddSyst(cb,
                                             "lumi_13TeV_2016", "lnN", SystMap<>::init(1.025));
         cb.cp().process({"W_rest", "ZJ_rest", "TTJ_rest", "VVJ_rest"}).channel({"tt"}).AddSyst(cb,"lumi_13TeV_2016", "lnN", SystMap<>::init(1.025));
         
@@ -73,18 +140,18 @@ namespace ch {
         //  trigger   ##FIXME   the values have been chosen rather arbitrarily
         //##############################################################################
         
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs_no_W})).channel({"mt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs_no_W})).channel({"mt"}).AddSyst(cb,
                                              "CMS_eff_trigger_$CHANNEL_$ERA", "lnN", SystMap<>::init(1.02));
         
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs_no_W})).channel({"et"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs_no_W})).channel({"et"}).AddSyst(cb,
                                              "CMS_eff_trigger_$CHANNEL_$ERA", "lnN", SystMap<>::init(1.02));
         
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"em","ttbar"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"em","ttbar"}).AddSyst(cb,
                                              // hard coding channel here keeps "em" and "ttbar" correlated
                                              "CMS_eff_trigger_em_$ERA", "lnN", SystMap<>::init(1.02));
 
         // New
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"tt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"tt"}).AddSyst(cb,
                                             "CMS_eff_trigger_$CHANNEL_$ERA", "lnN", SystMap<>::init(1.10));
 
 
@@ -95,12 +162,12 @@ namespace ch {
         //##############################################################################
         cb.cp().AddSyst(cb, "CMS_eff_m", "lnN", SystMap<channel, process>::init
                         ({"mm"}, {"ZTT", "TT", "VV", "ZL", "ZJ"},  1.02)
-                        ({"mt"}, JoinStr({sig_procs, all_mc_bkgs_no_W}),  1.02)
-                        ({"em","ttbar"}, JoinStr({sig_procs, all_mc_bkgs}),  1.02));
+                        ({"mt"}, JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs_no_W}),  1.02)
+                        ({"em","ttbar"}, JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs}),  1.02));
         
         cb.cp().AddSyst(cb, "CMS_eff_e", "lnN", SystMap<channel, process>::init
-                        ({"et"}, JoinStr({sig_procs, all_mc_bkgs_no_W}),  1.02)
-                        ({"em","ttbar"}, JoinStr({sig_procs, all_mc_bkgs}),       1.02));
+                        ({"et"}, JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs_no_W}),  1.02)
+                        ({"em","ttbar"}, JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs}),       1.02));
         
 
         // Tau Efficiency applied to all MC
@@ -110,17 +177,17 @@ namespace ch {
         // We also have channel specific components and fully correlated components
         //
         // ETau & MuTau
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"et","mt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt"}).AddSyst(cb,
                                              "CMS_eff_t_$ERA", "lnN", SystMap<>::init(1.045));
         
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"et","mt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt"}).AddSyst(cb,
                                              "CMS_eff_t_$CHANNEL_$ERA", "lnN", SystMap<>::init(1.02));
 
         // TauTau - 2 real taus
-        cb.cp().process(JoinStr({sig_procs, {"ZTT","VV","VVT","TTT","EWKZ"}})).channel({"tt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, {"ZTT","VV","VVT","TTT","EWKZ"}})).channel({"tt"}).AddSyst(cb,
                                              "CMS_eff_t_$ERA", "lnN", SystMap<>::init(1.09));
         
-        cb.cp().process(JoinStr({sig_procs, {"ZTT","VV","VVT","TTT","EWKZ"}})).channel({"tt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, {"ZTT","VV","VVT","TTT","EWKZ"}})).channel({"tt"}).AddSyst(cb,
                                              "CMS_eff_t_$CHANNEL_$ERA", "lnN", SystMap<>::init(1.04));
 
         // TauTau - 1+ jet to tau fakes
@@ -161,7 +228,7 @@ namespace ch {
         //  Electron and tau energy Scale
         //##############################################################################
         
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs, {"QCD"}})).channel({"em"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"QCD"}})).channel({"em"}).AddSyst(cb,
                                              "CMS_scale_e_$CHANNEL_$ERA", "shape", SystMap<>::init(1.00));
         
         // Use only one of the TES options below per channel
@@ -174,21 +241,21 @@ namespace ch {
         // without scale_t on all shapes)
         // FIXME
 //        if (control_region == 1) {
-//            cb.cp().process(JoinStr({sig_procs, {"ZTT","TTT","VV","VVT","EWKZ"}})).channel({"et","mt","tt"}).AddSyst(cb,
+//            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, {"ZTT","TTT","VV","VVT","EWKZ"}})).channel({"et","mt","tt"}).AddSyst(cb,
 //                                             "CMS_scale_t_$CHANNEL_$ERA", "shape", SystMap<>::init(1.00));
 //        }
 //        else {
-//            cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"et","mt","tt"}).AddSyst(cb,
+//            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt"}).AddSyst(cb,
 //                                             "CMS_scale_t_$CHANNEL_$ERA", "shape", SystMap<>::init(1.00));
 //        }
 
 
         // Decay Mode based TES Settings
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"et","mt","tt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt"}).AddSyst(cb,
                                                   "CMS_scale_t_1prong_$ERA", "shape", SystMap<>::init(1.00));
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"et","mt","tt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt"}).AddSyst(cb,
                                                   "CMS_scale_t_1prong1pizero_$ERA", "shape", SystMap<>::init(1.00));
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"et","mt","tt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt"}).AddSyst(cb,
                                                   "CMS_scale_t_3prong_$ERA", "shape", SystMap<>::init(1.00));
         
 
@@ -197,21 +264,21 @@ namespace ch {
         //##############################################################################
  
         // MET Systematic shapes
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"et","mt","tt","em"}).bin_id({1,2,3}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt","em"}).bin_id({1,2,3}).AddSyst(cb,
                                                   "CMS_scale_met_clustered_$ERA", "shape", SystMap<>::init(1.00));
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"et","mt","tt","em"}).bin_id({1,2,3}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt","em"}).bin_id({1,2,3}).AddSyst(cb,
                                                   "CMS_scale_met_unclustered_$ERA", "shape", SystMap<>::init(1.00));
         
         
         // Standard JES, factorized 27 JES implementation below
         // only use 1 at a time.
         // full 27 JES...
-//        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"et","mt","tt"}).bin_id({1,2,3}).AddSyst(cb,
+//        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt"}).bin_id({1,2,3}).AddSyst(cb,
  //                                            "CMS_scale_j_$ERA", "shape", SystMap<>::init(1.00));
- //           cb.cp().process(JoinStr({sig_procs, all_mc_bkgs, {"QCD"}})).bin_id({1,2,3}).channel({"em"}).AddSyst(cb,
+ //           cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"QCD"}})).bin_id({1,2,3}).channel({"em"}).AddSyst(cb,
  //                                          "CMS_scale_j_$ERA", "shape", SystMap<>::init(1.00));
         
-//        cb.cp().process(JoinStr({sig_procs, {"ZTT","TT","W","VV", "ZL", "QCD"}})).channel({"ttbar"}).AddSyst(cb,
+//        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, {"ZTT","TT","W","VV", "ZL", "QCD"}})).channel({"ttbar"}).AddSyst(cb,
 //                                             "CMS_scale_j_$ERA", "shape", SystMap<>::init(1.00));
 
         // JES factorization test tautau        
@@ -276,15 +343,15 @@ namespace ch {
         //
         
         /*for (string uncert:uncertNames){
-         cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"tt","mt"}).AddSyst(cb,
+         cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"tt","mt"}).AddSyst(cb,
          "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
-         cb.cp().process(JoinStr({sig_procs, all_mc_bkgs, {"QCD"}})).channel({"em"}).AddSyst(cb,
+         cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"QCD"}})).channel({"em"}).AddSyst(cb,
          "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
          
          //Note:  TTJ is excluded from bin 13 of et channel as it was empty and causing error
-         cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"et"}).bin_id({1,2,3,10,11,12,14,15}).AddSyst(cb,
+         cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et"}).bin_id({1,2,3,10,11,12,14,15}).AddSyst(cb,
          "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
-         cb.cp().process(JoinStr({sig_procs, all_mc_bkgs_no_TTJ})).channel({"et"}).bin_id({13}).AddSyst(cb,
+         cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs_no_TTJ})).channel({"et"}).bin_id({13}).AddSyst(cb,
          "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
          
          cb.cp().process({"ZTT","TT","W","VV", "ZL", "QCD"}).channel({"ttbar"}).AddSyst(cb,
@@ -294,16 +361,16 @@ namespace ch {
          }*/
         for (string uncert:uncertNames){
             
-            cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"et"}).bin_id({10,11,14}).AddSyst(cb,
+            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et"}).bin_id({10,11,14}).AddSyst(cb,
                                                                                                 "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
 
-            cb.cp().process(JoinStr({sig_procs, all_mc_bkgs_no_TTJ})).channel({"et"}).bin_id({13}).AddSyst(cb,
+            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs_no_TTJ})).channel({"et"}).bin_id({13}).AddSyst(cb,
                                                                                                 "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
             
-            cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"mt"}).bin_id({10,11,13,14}).AddSyst(cb,
+            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"mt"}).bin_id({10,11,13,14}).AddSyst(cb,
                                                                                                 "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
             
-            cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"tt"}).bin_id({10,11,12}).AddSyst(cb,
+            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"tt"}).bin_id({10,11,12}).AddSyst(cb,
                                                                                                  "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
         }
         
@@ -354,9 +421,12 @@ namespace ch {
         cb.cp().process({"TTT"}).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativePtEC2_$ERA", "lnN", SystMap<>::init(1.01145848957));
         cb.cp().process({"TTJ"}).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_FlavorQCD_$ERA", "lnN", SystMap<>::init(1.01601456021));
         cb.cp().process({"TTJ"}).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_PileUpPtEC1_$ERA", "lnN", SystMap<>::init(1.01601456021));
-        cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativeBal_$ERA", "lnN", SystMap<>::init(0.978152281977));
-        cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativePtEC2_$ERA", "lnN", SystMap<>::init(1.00304039446));
-        cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativePtHF_$ERA", "lnN", SystMap<>::init(1.01605523932));
+        //cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativeBal_$ERA", "lnN", SystMap<>::init(0.978152281977));
+        //cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativePtEC2_$ERA", "lnN", SystMap<>::init(1.00304039446));
+        //cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativePtHF_$ERA", "lnN", SystMap<>::init(1.01605523932));
+        cb.cp().process(ggH_sig_procs_125).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativeBal_$ERA", "lnN", SystMap<>::init(0.978152281977));
+        cb.cp().process(ggH_sig_procs_125).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativePtEC2_$ERA", "lnN", SystMap<>::init(1.00304039446));
+        cb.cp().process(ggH_sig_procs_125).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativePtHF_$ERA", "lnN", SystMap<>::init(1.01605523932));
         cb.cp().process({"qqH_htt125"}).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_FlavorQCD_$ERA", "lnN", SystMap<>::init(1.00733361765));
         cb.cp().process({"qqH_htt125"}).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativeBal_$ERA", "lnN", SystMap<>::init(0.984061069106));
         cb.cp().process({"qqH_htt125"}).channel({"tt"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativePtHF_$ERA", "shape", SystMap<>::init(1.00));
@@ -416,12 +486,18 @@ namespace ch {
         cb.cp().process({"TTJ"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_FlavorQCD_$ERA", "lnN", SystMap<>::init(0.936103550246));
         cb.cp().process({"TTJ"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_RelativeBal_$ERA", "lnN", SystMap<>::init(0.985502638586));
         cb.cp().process({"TTJ"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_RelativePtHF_$ERA", "lnN", SystMap<>::init(0.95060091166));
-        cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_FlavorQCD_$ERA", "shape", SystMap<>::init(1.00));
-        cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_PileUpDataMC_$ERA", "shape", SystMap<>::init(1.00));
-        cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_PileUpPtEC1_$ERA", "shape", SystMap<>::init(1.00));
-        cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_PileUpPtHF_$ERA", "lnN", SystMap<>::init(0.996671566248));
-        cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_RelativeBal_$ERA", "shape", SystMap<>::init(1.00));
-        cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_RelativePtHF_$ERA", "shape", SystMap<>::init(1.00));
+        //cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_FlavorQCD_$ERA", "shape", SystMap<>::init(1.00));
+        //cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_PileUpDataMC_$ERA", "shape", SystMap<>::init(1.00));
+        //cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_PileUpPtEC1_$ERA", "shape", SystMap<>::init(1.00));
+        //cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_PileUpPtHF_$ERA", "lnN", SystMap<>::init(0.996671566248));
+        //cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_RelativeBal_$ERA", "shape", SystMap<>::init(1.00));
+        //cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_RelativePtHF_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process(ggH_sig_procs_125).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_FlavorQCD_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process(ggH_sig_procs_125).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_PileUpDataMC_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process(ggH_sig_procs_125).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_PileUpPtEC1_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process(ggH_sig_procs_125).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_PileUpPtHF_$ERA", "lnN", SystMap<>::init(0.996671566248));
+        cb.cp().process(ggH_sig_procs_125).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_RelativeBal_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process(ggH_sig_procs_125).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_RelativePtHF_$ERA", "shape", SystMap<>::init(1.00));
         cb.cp().process({"qqH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_AbsoluteMPFBias_$ERA", "shape", SystMap<>::init(1.00));
         cb.cp().process({"qqH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_AbsoluteScale_$ERA", "lnN", SystMap<>::init(0.985040891467));
         cb.cp().process({"qqH_htt125"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_AbsoluteStat_$ERA", "lnN", SystMap<>::init(0.985040891467));
@@ -494,7 +570,8 @@ namespace ch {
         cb.cp().process({"ZJ"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_RelativePtHF_$ERA", "lnN", SystMap<>::init(0.992799503635));
         cb.cp().process({"ZJ"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_SinglePionECAL_$ERA", "lnN", SystMap<>::init(1.00762890882));
         cb.cp().process({"ZJ"}).channel({"tt"}).bin_id({1}).AddSyst(cb,"CMS_scale_j_SinglePionHCAL_$ERA", "lnN", SystMap<>::init(1.00762890882));
-        cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({2}).AddSyst(cb,"CMS_scale_j_FlavorQCD_$ERA", "lnN", SystMap<>::init(1.00824765659));
+        //cb.cp().process({"ggH_htt125"}).channel({"tt"}).bin_id({2}).AddSyst(cb,"CMS_scale_j_FlavorQCD_$ERA", "lnN", SystMap<>::init(1.00824765659));
+        cb.cp().process(ggH_sig_procs_125).channel({"tt"}).bin_id({2}).AddSyst(cb,"CMS_scale_j_FlavorQCD_$ERA", "lnN", SystMap<>::init(1.00824765659));
         cb.cp().process({"qqH_htt125"}).channel({"tt"}).bin_id({2}).AddSyst(cb,"CMS_scale_j_RelativeBal_$ERA", "lnN", SystMap<>::init(1.0091440601));
         cb.cp().process({"W"}).channel({"tt"}).bin_id({2}).AddSyst(cb,"CMS_scale_j_AbsoluteMPFBias_$ERA", "lnN", SystMap<>::init(1.00338910703));
         cb.cp().process({"W"}).channel({"tt"}).bin_id({2}).AddSyst(cb,"CMS_scale_j_AbsoluteScale_$ERA", "lnN", SystMap<>::init(1.00306955129));
@@ -1334,16 +1411,16 @@ namespace ch {
 
 
 //        for (string uncert:uncertNames){
-//            cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"tt","mt","et"}).bin_id({1,2,3}).AddSyst(cb,
+//            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"tt","mt","et"}).bin_id({1,2,3}).AddSyst(cb,
 //                                           "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
-//            cb.cp().process(JoinStr({sig_procs, all_mc_bkgs, {"QCD"}})).bin_id({1,2,3}).channel({"em"}).AddSyst(cb,
+//            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"QCD"}})).bin_id({1,2,3}).channel({"em"}).AddSyst(cb,
 //                                           "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
 //        }
 
 
 //        cb.cp().AddSyst(cb,
 //                        "CMS_htt_scale_met_$ERA", "lnN", SystMap<channel, bin_id, process>::init
-//                        ({"et", "mt", "em", "tt","ttbar"}, {1, 2, 3}, JoinStr({sig_procs, all_mc_bkgs_no_W}), 1.01));
+//                        ({"et", "mt", "em", "tt","ttbar"}, {1, 2, 3}, JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs_no_W}), 1.01));
         cb.cp().AddSyst(cb,
                         "CMS_htt_scale_met_$ERA", "lnN", SystMap<channel, bin_id, process>::init
                         ({"ttbar"}, {1, 2, 3}, {all_mc_bkgs}, 1.01));
@@ -1520,7 +1597,7 @@ namespace ch {
         //##############################################################################
         
         //scale_gg on signal
-        cb.cp().process( {"ggH_htt"}).channel({"et","mt","tt","em"}).AddSyst(cb,
+        cb.cp().process( ggH_sig_procs ).channel({"et","mt","tt","em"}).AddSyst(cb,
                                              "CMS_scale_gg_$ERA", "shape", SystMap<>::init(1.00));
         
         // Scale uncertainty on signal Applies to ggH in boosted and VBF. Event-by-event weight applied as a func(on of pth or mjj. Fully correlated between categories and final states.
@@ -1572,18 +1649,18 @@ namespace ch {
                         ({"em"},{1},{"ggH_htt"}, 1.007)
                         ({"et"},{1},{"ggH_htt"}, 1.007)
                         ({"mt"},{1},{"ggH_htt"}, 1.007)
-                        ({"tt"},{1},{"ggH_htt"}, 1.009)
+                        ({"tt"},{1},ggH_sig_procs, 1.009)
                         
                         ({"em"},{2},{"ggH_htt"}, 1.007)
                         ({"et"},{2},{"ggH_htt"}, 1.007)
                         ({"mt"},{2},{"ggH_htt"}, 1.007)
-                        ({"tt"},{2},{"ggH_htt"}, 1.009)
+                        ({"tt"},{2},ggH_sig_procs, 1.009)
                         
                         
                         ({"em"},{3},{"ggH_htt"}, 1.007)
                         ({"et"},{3},{"ggH_htt"}, 1.007)
                         ({"mt"},{3},{"ggH_htt"}, 1.007)
-                        ({"tt"},{3},{"ggH_htt"}, 1.009)
+                        ({"tt"},{3},ggH_sig_procs, 1.009)
                         );
         
         
@@ -1618,17 +1695,17 @@ namespace ch {
                         ({"em"},{1},{"ggH_htt"}, 1.015)
                         ({"et"},{1},{"ggH_htt"}, 1.015)
                         ({"mt"},{1},{"ggH_htt"}, 1.015)
-                        ({"tt"},{1},{"ggH_htt"}, 1.015)
+                        ({"tt"},{1},ggH_sig_procs, 1.015)
                         
                         ({"em"},{2},{"ggH_htt"}, 0.945)
                         ({"et"},{2},{"ggH_htt"}, 0.945)
                         ({"mt"},{2},{"ggH_htt"}, 0.945)
-                        ({"tt"},{2},{"ggH_htt"}, 0.945)
+                        ({"tt"},{2},ggH_sig_procs, 0.945)
                         
                         ({"em"},{3},{"ggH_htt"}, 1.03)
                         ({"et"},{3},{"ggH_htt"}, 1.03)
                         ({"mt"},{3},{"ggH_htt"}, 1.03)
-                        ({"tt"},{3},{"ggH_htt"}, 1.03)
+                        ({"tt"},{3},ggH_sig_procs, 1.03)
                         );
         
         
@@ -1700,12 +1777,12 @@ namespace ch {
         cb.cp().process({"ggH_hww125","qqH_hww125"}).AddSyst(cb,"BR_hww_PU_alphas", "lnN", SystMap<>::init(1.0066));
         
         
-        cb.cp().process({"ggH_htt","ggH_hww125"}).AddSyst(cb,"QCDscale_ggH", "lnN", SystMap<>::init(1.039));
+        cb.cp().process( JoinStr({ggH_sig_procs,{"ggH_hww125"}}) ).AddSyst(cb,"QCDscale_ggH", "lnN", SystMap<>::init(1.039));
         cb.cp().process({"qqH_htt","qqH_hww125"}).AddSyst(cb,"QCDscale_qqH", "lnN", SystMap<>::init(1.004));
         cb.cp().process({"WH_htt"}).AddSyst(cb,"QCDscale_VH", "lnN", SystMap<>::init(1.007));
         cb.cp().process({"ZH_htt"}).AddSyst(cb,"QCDscale_VH", "lnN", SystMap<>::init(1.038));
         
-        cb.cp().process({"ggH_htt","ggH_hww125"}).AddSyst(cb,"pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
+        cb.cp().process( JoinStr({ggH_sig_procs,{"ggH_hww125"}}) ).AddSyst(cb,"pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
         cb.cp().process({"qqH_htt","qqH_hww125"}).AddSyst(cb,"pdf_Higgs_qqbar", "lnN", SystMap<>::init(1.021));
         cb.cp().process({"WH_htt"}).AddSyst(cb,"pdf_Higgs_qqbar", "lnN", SystMap<>::init(1.019));
         cb.cp().process({"ZH_htt"}).AddSyst(cb,"pdf_Higgs_qqbar", "lnN", SystMap<>::init(1.016));
@@ -1717,7 +1794,7 @@ namespace ch {
         
         
         //   Additonal uncertainties applied to the paper i.e. top mass 
-        cb.cp().process( {"ggH_htt"}).channel({"et","mt","em","tt"}).AddSyst(cb,
+        cb.cp().process( ggH_sig_procs ).channel({"et","mt","em","tt"}).AddSyst(cb,
                                                                          "TopMassTreatment_$ERA", "shape", SystMap<>::init(1.00));
         
         
@@ -1725,17 +1802,17 @@ namespace ch {
                         ({"em"},{1},{"ggH_htt"}, 0.959)
                         ({"et"},{1},{"ggH_htt"}, 0.959)
                         ({"mt"},{1},{"ggH_htt"}, 0.959)
-                        ({"tt"},{1},{"ggH_htt"}, 0.959)
+                        ({"tt"},{1},ggH_sig_procs, 0.959)
                         
                         ({"em"},{2},{"ggH_htt"}, 1.079)
                         ({"et"},{2},{"ggH_htt"}, 1.079)
                         ({"mt"},{2},{"ggH_htt"}, 1.079)
-                        ({"tt"},{2},{"ggH_htt"}, 1.079)
+                        ({"tt"},{2},ggH_sig_procs, 1.079)
                         
                         ({"em"},{3},{"ggH_htt"}, 1.039)
                         ({"et"},{3},{"ggH_htt"}, 1.039)
                         ({"mt"},{3},{"ggH_htt"}, 1.039)
-                        ({"tt"},{3},{"ggH_htt"}, 1.039)
+                        ({"tt"},{3},ggH_sig_procs, 1.039)
                         );
         
         
@@ -1743,34 +1820,34 @@ namespace ch {
                         ({"em"},{1},{"ggH_htt"}, 1.000)
                         ({"et"},{1},{"ggH_htt"}, 1.000)
                         ({"mt"},{1},{"ggH_htt"}, 1.000)
-                        ({"tt"},{1},{"ggH_htt"}, 1.000)
+                        ({"tt"},{1},ggH_sig_procs, 1.000)
                         
                         ({"em"},{2},{"ggH_htt"}, 0.932)
                         ({"et"},{2},{"ggH_htt"}, 0.932)
                         ({"mt"},{2},{"ggH_htt"}, 0.932)
-                        ({"tt"},{2},{"ggH_htt"}, 0.932)
+                        ({"tt"},{2},ggH_sig_procs, 0.932)
                         
                         ({"em"},{3},{"ggH_htt"}, 1.161)
                         ({"et"},{3},{"ggH_htt"}, 1.161)
                         ({"mt"},{3},{"ggH_htt"}, 1.161)
-                        ({"tt"},{3},{"ggH_htt"}, 1.161)
+                        ({"tt"},{3},ggH_sig_procs, 1.161)
                         );
         
         cb.cp().AddSyst(cb, "CMS_ggH_STXSVBF2j", "lnN", SystMap<channel, bin_id, process>::init
                         ({"em"},{1},{"ggH_htt"}, 1.000)
                         ({"et"},{1},{"ggH_htt"}, 1.000)
                         ({"mt"},{1},{"ggH_htt"}, 1.000)
-                        ({"tt"},{1},{"ggH_htt"}, 1.000)
+                        ({"tt"},{1},ggH_sig_procs, 1.000)
                         
                         ({"em"},{2},{"ggH_htt"}, 1.000)
                         ({"et"},{2},{"ggH_htt"}, 1.000)
                         ({"mt"},{2},{"ggH_htt"}, 1.000)
-                        ({"tt"},{2},{"ggH_htt"}, 1.000)
+                        ({"tt"},{2},ggH_sig_procs, 1.000)
                         
                         ({"em"},{3},{"ggH_htt"}, 1.200)
                         ({"et"},{3},{"ggH_htt"}, 1.200)
                         ({"mt"},{3},{"ggH_htt"}, 1.200)
-                        ({"tt"},{3},{"ggH_htt"}, 1.200)
+                        ({"tt"},{3},ggH_sig_procs, 1.200)
                         );
         
                         
