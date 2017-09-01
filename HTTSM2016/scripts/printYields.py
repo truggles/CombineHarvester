@@ -1,7 +1,7 @@
 import ROOT
 import math
 
-def pYields ( fName ) :
+def pYields ( fName, bkgs ) :
     f = ROOT.TFile( fName,'r')
     
     dirs = [
@@ -11,74 +11,6 @@ def pYields ( fName ) :
         'tt_vbf',
     ]
     
-    bkgs = [
-        'ggH_htt125',
-
-        'ggH_htt_GG2H125',
-        'ggH_htt_GG2H_FWDH125',
-
-        'ggH_htt_GG2H_VBFTOPO_JET3VETO125',
-        'ggH_htt_GG2H_VBFTOPO_JET3125',
-        'ggH_htt_GG2H_0J125',
-        'ggH_htt_GG2H_1J_PTH_0_60125',
-        'ggH_htt_GG2H_1J_PTH_60_120125',
-        'ggH_htt_GG2H_1J_PTH_120_200125',
-        'ggH_htt_GG2H_1J_PTH_GT200125',
-        'ggH_htt_GG2H_GE2J_PTH_0_60125',
-        'ggH_htt_GG2H_GE2J_PTH_60_120125',
-        'ggH_htt_GG2H_GE2J_PTH_120_200125',
-        'ggH_htt_GG2H_GE2J_PTH_GT200125',
-
-        'qqH_htt125',
-
-        'qqH_htt_VBF125',
-        'qqH_htt_VBF_FWDH125',
-
-        'qqH_htt_QQ2HQQ_FWDH125',
-        'qqH_htt_QQ2HQQ_VBFTOPO_JET3VETO125',
-        'qqH_htt_QQ2HQQ_VBFTOPO_JET3125',
-        'qqH_htt_QQ2HQQ_VH2JET125',
-        'qqH_htt_QQ2HQQ_REST125',
-        'qqH_htt_QQ2HQQ_PTJET1_GT200125',
-
-
-        'ZH_htt125',
-
-        'ZH_htt_VH2HQQ125',
-        'ZH_htt_VH2HQQ_FWDH125',
-        'ZH_htt_QQ2HLL_FWDH125',
-        'ZH_htt_QQ2HLL125',
-
-        'ZH_htt_QQ2HQQ_FWDH125',
-        'ZH_htt_QQ2HQQ_VBFTOPO_JET3VETO125',
-        'ZH_htt_QQ2HQQ_VBFTOPO_JET3125',
-        'ZH_htt_QQ2HQQ_VH2JET125',
-        'ZH_htt_QQ2HQQ_REST125',
-        'ZH_htt_QQ2HQQ_PTJET1_GT200125',
-        'ZH_htt_QQ2HLL_FWDH125',
-        'ZH_htt_QQ2HLL_PTV_0_150125',
-        'ZH_htt_QQ2HLL_PTV_150_250_0J125',
-        'ZH_htt_QQ2HLL_PTV_150_250_GE1J125',
-        'ZH_htt_QQ2HLL_PTV_GT250125',
-
-
-        'WH_htt125',
-
-        'WH_htt_VH2HQQ125',
-        'WH_htt_QQ2HLNU125',
-        'WH_htt_QQ2HLNU_FWDH125',
-
-        'WH_htt_QQ2HQQ_VBFTOPO_JET3VETO125',
-        'WH_htt_QQ2HQQ_VBFTOPO_JET3125',
-        'WH_htt_QQ2HQQ_VH2JET125',
-        'WH_htt_QQ2HQQ_REST125',
-        'WH_htt_QQ2HQQ_PTJET1_GT200125',
-        'WH_htt_QQ2HLNU_FWDH125',
-        'WH_htt_QQ2HLNU_PTV_0_150125',
-        'WH_htt_QQ2HLNU_PTV_150_250_0J125',
-        'WH_htt_QQ2HLNU_PTV_150_250_GE1J125',
-        'WH_htt_QQ2HLNU_PTV_GT250125',
-    ]
     
     for dir in dirs :
         print dir
@@ -89,8 +21,77 @@ def pYields ( fName ) :
             for b in range(1, h.GetXaxis().GetNbins()+1 ) :
                 toRoot += h.GetBinError( b )**2
             print ' - %40s %10.4f +/- %4.4f' % (bkg, h.Integral(), math.sqrt(toRoot))
+
+
+bkgs_nom = [
+    'ggH_htt125',
+    'qqH_htt125',
+    'WH_htt125',
+    'ZH_htt125',
+]
+
+bkgs_s0 = [
+    "ggH_fwd_htt125",
+    "ggH_htt125",
+    "qqH_fwd_htt125",
+    "qqH_htt125",
+    "VH_had_fwd_htt125",
+    "VH_had_htt125",
+    "WH_lep_fwd_htt125",
+    "WH_lep_htt125",
+    "ZH_lep_fwd_htt125",
+    "ZH_lep_htt125"
+]
+
+bkgs_s1 = [
+    "ggH_VBFTOPO_JET3VETO_htt125",
+    "ggH_VBFTOPO_JET3_htt125",
+    "ggH_0J_htt125",
+    "ggH_1J_PTH_0_60_htt125",
+    "ggH_1J_PTH_60_120_htt125",
+    "ggH_1J_PTH_120_200_htt125",
+    "ggH_1J_PTH_GT200_htt125",
+    "ggH_GE2J_PTH_0_60_htt125",
+    "ggH_GE2J_PTH_60_120_htt125",
+    "ggH_GE2J_PTH_120_200_htt125",
+    "ggH_GE2J_PTH_GT200_htt125",
+
+    "qqH_FWDH_htt125",
+    "qqH_VBFTOPO_JET3VETO_htt125",
+    "qqH_VBFTOPO_JET3_htt125",
+    "qqH_VH2JET_htt125",
+    "qqH_REST_htt125",
+    "qqH_PTJET1_GT200_htt125",
+
+    "VH_had_FWDH_htt125",
+    "VH_had_VBFTOPO_JET3VETO_htt125",
+    "VH_had_VBFTOPO_JET3_htt125",
+    "VH_had_VH2JET_htt125",
+    "VH_had_REST_htt125",
+    "VH_had_PTJET1_GT200_htt125",
+
+    "WH_lep_FWDH_htt125",
+    "WH_lep_PTV_0_150_htt125",
+    "WH_lep_PTV_150_250_0J_htt125",
+    "WH_lep_PTV_150_250_GE1J_htt125",
+    "WH_lep_PTV_GT250_htt125",
+
+    "ZH_lep_FWDH_htt125",
+    "ZH_lep_PTV_0_150_htt125",
+    "ZH_lep_PTV_150_250_0J_htt125",
+    "ZH_lep_PTV_150_250_GE1J_htt125",
+    "ZH_lep_PTV_GT250_htt125"
+]
+
+
             
 n = 'shapes/USCMS/htt_tt.inputs-sm-13TeV-2D.root'
 print n
-pYields( n )
+pYields( n, bkgs_nom )
+n = 'shapes/USCMS/htt_tt.inputs-sm-13TeV-2D-HTXS.root'
+print n
+pYields( n, bkgs_s0 )
+n = 'shapes/USCMS/htt_tt.inputs-sm-13TeV-2D-HTXS.root'
+print n
+pYields( n, bkgs_s1 )
 

@@ -254,61 +254,58 @@ int main(int argc, char** argv) {
     //  - HTXS Stage 1 categorization
     // HTXS details see https://svnweb.cern.ch/cern/wsvn/lhchiggsxs/repository/TemplateXS/HiggsTemplateCrossSections.h for rivet code mappings
     vector<string> sig_procs = {"ggH_htt","qqH_htt","WH_htt","ZH_htt"};
+
     vector<string> sig_procs_stage0 = {
-        "ggH_htt_s0_GG2H_FWDH",
-        "ggH_htt_s0_GG2H",
-        "qqH_htt_s0_VBF_FWDH",
-        "qqH_htt_s0_VBF",
-        "WH_htt_s0_VH2HQQ",
-        "WH_htt_s0_QQ2HLNU_FWDH",
-        "WH_htt_s0_QQ2HLNU",
-        "ZH_htt_s0_VH2HQQ_FWDH",
-        "ZH_htt_s0_VH2HQQ",
-        "ZH_htt_s0_QQ2HLL_FWDH"
-        "ZH_htt_s0_QQ2HLL"
+        "ggH_fwd_htt",
+        "ggH_htt",
+        "qqH_fwd_htt",
+        "qqH_htt",
+        "VH_had_fwd_htt",
+        "VH_had_htt",
+        "WH_lep_fwd_htt",
+        "WH_lep_htt",
+        "ZH_lep_fwd_htt",
+        "ZH_lep_htt"
     };
+
     vector<string> sig_procs_stage1 = {
-        "ggH_htt_s1_GG2H_VBFTOPO_JET3VETO",
-        "ggH_htt_s1_GG2H_VBFTOPO_JET3",
-        "ggH_htt_s1_GG2H_0J",
-        "ggH_htt_s1_GG2H_1J_PTH_0_60",
-        "ggH_htt_s1_GG2H_1J_PTH_60_120",
-        "ggH_htt_s1_GG2H_1J_PTH_120_200",
-        "ggH_htt_s1_GG2H_1J_PTH_GT200",
-        "ggH_htt_s1_GG2H_GE2J_PTH_0_60",
-        "ggH_htt_s1_GG2H_GE2J_PTH_60_120",
-        "ggH_htt_s1_GG2H_GE2J_PTH_120_200",
-        "ggH_htt_s1_GG2H_GE2J_PTH_GT200",
-        
-        "qqH_htt_s1_QQ2HQQ_FWDH",
-        "qqH_htt_s1_QQ2HQQ_VBFTOPO_JET3VETO",
-        "qqH_htt_s1_QQ2HQQ_VBFTOPO_JET3",
-        "qqH_htt_s1_QQ2HQQ_VH2JET",
-        "qqH_htt_s1_QQ2HQQ_REST",
-        "qqH_htt_s1_QQ2HQQ_PTJET1_GT200",
-        
-        "WH_htt_s1_QQ2HQQ_VBFTOPO_JET3VETO",
-        "WH_htt_s1_QQ2HQQ_VBFTOPO_JET3",
-        "WH_htt_s1_QQ2HQQ_VH2JET",
-        "WH_htt_s1_QQ2HQQ_REST",
-        "WH_htt_s1_QQ2HQQ_PTJET1_GT200",
-        "WH_htt_s1_QQ2HLNU_FWDH",
-        "WH_htt_s1_QQ2HLNU_PTV_0_150",
-        "WH_htt_s1_QQ2HLNU_PTV_150_250_0J",
-        "WH_htt_s1_QQ2HLNU_PTV_150_250_GE1J",
-        "WH_htt_s1_QQ2HLNU_PTV_GT250",
-        
-        "ZH_htt_s1_QQ2HQQ_FWDH",
-        "ZH_htt_s1_QQ2HQQ_VBFTOPO_JET3VETO",
-        "ZH_htt_s1_QQ2HQQ_VBFTOPO_JET3",
-        "ZH_htt_s1_QQ2HQQ_VH2JET",
-        "ZH_htt_s1_QQ2HQQ_REST",
-        "ZH_htt_s1_QQ2HQQ_PTJET1_GT200",
-        "ZH_htt_s1_QQ2HLL_FWDH",
-        "ZH_htt_s1_QQ2HLL_PTV_0_150",
-        "ZH_htt_s1_QQ2HLL_PTV_150_250_0J",
-        "ZH_htt_s1_QQ2HLL_PTV_150_250_GE1J",
-        "ZH_htt_s1_QQ2HLL_PTV_GT250",
+        "ggH_VBFTOPO_JET3VETO_htt",
+        "ggH_VBFTOPO_JET3_htt",
+        "ggH_0J_htt",
+        "ggH_1J_PTH_0_60_htt",
+        "ggH_1J_PTH_60_120_htt",
+        "ggH_1J_PTH_120_200_htt",
+        "ggH_1J_PTH_GT200_htt",
+        "ggH_GE2J_PTH_0_60_htt",
+        "ggH_GE2J_PTH_60_120_htt",
+        "ggH_GE2J_PTH_120_200_htt",
+        "ggH_GE2J_PTH_GT200_htt",
+
+        "qqH_FWDH_htt",
+        "qqH_VBFTOPO_JET3VETO_htt",
+        "qqH_VBFTOPO_JET3_htt",
+        "qqH_VH2JET_htt",
+        "qqH_REST_htt",
+        "qqH_PTJET1_GT200_htt",
+
+        "VH_had_FWDH_htt",
+        "VH_had_VBFTOPO_JET3VETO_htt",
+        "VH_had_VBFTOPO_JET3_htt",
+        "VH_had_VH2JET_htt",
+        "VH_had_REST_htt",
+        "VH_had_PTJET1_GT200_htt",
+
+        "WH_lep_FWDH_htt",
+        "WH_lep_PTV_0_150_htt",
+        "WH_lep_PTV_150_250_0J_htt",
+        "WH_lep_PTV_150_250_GE1J_htt",
+        "WH_lep_PTV_GT250_htt",
+
+        "ZH_lep_FWDH_htt",
+        "ZH_lep_PTV_0_150_htt",
+        "ZH_lep_PTV_150_250_0J_htt",
+        "ZH_lep_PTV_150_250_GE1J_htt",
+        "ZH_lep_PTV_GT250_htt"
     };
 
 //    vector<string> masses = {"110","120","125","130","140"};
