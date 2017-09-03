@@ -24,6 +24,8 @@ def pYields ( fName, bkgs ) :
 
 
 bkgs_nom = [
+    "ggH_fwd_NNLOPS_htt125",
+    "ggH_NNLOPS_htt125",
     'ggH_htt125',
     'qqH_htt125',
     'WH_htt125',
@@ -31,6 +33,8 @@ bkgs_nom = [
 ]
 
 bkgs_s0 = [
+    "ggH_fwd_NNLOPS_htt125",
+    "ggH_NNLOPS_htt125",
     "ggH_fwd_htt125",
     "ggH_htt125",
     "qqH_fwd_htt125",
@@ -44,6 +48,17 @@ bkgs_s0 = [
 ]
 
 bkgs_s1 = [
+    "ggH_VBFTOPO_JET3VETO_NNLOPS_htt125",
+    "ggH_VBFTOPO_JET3_NNLOPS_htt125",
+    "ggH_0J_NNLOPS_htt125",
+    "ggH_1J_PTH_0_60_NNLOPS_htt125",
+    "ggH_1J_PTH_60_120_NNLOPS_htt125",
+    "ggH_1J_PTH_120_200_NNLOPS_htt125",
+    "ggH_1J_PTH_GT200_NNLOPS_htt125",
+    "ggH_GE2J_PTH_0_60_NNLOPS_htt125",
+    "ggH_GE2J_PTH_60_120_NNLOPS_htt125",
+    "ggH_GE2J_PTH_120_200_NNLOPS_htt125",
+    "ggH_GE2J_PTH_GT200_NNLOPS_htt125",
     "ggH_VBFTOPO_JET3VETO_htt125",
     "ggH_VBFTOPO_JET3_htt125",
     "ggH_0J_htt125",
