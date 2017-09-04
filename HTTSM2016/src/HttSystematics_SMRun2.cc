@@ -1611,9 +1611,41 @@ namespace ch {
         //##############################################################################
         
         //scale_gg on signal
-        cb.cp().process( ggH_sig_procs ).channel({"et","mt","tt","em"}).AddSyst(cb,
+        //cb.cp().process( ggH_sig_procs ).channel({"et","mt","tt","em"}).AddSyst(cb,
+        cb.cp().process( ggH_sig_procs ).channel({"et","mt","em"}).AddSyst(cb,
                                              "CMS_scale_gg_$ERA", "shape", SystMap<>::init(1.00));
+
+
+
+        // Gluon Fusion WG1 uncertainty scheme
+        // See: https://twiki.cern.ch/twiki/bin/view/CMS/HiggsWG/SignalModelingTools
+        // Needed for Grand Higgs Combination
+        // With the addition of these uncertainties, the scale_gg uncertainty
+        // above can be removed for that channel.
+        // Only in tautau channel at the moment
+        //cb.cp().process( ggH_sig_procs ).channel({"et","mt","tt","em"}).AddSyst(cb,
+        cb.cp().process( ggH_sig_procs ).channel({"tt"}).AddSyst(cb,
+                "CMS_THU_ggH_Mu_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process( ggH_sig_procs ).channel({"tt"}).AddSyst(cb,
+                "CMS_THU_ggH_Res_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process( ggH_sig_procs ).channel({"tt"}).AddSyst(cb,
+                "CMS_THU_ggH_Mig01_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process( ggH_sig_procs ).channel({"tt"}).AddSyst(cb,
+                "CMS_THU_ggH_Mig12_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process( ggH_sig_procs ).channel({"tt"}).AddSyst(cb,
+                "CMS_THU_ggH_VBF2j_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process( ggH_sig_procs ).channel({"tt"}).AddSyst(cb,
+                "CMS_THU_ggH_VBF3j_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process( ggH_sig_procs ).channel({"tt"}).AddSyst(cb,
+                "CMS_THU_ggH_PT60_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process( ggH_sig_procs ).channel({"tt"}).AddSyst(cb,
+                "CMS_THU_ggH_PT120_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process( ggH_sig_procs ).channel({"tt"}).AddSyst(cb,
+                "CMS_THU_ggH_qmtop_$ERA", "shape", SystMap<>::init(1.00));
         
+
+
+
         // Scale uncertainty on signal Applies to ggH in boosted and VBF. Event-by-event weight applied as a func(on of pth or mjj. Fully correlated between categories and final states.
         
         
@@ -1816,17 +1848,17 @@ namespace ch {
                         ({"em"},{1},{"ggH_htt"}, 0.959)
                         ({"et"},{1},{"ggH_htt"}, 0.959)
                         ({"mt"},{1},{"ggH_htt"}, 0.959)
-                        ({"tt"},{1},ggH_sig_procs, 0.959)
+                        //({"tt"},{1},ggH_sig_procs, 0.959)
                         
                         ({"em"},{2},{"ggH_htt"}, 1.079)
                         ({"et"},{2},{"ggH_htt"}, 1.079)
                         ({"mt"},{2},{"ggH_htt"}, 1.079)
-                        ({"tt"},{2},ggH_sig_procs, 1.079)
+                        //({"tt"},{2},ggH_sig_procs, 1.079)
                         
                         ({"em"},{3},{"ggH_htt"}, 1.039)
                         ({"et"},{3},{"ggH_htt"}, 1.039)
                         ({"mt"},{3},{"ggH_htt"}, 1.039)
-                        ({"tt"},{3},ggH_sig_procs, 1.039)
+                        //({"tt"},{3},ggH_sig_procs, 1.039)
                         );
         
         
@@ -1834,34 +1866,34 @@ namespace ch {
                         ({"em"},{1},{"ggH_htt"}, 1.000)
                         ({"et"},{1},{"ggH_htt"}, 1.000)
                         ({"mt"},{1},{"ggH_htt"}, 1.000)
-                        ({"tt"},{1},ggH_sig_procs, 1.000)
+                        //({"tt"},{1},ggH_sig_procs, 1.000)
                         
                         ({"em"},{2},{"ggH_htt"}, 0.932)
                         ({"et"},{2},{"ggH_htt"}, 0.932)
                         ({"mt"},{2},{"ggH_htt"}, 0.932)
-                        ({"tt"},{2},ggH_sig_procs, 0.932)
+                        //({"tt"},{2},ggH_sig_procs, 0.932)
                         
                         ({"em"},{3},{"ggH_htt"}, 1.161)
                         ({"et"},{3},{"ggH_htt"}, 1.161)
                         ({"mt"},{3},{"ggH_htt"}, 1.161)
-                        ({"tt"},{3},ggH_sig_procs, 1.161)
+                        //({"tt"},{3},ggH_sig_procs, 1.161)
                         );
         
         cb.cp().AddSyst(cb, "CMS_ggH_STXSVBF2j", "lnN", SystMap<channel, bin_id, process>::init
                         ({"em"},{1},{"ggH_htt"}, 1.000)
                         ({"et"},{1},{"ggH_htt"}, 1.000)
                         ({"mt"},{1},{"ggH_htt"}, 1.000)
-                        ({"tt"},{1},ggH_sig_procs, 1.000)
+                        //({"tt"},{1},ggH_sig_procs, 1.000)
                         
                         ({"em"},{2},{"ggH_htt"}, 1.000)
                         ({"et"},{2},{"ggH_htt"}, 1.000)
                         ({"mt"},{2},{"ggH_htt"}, 1.000)
-                        ({"tt"},{2},ggH_sig_procs, 1.000)
+                        //({"tt"},{2},ggH_sig_procs, 1.000)
                         
                         ({"em"},{3},{"ggH_htt"}, 1.200)
                         ({"et"},{3},{"ggH_htt"}, 1.200)
                         ({"mt"},{3},{"ggH_htt"}, 1.200)
-                        ({"tt"},{3},ggH_sig_procs, 1.200)
+                        //({"tt"},{3},ggH_sig_procs, 1.200)
                         );
         
                         
