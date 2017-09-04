@@ -43,6 +43,7 @@ parser = argparse.ArgumentParser()
 # parser.add_argument('--input', '-i', help='Output of PostFitShapes or PostFitShapesFromWorkspace, specified as FILE:BIN')
 parser.add_argument('--output', '-o', default=None, help='Output name')
 parser.add_argument('--typet', '-t', default='cat', help='category or channel')
+parser.add_argument('--blind', '-b', dest='blind', action='store_true', help='Find Asimove jsons')
 # parser.add_argument('--channel', '-c', default='mt', choices=['mt', 'et', 'em', 'tt', 'mm'], help='Channel')
 # parser.add_argument('--x-title', default='m_{ll}', help='x-axis variable, without GeV')
 # parser.add_argument('--logy', action='store_true')
@@ -51,14 +52,31 @@ parser.add_argument('--typet', '-t', default='cat', help='category or channel')
 args = parser.parse_args()
 
 Type=args.typet
+Blind=args.blind
+output=args.output
+print "Type:",Type
+print "Blind:",Blind
+print "Output Name:",output
 
 # Canvas and pads
 canv = ROOT.TCanvas(args.output, args.output)
 pads = plot.OnePad()
 pads[0].SetTicks(1, -1)
 
+if Type == 'signal_nom' :
+    if Blind :
+        pad = {'xmin' : -15, 'xmax' : 20, 'ymin' : 0, 'ymax' : 10}
+    else :
+        pad = {'xmin' : -30, 'xmax' : 25, 'ymin' : 0, 'ymax' : 10}
+elif Type == 'signal_s0' :
+    pad = {'xmin' : -50, 'xmax' : 50, 'ymin' : 0, 'ymax' : 10}
+else :
+    pad = {'xmin' : -.5, 'xmax' : 3, 'ymin' : 0, 'ymax' : 10}
+print pad
+#pad = {'xmin' : -20, 'xmax' : 20, 'ymin' : 0, 'ymax' : 10} # Nom Blind
+#pad = {'xmin' : -50, 'xmax' : 50, 'ymin' : 0, 'ymax' : 10} # S0 blind
 
-axis = ROOT.TH2F('axis', '', 1, -.5, 3, 10, 0, 10)
+axis = ROOT.TH2F('axis', '', 1, pad['xmin'], pad['xmax'], pad['ymax'], pad['ymin'], pad['ymax'])
 
 plot.Set(axis.GetYaxis(), LabelSize=0)
 plot.Set(axis.GetXaxis(), Title='Best fit #mu = #sigma/#sigma_{SM}')
@@ -66,8 +84,8 @@ axis.Draw()
 
 
 
-y_pos = 8.5
-x_text = 1.85
+#y_pos = 8.5
+y_pos = pad['ymax'] - 1.5
 
 latex = ROOT.TLatex()
 latexNum = ROOT.TLatex()
@@ -95,7 +113,31 @@ Channel_Category_Name={
         'em': 'e#mu',
         'tt': '#tau_{h}#tau_{h}',
         'cmb': 'combined'
-    }
+    },
+    'signal_nom' : {
+        'r_ggH': 'ggH',
+        'r_qqH': 'qqH',
+        'r_WH': 'WH',
+        'r_ZH': 'ZH',
+        'r_cmb': 'cmb'
+    },
+    'signal_s0' : {
+        'r_ggH': 'ggH',
+        'r_qqH': 'qqH',
+        'r_WH_lep': 'WH lep',
+        'r_WH_lep_fwd': 'WH lep fwd',
+        'r_ZH_lep': 'ZH lep',
+        'r_VH_had': 'VH had',
+        'r_VH_had_fwd': 'VH had fwd',
+        'r_cmb': 'cmb'
+    },
+    'signal_s0_frozen' : {
+        'wFrozen_r_ggH': 'ggH',
+        'wFrozen_r_qqH': 'qqH',
+        'wFrozen_r_ZH_lep': 'ZH lep',
+        'wFrozen_r_VH_had': 'VH had',
+        'r_cmb': 'cmb'
+    },
 }
 
 i = 0
@@ -103,18 +145,43 @@ y_pos -= 1.0
 
 chn = '120.0'
 
+x_text = 1.85
+num_text = x_text
+y_adj = 0.0
+
 if Type=='channel': proc = ['em','et', 'mt', 'tt','cmb']
 elif Type=='category': proc = ['0jet','boosted', 'vbf','cmb']
 elif Type=='signal': proc = ['ggH','qqH','WH','ZH','cmb']
-else:  print 'either select category or channel'
+elif Type=='signal_nom':
+    proc = ['r_ggH','r_qqH','r_WH','r_ZH','r_cmb']
+    x_text = 5
+    num_text = 13
+    spacingPerEntry = (pad['ymax'] - pad['ymin']) * 0.75 / len(proc)
+    y_adj = spacingPerEntry*0.3
+elif Type=='signal_s0':
+    proc = ['r_ggH','r_qqH','r_VH_had','r_VH_had_fwd','r_ZH_lep','r_WH_lep','r_WH_lep_fwd','r_cmb']
+    x_text = 5
+    num_text = 28
+    spacingPerEntry = (pad['ymax'] - pad['ymin']) * 0.75 / len(proc)
+    y_adj = spacingPerEntry*0.3
+elif Type=='signal_s0_frozen':
+    proc = ['wFrozen_r_ggH','wFrozen_r_qqH','wFrozen_r_ZH_lep','wFrozen_r_VH_had','r_cmb']
+    x_text = 5
+    num_text = 18
+elif Type=='signal_s1': proc = ['ggH','qqH','WH','ZH','cmb']
+else:
+    print 'either select category or channel'
 
 
 gr = ROOT.TGraphAsymmErrors(len(proc))
 plot.Set(gr, LineWidth=2, LineColor=ROOT.kBlue)
 
+# 25% buffer
+spacingPerEntry = (pad['ymax'] - pad['ymin']) * 0.75 / len(proc)
 
 for pro in proc:
-    with open('Mu_%s.json'%pro) as jsonfile:
+    append = '' if not Blind else '_blind'
+    with open('Mu_%s%s.json' % ( pro,append) ) as jsonfile:
         js = json.load(jsonfile)
 
         mean=round(js[chn]['obs'], 2)
@@ -124,20 +191,20 @@ for pro in proc:
         gr.SetPoint(i, mean, y_pos)
         gr.SetPointError(i,down ,up, 0, 0)
         
-        latex.DrawLatex(x_text, y_pos+0.25, Channel_Category_Name[Type][pro])
-        latexNum.DrawLatex(x_text, y_pos-0.25, str(mean)+'#splitline{ +%s}{ -%s}'%(str(up),str(down)))
-        if pro=='cmb':  combineMu= mean; lowBnad=down; highBand=up;
+        latex.DrawLatex(x_text, y_pos+y_adj, Channel_Category_Name[Type][pro])
+        latexNum.DrawLatex(num_text, y_pos+y_adj, str(mean)+'#splitline{ +%s}{ -%s}'%(str(up),str(down)))
+        if 'cmb' in pro :  combineMu= mean; lowBnad=down; highBand=up;
         i += 1
-        y_pos -= 1.5
+        y_pos -= spacingPerEntry
 
 gr.Draw('SAMEP')
 
 
-theory_band = ROOT.TBox(combineMu-lowBnad,0,combineMu+highBand,10)
+theory_band = ROOT.TBox(combineMu-lowBnad,pad['ymin'],combineMu+highBand,pad['ymax'])
 theory_band.SetFillColor(ROOT.kYellow)
 theory_band.Draw('same')
 
-l=ROOT.TLine(combineMu,0,combineMu,10)
+l=ROOT.TLine(combineMu,pad['ymin'],combineMu,pad['ymax'])
 l.Draw('sameL')
 
 gr.Draw('SAMEP')
@@ -158,7 +225,9 @@ plot.DrawTitle(pads[0], '35.9 fb^{-1} (13 TeV)', 3)
 
 
 # ... and we're done
-canv.Print('.png')
-canv.Print('.pdf')
+base = '/afs/cern.ch/user/t/truggles/www/HTXS/Sept04/'+output
+canv.Print(base+'.png')
+canv.Print(base+'.pdf')
+canv.Print(base+'.C')
 
 
