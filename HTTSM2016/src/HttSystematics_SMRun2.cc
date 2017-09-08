@@ -1840,8 +1840,9 @@ namespace ch {
         
         
         //   Additonal uncertainties applied to the paper i.e. top mass 
-        cb.cp().process( ggH_sig_procs ).channel({"et","mt","em","tt"}).AddSyst(cb,
-                                                                         "TopMassTreatment_$ERA", "shape", SystMap<>::init(1.00));
+        //cb.cp().process( ggH_sig_procs ).channel({"et","mt","em","tt"}).AddSyst(cb,
+        cb.cp().process( ggH_sig_procs ).channel({"et","mt","em"}).AddSyst(cb,
+                "TopMassTreatment_$ERA", "shape", SystMap<>::init(1.00));
         
         
         cb.cp().AddSyst(cb, "CMS_ggH_STXSmig01", "lnN", SystMap<channel, bin_id, process>::init
