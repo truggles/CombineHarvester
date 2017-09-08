@@ -2,7 +2,7 @@
 # See: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideHiggsAnalysisCombinedLimit#MultiSignalModel_ready_made_mode
 
 
-newFolder=Blinded20170830_htxs_nom
+newFolder=Blinded20170904_htxs_nom
 
 # Nominal
 MorphingSM2016 --output_folder=${newFolder} --postfix="-2D" --control_region=1 --manual_rebin=false --real_data=true --mm_fit=false --ttbar_fit=true
@@ -34,6 +34,8 @@ text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -
 ### BLINDED ###
 ###############
 # Fit CMB
+echo ""
+echo "group: TauTau Signal Combined"
 combine -M MaxLikelihoodFit   tt/125/workspace.root  -t -1 --expectSignal=1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --rMin -5 --rMax 5 -n _Mu_r_cmb_blind
 
 # Run for each signal in tautau
@@ -49,6 +51,8 @@ done
 ### Un-BLINDED ###
 ##################
 # Fit CMB
+echo ""
+echo "group: TauTau Signal Combined"
 combine -M MaxLikelihoodFit   tt/125/workspace.root  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad -n _Mu_r_cmb
 
 # Run for each signal in tautau
@@ -58,10 +62,6 @@ for SIGNAL in r_ggH r_qqH r_WH r_ZH; do
     combine -M MaxLikelihoodFit   workspace_per_background_breakdown_tt.root  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -50 --rMax 50  --setPhysicsModelParameters r_ggH=1,r_qqH=1,r_WH=1,r_ZH=1 --redefineSignalPOIs ${SIGNAL} -n _Mu_${SIGNAL}
 done
 
-echo ""
-echo "group: Combined"
-combine -M MaxLikelihoodFit  cmb/125/workspace.root  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -5 --rMax 5  -n _Mu_Combined
-### END Un-BLINDED ###
 
 
 

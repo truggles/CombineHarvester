@@ -1,5 +1,5 @@
 
-newFolder=Blinded20170828_htxs_s0
+newFolder=Blinded20170904_htxs_s0
 
 # Stage 0
 MorphingSM2016 --output_folder=${newFolder} --postfix="-2D-HTXS" --do_nominal_signals=false  --do_stage0_signals=true --control_region=1 --manual_rebin=false --real_data=true --mm_fit=false --ttbar_fit=true
@@ -30,6 +30,11 @@ text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -
 ###############
 ### BLINDED ###
 ###############
+# Fit CMB
+echo ""
+echo "group: TauTau Signal Combined"
+combine -M MaxLikelihoodFit   tt/125/workspace.root  -t -1 --expectSignal=1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --rMin -5 --rMax 5 -n _Mu_r_cmb_blind
+
 # Run for each signal in tautau
 for SIGNAL in r_VH_had_fwd r_WH_lep_fwd r_WH_lep; do
     echo ""
@@ -50,9 +55,6 @@ for SIGNAL in r_ZH_lep; do
     echo "group: TauTau Signal " ${SIGNAL}
     combine -M MaxLikelihoodFit   workspace_htxs_stage0_breakdown.root  -t -1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -5000 --rMax 5000  --setPhysicsModelParameters r_ggH=1,r_qqH=1,r_VH_had_fwd=1,r_VH_had=1,r_WH_lep_fwd=1,r_WH_lep=1,r_ZH_lep=1 --redefineSignalPOIs ${SIGNAL} -n _Mu_${SIGNAL}_blind
 done
-
-# Fit CMB
-combine -M MaxLikelihoodFit   tt/125/workspace.root  -t -1 --expectSignal=1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad -n _Mu_r_cmb_blind
 ### END BLINDED ###
 
 
@@ -60,6 +62,11 @@ combine -M MaxLikelihoodFit   tt/125/workspace.root  -t -1 --expectSignal=1 --X-
 ##################
 ### Un-BLINDED ###
 ##################
+# Fit CMB
+echo ""
+echo "group: TauTau Signal Combined"
+combine -M MaxLikelihoodFit   tt/125/workspace.root  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --rMin -5 --rMax 5 -n _Mu_r_cmb
+
 # Run for each signal in tautau
 for SIGNAL in r_VH_had_fwd r_WH_lep_fwd r_WH_lep; do
     echo ""
@@ -68,14 +75,19 @@ for SIGNAL in r_VH_had_fwd r_WH_lep_fwd r_WH_lep; do
 done
 
 # Run for each signal in tautau
-for SIGNAL in r_ggH r_qqH r_VH_had r_ZH_lep; do
+for SIGNAL in r_ggH r_qqH r_VH_had; do
     echo ""
     echo "group: TauTau Signal " ${SIGNAL}
     combine -M MaxLikelihoodFit   workspace_htxs_stage0_breakdown.root  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -100 --rMax 100  --setPhysicsModelParameters r_ggH=1,r_qqH=1,r_VH_had_fwd=1,r_VH_had=1,r_WH_lep_fwd=1,r_WH_lep=1,r_ZH_lep=1 --redefineSignalPOIs ${SIGNAL} -n _Mu_${SIGNAL}
 done
 
-# Fit CMB
-combine -M MaxLikelihoodFit   tt/125/workspace.root  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad -n _Mu_r_cmb
+# Run for each signal in tautau
+for SIGNAL in r_ZH_lep; do
+    echo ""
+    echo "group: TauTau Signal " ${SIGNAL}
+    combine -M MaxLikelihoodFit   workspace_htxs_stage0_breakdown.root  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -5000 --rMax 5000  --setPhysicsModelParameters r_ggH=1,r_qqH=1,r_VH_had_fwd=1,r_VH_had=1,r_WH_lep_fwd=1,r_WH_lep=1,r_ZH_lep=1 --redefineSignalPOIs ${SIGNAL} -n _Mu_${SIGNAL}
+done
+### END Un-BLINDED ###
 
 
 
