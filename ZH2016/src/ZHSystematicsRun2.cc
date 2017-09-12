@@ -37,15 +37,21 @@ namespace ch {
             "RedBkg",
             "ZZ",
             "TriBoson",
-            "WH125",
-            "HZZ125",
-            "ZHWW125"};
+            "WH_htt125",
+            "ggH_hzz125",
+            "ZH_hww125",
+            "ggH_htt125",
+            "qqH_htt125"
+            };
         std::vector<std::string> all_mc_bkgs = {
             "ZZ",
             "TriBoson",
-            "WH125",
-            "HZZ125",
-            "ZHWW125"};
+            "WH_htt125",
+            "ggH_hzz125",
+            "ZH_hww125",
+            "ggH_htt125",
+            "qqH_htt125"
+            };
         std::vector<std::string> eeChans = {
             "eeet",
             "eemt",
@@ -63,7 +69,7 @@ namespace ch {
         //##############################################################################
         
         cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).AddSyst(cb,
-                "lumi_13tev", "lnN", SystMap<>::init(1.025));
+                "lumi_2016_13tev", "lnN", SystMap<>::init(1.025));
 
 
 
@@ -80,17 +86,17 @@ namespace ch {
         cb.cp().process({"TriBoson"}).AddSyst(cb,
                 "CMS_htt_zh_triBoson_scale_$ERA", "lnN", SystMap<>::init(1.2));
 
-        cb.cp().process({"WH125"}).AddSyst(cb,
+        cb.cp().process({"WH_htt125"}).AddSyst(cb,
                 "CMS_htt_zh_wh_htt_scale_$ERA", "lnN", SystMap<>::init(1.2));
 
-        cb.cp().process({"ZHWW125"}).AddSyst(cb,
+        cb.cp().process({"ZH_hww125"}).AddSyst(cb,
                 "CMS_htt_zh_zh_hww_scale_$ERA", "lnN", SystMap<>::init(1.2));
 
-        cb.cp().process({"HZZ125"}).AddSyst(cb,
+        cb.cp().process({"ggH_hzz125"}).AddSyst(cb,
                 "CMS_htt_zh_hzz_scale_$ERA", "lnN", SystMap<>::init(1.2));
 
         if (azh) {
-            cb.cp().process({"ZH125"}).AddSyst(cb,
+            cb.cp().process({"ZH_htt125"}).AddSyst(cb,
                     "CMS_htt_zh_zh_scale_$ERA", "lnN", SystMap<>::init(1.2));
         }
 
@@ -269,15 +275,25 @@ namespace ch {
         cb.cp().process(sig_procs).AddSyst(cb,"BR_htt_PU_alphas", "lnN", SystMap<>::init(1.0062));
         
         
-        cb.cp().process({"ggH"}).AddSyst(cb,"QCDScale_ggH", "lnN", SystMap<>::init(1.039));
-        cb.cp().process({"qqH"}).AddSyst(cb,"QCDScale_qqH", "lnN", SystMap<>::init(1.004));
-        cb.cp().process({"WH"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.007));
-        cb.cp().process({"ZH"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.038));
+        cb.cp().process({"ggH_htt125"}).AddSyst(cb,"QCDScale_ggH", "lnN", SystMap<>::init(1.039));
+        cb.cp().process({"qqH_htt125"}).AddSyst(cb,"QCDScale_qqH", "lnN", SystMap<>::init(1.004));
+        cb.cp().process({"WH_htt125"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.007));
+        if (azh) {
+            cb.cp().process({"ZH_htt125"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.038));
+        }
+        else {
+            cb.cp().process({"ZH_htt"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.038));
+        }
         
-        cb.cp().process({"ggH"}).AddSyst(cb,"pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
-        cb.cp().process({"qqH"}).AddSyst(cb,"pdf_Higgs_qq", "lnN", SystMap<>::init(1.021));
-        cb.cp().process({"WH"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.019));
-        cb.cp().process({"ZH"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.016));
+        cb.cp().process({"ggH_htt125"}).AddSyst(cb,"pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
+        cb.cp().process({"qqH_htt125"}).AddSyst(cb,"pdf_Higgs_qq", "lnN", SystMap<>::init(1.021));
+        cb.cp().process({"WH_htt125"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.019));
+        if (azh) {
+            cb.cp().process({"ZH_htt125"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.016));
+        }
+        else {
+            cb.cp().process({"ZH_htt"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.016));
+        }
         
         
         

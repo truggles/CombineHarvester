@@ -95,21 +95,23 @@ int main(int argc, char** argv) {
     
     
     VString chns = {"eeet", "eemt", "eeem", "eett", "emmt", "mmmt", "emmm", "mmtt"};
-    
     VString bkg_procs;
     vector<string> sig_procs;
     vector<string> masses;
 
     if (!azh) {
-        bkg_procs = {"RedBkg", "ZZ", "TriBoson", "WH125", "HZZ125", "ZHWW125"};
-        sig_procs = {"ZH"};
+        bkg_procs = {"RedBkg", "ZZ", "TriBoson", "WH_htt125", "ggH_hzz125",
+            "ZH_hww125", "ggH_htt125", "qqH_htt125"};
+        sig_procs = {"ZH_htt"};
         //masses = {"110","120","125","130","140"};
         masses = {"125"};
     }
     if (azh) {
-        bkg_procs = {"RedBkg", "ZZ", "TriBoson", "WH125", "HZZ125", "ZHWW125", "ZH125"};
+        bkg_procs = {"RedBkg", "ZZ", "TriBoson", "WH_htt125", "ggH_hzz125",
+            "ZH_hww125", "ggH_htt125", "qqH_htt125", "ZH_htt125"};
         sig_procs = {"azh"};
         masses = {"220", "240", "260", "280", "300", "320", "340", "350", "400"};
+        masses = {"300"};
     }
     
     
