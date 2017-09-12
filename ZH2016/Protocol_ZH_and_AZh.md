@@ -13,6 +13,8 @@ mkdir -p shapes/UW_TR/
 and copy the data card of choice into there.
 
 # creating datacards
+You can toggel between ZH and AZh analysis using: --azh="true" in the MorphingZH2016 command below
+
 You will need to adjust the --postfix selection below. If you data card root file is called
 "htt_zh.inputs-sm-13TeV_svFitMass_new.root" you will need --postfix="_svFitMass_new"
 
