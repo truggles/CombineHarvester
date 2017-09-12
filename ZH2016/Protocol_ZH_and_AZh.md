@@ -1,16 +1,26 @@
 
+# Checkout instructions
 
-# Standard Work Flow
+    scram project CMSSW CMSSW_7_4_7
+    cd CMSSW_7_4_7/src
+    cmsenv
+    git clone -b 74x-root6 https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
+    git clone -b ZH2016 https://github.com/truggles/CombineHarvester.git CombineHarvester
+    scram b -j 8
 
-# First grab some data cards, we will get a GitLab repo in the future, but try these to start:
+# Getting data cards
+We will get a GitLab repo in the future, but try these to start:
 AZh analysis - https://github.com/truggles/2016-sync/blob/azhSync/UW/azh_dc_sync.txt#L7
 Zh analysis - https://github.com/truggles/2016-sync/blob/azhSync/UW/zh_dc_sync.txt#L8
 
-Make a directory to store these:
+Make a directory to store the above files depending on which analysis you care about:
 
-mkdir -p shapes/UW_TR/
+    mkdir -p shapes/UW_TR/
 
 and copy the data card of choice into there.
+
+# Standard Work Flow
+
 
 # creating datacards
 You can toggel between ZH and AZh analysis using: --azh="true" in the MorphingZH2016 command below
