@@ -103,15 +103,16 @@ int main(int argc, char** argv) {
         bkg_procs = {"RedBkg", "ZZ", "TriBoson", "WH_htt125", "ggH_hzz125",
             "ZH_hww125", "ggH_htt125", "qqH_htt125"};
         sig_procs = {"ZH_htt"};
-        //masses = {"110","120","125","130","140"};
-        masses = {"125"};
+        masses = {"110","120","125","130","140"};
+        //masses = {"120","125","130"}; // Only NNNL cross sections provided for these 3
+        //masses = {"125"};
     }
     if (azh) {
         bkg_procs = {"RedBkg", "ZZ", "TriBoson", "WH_htt125", "ggH_hzz125",
             "ZH_hww125", "ggH_htt125", "qqH_htt125", "ZH_htt125"};
         sig_procs = {"azh"};
         masses = {"220", "240", "260", "280", "300", "320", "340", "350", "400"};
-        masses = {"300"};
+        //masses = {"300"};
     }
     
     
