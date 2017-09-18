@@ -45,5 +45,8 @@ You will need to adjust the --postfix selection below. If you data card root fil
     combineTool.py -M Asymptotic -t -1 -d */*/workspace.root --rMin 0.25 --rMax 2.0 --there -n .limit --parallel 16
     combineTool.py -M CollectLimits */*/*.limit.* --use-dirs -o limits.json
 
+    python ../scripts/plotLimits_SM2.py zh_limits.json --auto-style --cms-sub Preliminary  -o lim_zh_compare
+    python ../scripts/plotLimits_SM2.py {llet,llmt,lltt,llem,cmb}_zh_limits.json:exp0 --auto-style --cms-sub Preliminary  -o lim_zh_higgs_final_states
+    python ../scripts/plotLimits_SM2.py azh_limits.json --auto-style --cms-sub Preliminary  -o lim_azh_compare --limit-on "95% CL limit on #sigma(ggA)xB(A#rightarrowZh#rightarrowLL#tau#tau) (fb)"
 
 
