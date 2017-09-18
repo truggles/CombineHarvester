@@ -100,9 +100,8 @@ int main(int argc, char** argv) {
     vector<string> masses;
 
     if (!azh) {
-        bkg_procs = {"RedBkg", "ZZ", "TriBoson", "WH_htt125", "ggH_hzz125",
-            "ZH_hww125", "ggH_htt125", "qqH_htt125"};
-        sig_procs = {"ZH_htt"};
+        bkg_procs = {"RedBkg", "ZZ", "TriBoson", "ggH_hzz125", "ZH_hww125"};
+        sig_procs = {"ZH_htt", "WH_htt", "ggH_htt", "qqH_htt"};
         masses = {"110","120","125","130","140"};
         //masses = {"120","125","130"}; // Only NNNL cross sections provided for these 3
         //masses = {"125"};
