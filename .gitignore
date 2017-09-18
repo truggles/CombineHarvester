@@ -22,3 +22,6 @@ __init__.py
 *.pdf
 
 docs/html
+
+
+HTTSM2016/*
