@@ -50,3 +50,13 @@ You will need to adjust the --postfix selection below. If you data card root fil
     python ../scripts/plotLimits_SM2.py azh_limits.json --auto-style --cms-sub Preliminary  -o lim_azh_compare --limit-on "95% CL limit on #sigma(ggA)xB(A#rightarrowZh#rightarrowLL#tau#tau) (fb)"
 
 
+# estimate mu
+
+    combine -M MaxLikelihoodFit -m 125 125_all_workspace.root -t -1 --expectSignal=1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --minimizerTolerance=0.01 --rMin=-20 --rMax=20
+
+# estimate significance
+
+    combine -M ProfileLikelihood --significance -m 125 125_all_workspace.root -t -1 --expectSignal=1
+
+
+
