@@ -6,7 +6,7 @@ echo "pushd ${1}"
 
 for CHAN in llet llmt lltt llem zee zmm all; do
     echo "Plotting limits for ${CHAN}"
-    python ../scripts/plotLimits_SM2.py ${CHAN}_zh_limits.json --auto-style --cms-sub Preliminary  -o lim_zh_${CHAN}
+    python ../scripts/plotLimits_SM2.py ${CHAN}_zh_limits.json --auto-style --cms-sub Preliminary  -o lim_zh_${CHAN} --show exp
 done
 
 echo "Plotting limits for all higgs final states combined"

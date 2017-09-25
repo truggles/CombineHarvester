@@ -2,7 +2,8 @@
 doAZH=false
 doZH=true
 
-for TEST in sept18BaselineTightM sept18MedBJetVeto; do
+#for TEST in sept18BaselineTightM sept18MedBJetVeto; do
+for TEST in sept21_preBJetCut sept21_preLTCut sept21_bJetCut; do
     ### AZH ###
     if $doAZH; then
         newFolder=Blinded20170915_azh_${TEST}
