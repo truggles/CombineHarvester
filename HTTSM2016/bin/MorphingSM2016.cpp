@@ -256,15 +256,15 @@ int main(int argc, char** argv) {
     vector<string> sig_procs = {"ggH_htt","qqH_htt","WH_htt","ZH_htt"};
 
     vector<string> sig_procs_stage0 = {
-        "ggH_fwd_htt",
+        //"ggH_fwd_htt",
         "ggH_htt",
-        "qqH_fwd_htt",
+        //"qqH_fwd_htt",
         "qqH_htt",
-        "VH_had_fwd_htt",
+        //"VH_had_fwd_htt",
         "VH_had_htt",
-        "WH_lep_fwd_htt",
+        //"WH_lep_fwd_htt",
         "WH_lep_htt",
-        "ZH_lep_fwd_htt",
+        //"ZH_lep_fwd_htt",
         "ZH_lep_htt"
     };
 
@@ -281,27 +281,27 @@ int main(int argc, char** argv) {
         "ggH_GE2J_PTH_120_200_htt",
         "ggH_GE2J_PTH_GT200_htt",
 
-        "qqH_FWDH_htt",
+        //"qqH_FWDH_htt",
         "qqH_VBFTOPO_JET3VETO_htt",
         "qqH_VBFTOPO_JET3_htt",
         "qqH_VH2JET_htt",
         "qqH_REST_htt",
         "qqH_PTJET1_GT200_htt",
 
-        "VH_had_FWDH_htt",
+        //"VH_had_FWDH_htt",
         "VH_had_VBFTOPO_JET3VETO_htt",
         "VH_had_VBFTOPO_JET3_htt",
         "VH_had_VH2JET_htt",
         "VH_had_REST_htt",
         "VH_had_PTJET1_GT200_htt",
 
-        "WH_lep_FWDH_htt",
+        //"WH_lep_FWDH_htt",
         "WH_lep_PTV_0_150_htt",
         "WH_lep_PTV_150_250_0J_htt",
         "WH_lep_PTV_150_250_GE1J_htt",
         "WH_lep_PTV_GT250_htt",
 
-        "ZH_lep_FWDH_htt",
+        //"ZH_lep_FWDH_htt",
         "ZH_lep_PTV_0_150_htt",
         "ZH_lep_PTV_150_250_0J_htt",
         "ZH_lep_PTV_150_250_GE1J_htt",
@@ -318,18 +318,21 @@ int main(int argc, char** argv) {
     for (auto chn : chns) {
         cb.AddObservations({"*"}, {"htt"}, {"13TeV"}, {chn}, cats[chn]);
         cb.AddProcesses(   {"*"}, {"htt"}, {"13TeV"}, {chn}, bkg_procs[chn], cats[chn], false);
-        if (chn != "tt") {
+
+        // HTXS signals
+        if (chn == "tt" || chn == "mt" || chn == "et" || chn == "em") {
+            if (do_nominal_signals)
+                cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, sig_procs, cats[chn], true);
+            if (do_stage0_signals)
+                cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, sig_procs_stage0, cats[chn], true);
+            if (do_stage1_signals)
+                cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, sig_procs_stage1, cats[chn], true);
+        }
+        else {
             cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, sig_procs, cats[chn], true);
         }
         //Needed to add ewkz and W as these are not not available/Negative in qcd cR
     }
-    // HTXS signals are only in hadronic channel right now
-    if (do_nominal_signals)
-        cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {"tt"}, sig_procs, cats["tt"], true);
-    if (do_stage0_signals)
-        cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {"tt"}, sig_procs_stage0, cats["tt"], true);
-    if (do_stage1_signals)
-        cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {"tt"}, sig_procs_stage1, cats["tt"], true);
     
 //    //Add EWKZ and W manually !!!!!!
 //    
@@ -388,7 +391,7 @@ int main(int argc, char** argv) {
                 "$BIN/$PROCESS",
                 "$BIN/$PROCESS_$SYSTEMATIC");
         // Add HTXS signals if tt
-        if (chn == "tt") {
+        if (chn == "tt" || chn == "mt" || chn == "et" || chn == "em") {
             if (do_nominal_signals)
                 cb.cp().channel({chn}).process(sig_procs).ExtractShapes(
                         input_dir[chn] + "htt_"+chn+".inputs-sm-13TeV"+postfix+".root",
