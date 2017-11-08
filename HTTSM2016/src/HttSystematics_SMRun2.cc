@@ -85,6 +85,44 @@ namespace ch {
             "ZH_lep_PTV_150_250_GE1J_htt",
             "ZH_lep_PTV_GT250_htt"
         };
+        std::vector<std::string> sig_procs_stage_sans_VH_had_VBFTOPO_JET3VETO = {
+            "ggH_VBFTOPO_JET3VETO_htt",
+            "ggH_VBFTOPO_JET3_htt",
+            "ggH_0J_htt",
+            "ggH_1J_PTH_0_60_htt",
+            "ggH_1J_PTH_60_120_htt",
+            "ggH_1J_PTH_120_200_htt",
+            "ggH_1J_PTH_GT200_htt",
+            "ggH_GE2J_PTH_0_60_htt",
+            "ggH_GE2J_PTH_60_120_htt",
+            "ggH_GE2J_PTH_120_200_htt",
+            "ggH_GE2J_PTH_GT200_htt",
+
+            "qqH_FWDH_htt",
+            "qqH_VBFTOPO_JET3VETO_htt",
+            "qqH_VBFTOPO_JET3_htt",
+            "qqH_VH2JET_htt",
+            "qqH_REST_htt",
+            "qqH_PTJET1_GT200_htt",
+
+            "VH_had_FWDH_htt",
+            "VH_had_VBFTOPO_JET3_htt",
+            "VH_had_VH2JET_htt",
+            "VH_had_REST_htt",
+            "VH_had_PTJET1_GT200_htt",
+
+            "WH_lep_FWDH_htt",
+            "WH_lep_PTV_0_150_htt",
+            "WH_lep_PTV_150_250_0J_htt",
+            "WH_lep_PTV_150_250_GE1J_htt",
+            "WH_lep_PTV_GT250_htt",
+
+            "ZH_lep_FWDH_htt",
+            "ZH_lep_PTV_0_150_htt",
+            "ZH_lep_PTV_150_250_0J_htt",
+            "ZH_lep_PTV_150_250_GE1J_htt",
+            "ZH_lep_PTV_GT250_htt"
+        };
         // No harm in defining additional ggH here even if they aren't used
         std::vector<std::string> ggH_sig_procs = {
             "ggH_fwd_htt",
@@ -389,8 +427,20 @@ namespace ch {
                                                                                                  "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
 
             // Normal old JES for signals, at least try it for HTXS samples
-            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1})).channel({"et","mt","em","tt"}).bin_id({1,2,3}).AddSyst(cb,
-                                                                                                "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
+            if (uncert == "RelativeBal") {
+                // The only HTXS signal JES giving problems is EMu VBF category VH_had_VBFTOPO_JET3VETO_htt, 
+                // systematic CMS_scale_j_RelativeBal_13TeV, so set it to lnN
+                // 0.98 choosen to align with UP being a lower number like below, and same order as the below ones
+                cb.cp().process({"VH_had_VBFTOPO_JET3VETO_htt"}).channel({"em"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativeBal_$ERA", "lnN", SystMap<>::init(0.98));
+                cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage_sans_VH_had_VBFTOPO_JET3VETO})).channel({"em"}).bin_id({1,2,3}).AddSyst(cb,
+                        "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
+                cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1})).channel({"et","mt","tt"}).bin_id({1,2,3}).AddSyst(cb,
+                        "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
+            }
+            else {
+                cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1})).channel({"et","mt","em","tt"}).bin_id({1,2,3}).AddSyst(cb,
+                        "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
+            }
         }
         
         
