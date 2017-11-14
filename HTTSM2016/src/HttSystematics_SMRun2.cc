@@ -1811,7 +1811,7 @@ namespace ch {
         
         
         
-        cb.cp().AddSyst(cb, "CMS_qqH_UEPS", "lnN", SystMap<channel, bin_id, process>::init
+        cb.cp().AddSyst(cb, "CMS_qqH_PS", "lnN", SystMap<channel, bin_id, process>::init
                         ({"em"},{1},{"qqH_htt"}, 1.015)
                         ({"et"},{1},{"qqH_htt"}, 1.015)
                         ({"mt"},{1},{"qqH_htt"}, 1.015)
@@ -1878,7 +1878,7 @@ namespace ch {
         cb.cp().process({"ggH_hww125","qqH_hww125"}).AddSyst(cb,"BR_hww_PU_alphas", "lnN", SystMap<>::init(1.0066));
         
         
-        cb.cp().process( JoinStr({ggH_sig_procs,{"ggH_hww125"}}) ).AddSyst(cb,"QCDscale_ggH", "lnN", SystMap<>::init(1.039));
+        cb.cp().process({"ggH_hww125"}).AddSyst(cb,"QCDscale_ggH", "lnN", SystMap<>::init(1.039));
         cb.cp().process({"qqH_htt","qqH_hww125"}).AddSyst(cb,"QCDscale_qqH", "lnN", SystMap<>::init(1.004));
         cb.cp().process({"WH_htt"}).AddSyst(cb,"QCDscale_VH", "lnN", SystMap<>::init(1.007));
         cb.cp().process({"ZH_htt"}).AddSyst(cb,"QCDscale_VH", "lnN", SystMap<>::init(1.038));
