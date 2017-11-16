@@ -63,18 +63,28 @@ canv = ROOT.TCanvas(args.output, args.output)
 pads = plot.OnePad()
 pads[0].SetTicks(1, -1)
 
+# For hadronic channle solo
+#if Type == 'signal_nom' :
+#    if Blind :
+#        pad = {'xmin' : -15, 'xmax' : 20, 'ymin' : 0, 'ymax' : 10}
+#    else :
+#        pad = {'xmin' : -30, 'xmax' : 25, 'ymin' : 0, 'ymax' : 10}
+#elif Type == 'signal_s0' :
+#    pad = {'xmin' : -50, 'xmax' : 50, 'ymin' : 0, 'ymax' : 10}
+
+# For all 4 channels combine
 if Type == 'signal_nom' :
     if Blind :
-        pad = {'xmin' : -15, 'xmax' : 20, 'ymin' : 0, 'ymax' : 10}
+        pad = {'xmin' : -22, 'xmax' : 20, 'ymin' : 0, 'ymax' : 10}
     else :
-        pad = {'xmin' : -30, 'xmax' : 25, 'ymin' : 0, 'ymax' : 10}
+        pad = {'xmin' : -22, 'xmax' : 20, 'ymin' : 0, 'ymax' : 10}
 elif Type == 'signal_s0' :
-    pad = {'xmin' : -50, 'xmax' : 50, 'ymin' : 0, 'ymax' : 10}
+    pad = {'xmin' : -30, 'xmax' : 30, 'ymin' : 0, 'ymax' : 10}
+elif Type == 'signal_modS1' :
+    pad = {'xmin' : -20, 'xmax' : 50, 'ymin' : 0, 'ymax' : 20}
 else :
     pad = {'xmin' : -.5, 'xmax' : 3, 'ymin' : 0, 'ymax' : 10}
 print pad
-#pad = {'xmin' : -20, 'xmax' : 20, 'ymin' : 0, 'ymax' : 10} # Nom Blind
-#pad = {'xmin' : -50, 'xmax' : 50, 'ymin' : 0, 'ymax' : 10} # S0 blind
 
 axis = ROOT.TH2F('axis', '', 1, pad['xmin'], pad['xmax'], pad['ymax'], pad['ymin'], pad['ymax'])
 
@@ -89,7 +99,10 @@ y_pos = pad['ymax'] - 1.5
 
 latex = ROOT.TLatex()
 latexNum = ROOT.TLatex()
-plot.Set(latex, TextAlign=12, TextSize=0.035)
+if Type == 'signal_modS1' :
+    plot.Set(latex, TextAlign=12, TextSize=0.025)
+else :
+    plot.Set(latex, TextAlign=12, TextSize=0.035)
 plot.Set(latexNum, TextAlign=12, TextSize=0.025)
 
 
@@ -125,10 +138,8 @@ Channel_Category_Name={
         'r_ggH': 'ggH',
         'r_qqH': 'qqH',
         'r_WH_lep': 'WH lep',
-        'r_WH_lep_fwd': 'WH lep fwd',
         'r_ZH_lep': 'ZH lep',
         'r_VH_had': 'VH had',
-        'r_VH_had_fwd': 'VH had fwd',
         'r_cmb': 'cmb'
     },
     'signal_s0_frozen' : {
@@ -136,6 +147,24 @@ Channel_Category_Name={
         'wFrozen_r_qqH': 'qqH',
         'wFrozen_r_ZH_lep': 'ZH lep',
         'wFrozen_r_VH_had': 'VH had',
+        'r_cmb': 'cmb'
+    },
+    'signal_modS1' : {
+        'r_ggH_1J_PTH_120_200': 'ggH_1J_PTH_120_200',
+        'r_ggH_GE2J_PTH_120_200': 'ggH_GE2J_PTH_120_200',
+        'r_ggH_VBFTOPO_JET3': 'ggH_VBFTOPO_JET3',
+        'r_ggH_1J_PTH_GT200': 'ggH_1J_PTH_GT200',
+        'r_ggH_1J_PTH_0_60': 'ggH_1J_PTH_0_60',
+        'r_ggH_GE2J_PTH_GT200': 'ggH_GE2J_PTH_GT200',
+        'r_ggH_GE2J_PTH_60_120': 'ggH_GE2J_PTH_60_120',
+        'r_ggH_VBFTOPO_JET3VETO': 'ggH_VBFTOPO_JET3VETO',
+        'r_ggH_GE2J_PTH_0_60': 'ggH_GE2J_PTH_0_60',
+        'r_ggH_1J_PTH_60_120': 'ggH_1J_PTH_60_120',
+        'r_ggH_0J': 'ggH_0J',
+        'r_qqH': 'qqH',
+        'r_WH_lep': 'WH lep',
+        'r_ZH_lep': 'ZH lep',
+        'r_VH_had': 'VH had',
         'r_cmb': 'cmb'
     },
 }
@@ -159,9 +188,9 @@ elif Type=='signal_nom':
     spacingPerEntry = (pad['ymax'] - pad['ymin']) * 0.75 / len(proc)
     y_adj = spacingPerEntry*0.3
 elif Type=='signal_s0':
-    proc = ['r_ggH','r_qqH','r_VH_had','r_VH_had_fwd','r_ZH_lep','r_WH_lep','r_WH_lep_fwd','r_cmb']
+    proc = ['r_ggH','r_qqH','r_VH_had','r_ZH_lep','r_WH_lep','r_cmb']
     x_text = 5
-    num_text = 28
+    num_text = 20
     spacingPerEntry = (pad['ymax'] - pad['ymin']) * 0.75 / len(proc)
     y_adj = spacingPerEntry*0.3
 elif Type=='signal_s0_frozen':
@@ -169,6 +198,28 @@ elif Type=='signal_s0_frozen':
     x_text = 5
     num_text = 18
 elif Type=='signal_s1': proc = ['ggH','qqH','WH','ZH','cmb']
+elif Type=='signal_modS1': 
+    proc = [
+        'r_ggH_1J_PTH_120_200',
+        'r_ggH_GE2J_PTH_120_200',
+        'r_ggH_VBFTOPO_JET3',
+        'r_ggH_1J_PTH_GT200',
+        'r_ggH_1J_PTH_0_60',
+        'r_ggH_GE2J_PTH_GT200',
+        'r_ggH_GE2J_PTH_60_120',
+        'r_ggH_VBFTOPO_JET3VETO',
+        'r_ggH_GE2J_PTH_0_60',
+        'r_ggH_1J_PTH_60_120',
+        'r_ggH_0J',
+        'r_qqH',
+        'r_WH_lep',
+        'r_ZH_lep',
+        'r_VH_had',
+        'r_cmb']
+    spacingPerEntry = (pad['ymax'] - pad['ymin']) * 1 / len(proc)
+    y_adj = spacingPerEntry*0.3
+    x_text = 13
+    num_text = 40
 else:
     print 'either select category or channel'
 
@@ -225,7 +276,7 @@ plot.DrawTitle(pads[0], '35.9 fb^{-1} (13 TeV)', 3)
 
 
 # ... and we're done
-base = '/afs/cern.ch/user/t/truggles/www/HTXS/Sept04/'+output
+base = '/afs/cern.ch/user/t/truggles/www/HTXS/Nov06/'+output
 canv.Print(base+'.png')
 canv.Print(base+'.pdf')
 canv.Print(base+'.C')

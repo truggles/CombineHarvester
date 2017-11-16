@@ -1,5 +1,5 @@
 
-newFolder=Blinded20171016_htxs_s0
+newFolder=Stage0_20171116_htxs
 
 # Stage 0
 MorphingSM2016 --output_folder=${newFolder} --postfix="-2D-HTXS" --do_nominal_signals=false  --do_stage0_signals=true --control_region=1 --manual_rebin=false --real_data=true --mm_fit=false --ttbar_fit=true
@@ -11,83 +11,22 @@ combineTool.py -M T2W -i {cmb,em,et,mt,tt}/* -o workspace.root --parallel 12
 
 
 
-# Per HTXS Stage0 breakdown, very similar to per background with WH and ZH split
-# following are shapes with zero yield
-#    --PO 'map=htt_tt_.*_13TeV/ggH_fwd_htt:r_ggH_fwd[1,-100,100]' \
-#    --PO 'map=htt_tt_.*_13TeV/qqH_fwd_htt:r_qqH_fwd[1,-100,100]' \
-#    --PO 'map=htt_tt_.*_13TeV/ZH_lep_fwd_htt:r_ZH_lep_fwd[1,-100,100]' \
-#    --PO 'map=htt_.*_.*_13TeV/VH_had_fwd_htt:r_VH_had_fwd[1,-50000,50000]' \
-#    --PO 'map=htt_.*_.*_13TeV/WH_lep_fwd_htt:r_WH_lep_fwd[1,-50000,50000]' \
 text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --PO verbose \
-    --PO 'map=htt_.*_.*_13TeV/ggH_htt:r_ggH[1,-100,100]' \
-    --PO 'map=htt_.*_.*_13TeV/qqH_htt:r_qqH[1,-100,100]' \
-    --PO 'map=htt_.*_.*_13TeV/VH_had_htt:r_VH_had[1,-100,100]' \
-    --PO 'map=htt_.*_.*_13TeV/WH_lep_htt:r_WH_lep[1,-50000,50000]' \
-    --PO 'map=htt_.*_.*_13TeV/ZH_lep_htt:r_ZH_lep[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/ggH_htt:r_ggH[1,-20,20]' \
+    --PO 'map=htt_.*_.*_13TeV/qqH_htt:r_qqH[1,-20,20]' \
+    --PO 'map=htt_.*_.*_13TeV/WH_had_htt:r_WH_had[1,-100,100]' \
+    --PO 'map=htt_.*_.*_13TeV/ZH_had_htt:r_ZH_had[1,-100,100]' \
+    --PO 'map=htt_.*_.*_13TeV/WH_lep_htt:r_WH_lep[1,-500,500]' \
+    --PO 'map=htt_.*_.*_13TeV/ZH_lep_htt:r_ZH_lep[1,-500,500]' \
     cmb/125/combined.txt.cmb -o workspace_htxs_stage0_breakdown.root -m 125
 
+combine -M MultiDimFit cmb/125/workspace.root --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --algo=singles --cl=0.68 -n Cmb &
 
-###############
-### BLINDED ###
-###############
-# Fit CMB
-echo ""
-echo "group: All Channels Signal Combined"
-combine -M MaxLikelihoodFit   cmb/125/workspace.root  -t -1 --expectSignal=1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --rMin -5 --rMax 5 -n _Mu_r_cmb_blind
-
-# Run for each signal in tautau
-for SIGNAL in r_WH_lep; do
-    echo ""
-    echo "group: All Channels Signal " ${SIGNAL}
-    combine -M MaxLikelihoodFit   workspace_htxs_stage0_breakdown.root  -t -1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -50000 --rMax 50000  --setPhysicsModelParameters r_ggH=1,r_qqH=1,r_VH_had=1,r_WH_lep=1,r_ZH_lep=1 --redefineSignalPOIs ${SIGNAL} -n _Mu_${SIGNAL}_blind
-done
-
-# Run for each signal in tautau
-for SIGNAL in r_ggH r_qqH r_VH_had; do
-    echo ""
-    echo "group: All Channels Signal " ${SIGNAL}
-    combine -M MaxLikelihoodFit   workspace_htxs_stage0_breakdown.root  -t -1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -100 --rMax 100  --setPhysicsModelParameters r_ggH=1,r_qqH=1,r_VH_had=1,r_WH_lep=1,r_ZH_lep=1 --redefineSignalPOIs ${SIGNAL} -n _Mu_${SIGNAL}_blind
-done
-
-# Run for each signal in tautau
-for SIGNAL in r_ZH_lep; do
-    echo ""
-    echo "group: All Channels Signal " ${SIGNAL}
-    combine -M MaxLikelihoodFit   workspace_htxs_stage0_breakdown.root  -t -1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -5000 --rMax 5000  --setPhysicsModelParameters r_ggH=1,r_qqH=1,r_VH_had=1,r_WH_lep=1,r_ZH_lep=1 --redefineSignalPOIs ${SIGNAL} -n _Mu_${SIGNAL}_blind
-done
-### END BLINDED ###
+combine -M MultiDimFit cmb/125/workspace.root --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --algo=singles --cl=0.68 -n CmbBlind -t -1 --expectSignal=1 &
 
 
+#combine -M MultiDimFit workspace_htxs_stage0_breakdown.root --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --algo=singles --cl=0.68 -n Multi &
 
-##################
-### Un-BLINDED ###
-##################
-# Fit CMB
-echo ""
-echo "group: All Channels Signal Combined"
-combine -M MaxLikelihoodFit   cmb/125/workspace.root  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --rMin -5 --rMax 5 -n _Mu_r_cmb
-
-# Run for each signal in tautau
-for SIGNAL in r_WH_lep; do
-    echo ""
-    echo "group: All Channels Signal " ${SIGNAL}
-    combine -M MaxLikelihoodFit   workspace_htxs_stage0_breakdown.root  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -50000 --rMax 50000  --setPhysicsModelParameters r_ggH=1,r_qqH=1,r_VH_had=1,r_WH_lep=1,r_ZH_lep=1 --redefineSignalPOIs ${SIGNAL} -n _Mu_${SIGNAL}
-done
-
-# Run for each signal in tautau
-for SIGNAL in r_ggH r_qqH r_VH_had; do
-    echo ""
-    echo "group: All Channels Signal " ${SIGNAL}
-    combine -M MaxLikelihoodFit   workspace_htxs_stage0_breakdown.root  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -100 --rMax 100  --setPhysicsModelParameters r_ggH=1,r_qqH=1,r_VH_had=1,r_WH_lep=1,r_ZH_lep=1 --redefineSignalPOIs ${SIGNAL} -n _Mu_${SIGNAL}
-done
-
-# Run for each signal in tautau
-for SIGNAL in r_ZH_lep; do
-    echo ""
-    echo "group: All Channels Signal " ${SIGNAL}
-    combine -M MaxLikelihoodFit   workspace_htxs_stage0_breakdown.root  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -5000 --rMax 5000  --setPhysicsModelParameters r_ggH=1,r_qqH=1,r_VH_had=1,r_WH_lep=1,r_ZH_lep=1 --redefineSignalPOIs ${SIGNAL} -n _Mu_${SIGNAL}
-done
-### END Un-BLINDED ###
-
+#combine -M MultiDimFit workspace_htxs_stage0_breakdown.root --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --algo=singles --cl=0.68 -n MultiBlind -t -1 --expectSignal=1 &
 
 

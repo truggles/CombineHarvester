@@ -1,5 +1,5 @@
 
-newFolder=Blinded20171016_htxs_s1
+newFolder=Stage1_20171110_htxs
 
 # Stage 1
 MorphingSM2016 --output_folder=${newFolder} --postfix="-2D-HTXS" --do_nominal_signals=false --do_stage1_signals=true --control_region=1 --manual_rebin=false --real_data=true --mm_fit=false --ttbar_fit=true
@@ -8,7 +8,6 @@ MorphingSM2016 --output_folder=${newFolder} --postfix="-2D-HTXS" --do_nominal_si
 ### Building the workspaces:
 cd output/${newFolder}
 combineTool.py -M T2W -i {cmb,em,et,mt,tt}/* -o workspace.root --parallel 12
-#combineTool.py -M T2W -i {em,et,mt,tt}/* -o workspace.root --parallel 12
 
 
 
@@ -19,15 +18,6 @@ combineTool.py -M T2W -i {cmb,em,et,mt,tt}/* -o workspace.root --parallel 12
 ### two processes, VH_FWDH and WH_FWDH have 0.004 event expected yield and are a mess
 ###    --PO 'map=htt_tt_.*_13TeV/VH_had_FWDH_htt:r_VH_had_FWDH[1,-50000,50000]' \
 ###    --PO 'map=htt_tt_.*_13TeV/WH_lep_FWDH_htt:r_WH_lep_FWDH[1,-50000,50000]' \
-##
-### Processes with the same HTXS code should be joined under the same signal mu
-### for us these are processes with the 200-205 codes:
-### QQ2HQQ-FWDH = 200 for qqH and ZH
-### QQ2HQQ-VBFTOPO-JET3VETO = 201 qqH, WH, ZH
-### QQ2HQQ-VBFTOPO-JET3 = 202 all 3
-### QQ2HQQ-VH2JET = 203 all 3
-### QQ2HQQ-REST = 204 all 3
-### QQ2HQQ-PTJET1-GT200 = 205 all 3
 
 text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel --PO verbose \
     --PO 'map=htt_.*_.*_13TeV/ggH_VBFTOPO_JET3VETO_htt:r_ggH_VBFTOPO_JET3VETO[1,-5000,5000]' \
@@ -41,25 +31,45 @@ text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -
     --PO 'map=htt_.*_.*_13TeV/ggH_GE2J_PTH_60_120_htt:r_ggH_GE2J_PTH_60_120[1,-5000,5000]' \
     --PO 'map=htt_.*_.*_13TeV/ggH_GE2J_PTH_120_200_htt:r_ggH_GE2J_PTH_120_200[1,-5000,5000]' \
     --PO 'map=htt_.*_.*_13TeV/ggH_GE2J_PTH_GT200_htt:r_ggH_GE2J_PTH_GT200[1,-5000,5000]' \
-    --PO 'map=htt_.*_.*_13TeV/qqH_VBFTOPO_JET3VETO_htt:r_VH_had_VBFTOPO_JET3VETO[1,-5000,5000]' \
-    --PO 'map=htt_.*_.*_13TeV/qqH_VBFTOPO_JET3_htt:r_VH_had_VBFTOPO_JET3[1,-5000,5000]' \
-    --PO 'map=htt_.*_.*_13TeV/qqH_VH2JET_htt:r_VH_had_VH2JET[1,-5000,5000]' \
-    --PO 'map=htt_.*_.*_13TeV/qqH_REST_htt:r_VH_had_REST[1,-5000,5000]' \
-    --PO 'map=htt_.*_.*_13TeV/qqH_PTJET1_GT200_htt:r_VH_had_PTJET1_GT200[1,-5000,5000]' \
-    --PO 'map=htt_.*_.*_13TeV/VH_had_VBFTOPO_JET3VETO_htt:r_VH_had_VBFTOPO_JET3VETO[1,-5000,5000]' \
-    --PO 'map=htt_.*_.*_13TeV/VH_had_VBFTOPO_JET3_htt:r_VH_had_VBFTOPO_JET3[1,-5000,5000]' \
-    --PO 'map=htt_.*_.*_13TeV/VH_had_VH2JET_htt:r_VH_had_VH2JET[1,-5000,5000]' \
-    --PO 'map=htt_.*_.*_13TeV/VH_had_REST_htt:r_VH_had_REST[1,-5000,5000]' \
-    --PO 'map=htt_.*_.*_13TeV/VH_had_PTJET1_GT200_htt:r_VH_had_PTJET1_GT200[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/qqH_VBFTOPO_JET3VETO_htt:r_qqH_had_VBFTOPO_JET3VETO[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/qqH_VBFTOPO_JET3_htt:r_qqH_had_VBFTOPO_JET3[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/qqH_VH2JET_htt:r_qqH_had_VH2JET[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/qqH_REST_htt:r_qqH_had_REST[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/qqH_PTJET1_GT200_htt:r_qqH_had_PTJET1_GT200[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/WH_had_VBFTOPO_JET3VETO_htt:r_WH_had_VBFTOPO_JET3VETO[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/WH_had_VBFTOPO_JET3_htt:r_WH_had_VBFTOPO_JET3[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/WH_had_VH2JET_htt:r_WH_had_VH2JET[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/WH_had_REST_htt:r_WH_had_REST[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/WH_had_PTJET1_GT200_htt:r_WH_had_PTJET1_GT200[1,-5000,5000]' \
     --PO 'map=htt_.*_.*_13TeV/WH_lep_PTV_0_150_htt:r_WH_lep_PTV_0_150[1,-5000,5000]' \
     --PO 'map=htt_.*_.*_13TeV/WH_lep_PTV_150_250_0J_htt:r_WH_lep_PTV_150_250_0J[1,-5000,5000]' \
     --PO 'map=htt_.*_.*_13TeV/WH_lep_PTV_150_250_GE1J_htt:r_WH_lep_PTV_150_250_GE1J[1,-5000,5000]' \
     --PO 'map=htt_.*_.*_13TeV/WH_lep_PTV_GT250_htt:r_WH_lep_PTV_GT250[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/ZH_had_VBFTOPO_JET3VETO_htt:r_ZH_had_VBFTOPO_JET3VETO[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/ZH_had_VBFTOPO_JET3_htt:r_ZH_had_VBFTOPO_JET3[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/ZH_had_VH2JET_htt:r_ZH_had_VH2JET[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/ZH_had_REST_htt:r_ZH_had_REST[1,-5000,5000]' \
+    --PO 'map=htt_.*_.*_13TeV/ZH_had_PTJET1_GT200_htt:r_ZH_had_PTJET1_GT200[1,-5000,5000]' \
     --PO 'map=htt_.*_.*_13TeV/ZH_lep_PTV_0_150_htt:r_ZH_lep_PTV_0_150[1,-5000,5000]' \
     --PO 'map=htt_.*_.*_13TeV/ZH_lep_PTV_150_250_0J_htt:r_ZH_lep_PTV_150_250_0J[1,-5000,5000]' \
     --PO 'map=htt_.*_.*_13TeV/ZH_lep_PTV_150_250_GE1J_htt:r_ZH_lep_PTV_150_250_GE1J[1,-5000,5000]' \
     --PO 'map=htt_.*_.*_13TeV/ZH_lep_PTV_GT250_htt:r_ZH_lep_PTV_GT250[1,-5000,5000]' \
     cmb/125/combined.txt.cmb -o workspace_htxs_stage1_breakdown.root -m 125
+
+combine -M MultiDimFit cmb/125/workspace.root --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --algo=singles --cl=0.68 -n Cmb &
+
+combine -M MultiDimFit cmb/125/workspace.root --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --algo=singles --cl=0.68 -n CmbBlind -t -1 --expectSignal=1 &
+
+#combine -M MultiDimFit workspace_htxs_stage1_breakdown.root --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --algo=singles --cl=0.68 -n Multi &
+
+#combine -M MultiDimFit workspace_htxs_stage1_breakdown.root --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --algo=singles --cl=0.68 -n MultiBlind -t -1 --expectSignal=1 &
+
+
+
+
+
+
+
 
 
 ### All signals in row
