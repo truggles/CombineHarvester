@@ -254,17 +254,14 @@ int main(int argc, char** argv) {
     //  - HTXS Stage 1 categorization
     // HTXS details see https://svnweb.cern.ch/cern/wsvn/lhchiggsxs/repository/TemplateXS/HiggsTemplateCrossSections.h for rivet code mappings
     vector<string> sig_procs = {"ggH_htt","qqH_htt","WH_htt","ZH_htt"};
+    vector<string> ttbar_sig_procs = {"ggH_htt","qqH_htt"}; // Keep the 2 which do not have unique Stage-0 breakdowns
 
     vector<string> sig_procs_stage0 = {
-        //"ggH_fwd_htt",
         "ggH_htt",
-        //"qqH_fwd_htt",
         "qqH_htt",
-        //"VH_had_fwd_htt",
-        "VH_had_htt",
-        //"WH_lep_fwd_htt",
+        "WH_had_htt",
         "WH_lep_htt",
-        //"ZH_lep_fwd_htt",
+        "ZH_had_htt",
         "ZH_lep_htt"
     };
 
@@ -281,36 +278,36 @@ int main(int argc, char** argv) {
         "ggH_GE2J_PTH_120_200_htt",
         "ggH_GE2J_PTH_GT200_htt",
 
-        //"qqH_FWDH_htt",
         "qqH_VBFTOPO_JET3VETO_htt",
         "qqH_VBFTOPO_JET3_htt",
         "qqH_VH2JET_htt",
         "qqH_REST_htt",
         "qqH_PTJET1_GT200_htt",
 
-        //"VH_had_FWDH_htt",
-        "VH_had_VBFTOPO_JET3VETO_htt",
-        "VH_had_VBFTOPO_JET3_htt",
-        "VH_had_VH2JET_htt",
-        "VH_had_REST_htt",
-        "VH_had_PTJET1_GT200_htt",
-
-        //"WH_lep_FWDH_htt",
+        "WH_had_VBFTOPO_JET3VETO_htt",
+        "WH_had_VBFTOPO_JET3_htt",
+        "WH_had_VH2JET_htt",
+        "WH_had_REST_htt",
+        "WH_had_PTJET1_GT200_htt",
         "WH_lep_PTV_0_150_htt",
         "WH_lep_PTV_150_250_0J_htt",
         "WH_lep_PTV_150_250_GE1J_htt",
         "WH_lep_PTV_GT250_htt",
 
-        //"ZH_lep_FWDH_htt",
+        "ZH_had_VBFTOPO_JET3VETO_htt",
+        "ZH_had_VBFTOPO_JET3_htt",
+        "ZH_had_VH2JET_htt",
+        "ZH_had_REST_htt",
+        "ZH_had_PTJET1_GT200_htt",
         "ZH_lep_PTV_0_150_htt",
         "ZH_lep_PTV_150_250_0J_htt",
         "ZH_lep_PTV_150_250_GE1J_htt",
         "ZH_lep_PTV_GT250_htt"
     };
 
-//    vector<string> masses = {"110","120","125","130","140"};
+    vector<string> masses = {"110","120","125","130","140"};
 //    vector<string> masses = {"120","125","130"};
-    vector<string> masses = {"125"};
+//    vector<string> masses = {"125"};
     
     using ch::syst::bin_id;
     
@@ -328,8 +325,8 @@ int main(int argc, char** argv) {
             if (do_stage1_signals)
                 cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, sig_procs_stage1, cats[chn], true);
         }
-        else {
-            cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, sig_procs, cats[chn], true);
+        else if (chn == "ttbar") {
+            cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, ttbar_sig_procs, cats[chn], true);
         }
         //Needed to add ewkz and W as these are not not available/Negative in qcd cR
     }
@@ -408,9 +405,9 @@ int main(int argc, char** argv) {
                         "$BIN/$PROCESS$MASS",
                         "$BIN/$PROCESS$MASS_$SYSTEMATIC");
         }
-        // Not ready for HTXS signals yet
-        else {
-            cb.cp().channel({chn}).process(sig_procs).ExtractShapes(
+        // ttbar gets default ggH and qqH signals, will be removed later
+        else if (chn == "ttbar") {
+            cb.cp().channel({chn}).process(ttbar_sig_procs).ExtractShapes(
                     input_dir[chn] + "htt_"+chn+".inputs-sm-13TeV"+postfix+".root",
                     "$BIN/$PROCESS$MASS",
                     "$BIN/$PROCESS$MASS_$SYSTEMATIC");
@@ -571,7 +568,7 @@ int main(int argc, char** argv) {
                 cb.cp().channel({"mm"}).bin_id({3}).mass({"$MASS", "*"}).WriteDatacard(output_prefix + output_folder +"/"+chn+"/"+mmm+ "/htt_mm_3_13TeV.txt", output_prefix + output_folder +"/"+chn+"/common/htt_input_mm3.root");
             }
             
-            if (ttbar_fit){
+            if (chn == "ttbar" && ttbar_fit){
                 cb.cp().channel({"ttbar"}).bin_id({1}).mass({"$MASS", "*"}).WriteDatacard(output_prefix + output_folder +"/"+chn+"/"+mmm+ "/htt_ttbar_1_13TeV.txt", output_prefix + output_folder +"/"+chn+"/common/htt_input_ttbar1.root");
             }
             

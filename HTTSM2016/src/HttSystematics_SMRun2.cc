@@ -35,15 +35,11 @@ namespace ch {
         
         std::vector<std::string> sig_procs = {"ggH_htt","qqH_htt","WH_htt","ZH_htt"};
         std::vector<std::string> sig_procs_stage0 = {
-            "ggH_fwd_htt",
             "ggH_htt",
-            "qqH_fwd_htt",
             "qqH_htt",
-            "VH_had_fwd_htt",
-            "VH_had_htt",
-            "WH_lep_fwd_htt",
+            "WH_had_htt",
             "WH_lep_htt",
-            "ZH_lep_fwd_htt",
+            "ZH_had_htt",
             "ZH_lep_htt"
         };
         std::vector<std::string> sig_procs_stage1 = {
@@ -66,19 +62,24 @@ namespace ch {
             "qqH_REST_htt",
             "qqH_PTJET1_GT200_htt",
 
-            "VH_had_FWDH_htt",
-            "VH_had_VBFTOPO_JET3VETO_htt",
-            "VH_had_VBFTOPO_JET3_htt",
-            "VH_had_VH2JET_htt",
-            "VH_had_REST_htt",
-            "VH_had_PTJET1_GT200_htt",
-
+            "WH_had_FWDH_htt",
+            "WH_had_VBFTOPO_JET3VETO_htt",
+            "WH_had_VBFTOPO_JET3_htt",
+            "WH_had_VH2JET_htt",
+            "WH_had_REST_htt",
+            "WH_had_PTJET1_GT200_htt",
             "WH_lep_FWDH_htt",
             "WH_lep_PTV_0_150_htt",
             "WH_lep_PTV_150_250_0J_htt",
             "WH_lep_PTV_150_250_GE1J_htt",
             "WH_lep_PTV_GT250_htt",
 
+            "ZH_had_FWDH_htt",
+            "ZH_had_VBFTOPO_JET3VETO_htt",
+            "ZH_had_VBFTOPO_JET3_htt",
+            "ZH_had_VH2JET_htt",
+            "ZH_had_REST_htt",
+            "ZH_had_PTJET1_GT200_htt",
             "ZH_lep_FWDH_htt",
             "ZH_lep_PTV_0_150_htt",
             "ZH_lep_PTV_150_250_0J_htt",
@@ -125,7 +126,6 @@ namespace ch {
         };
         // No harm in defining additional ggH here even if they aren't used
         std::vector<std::string> ggH_sig_procs = {
-            "ggH_fwd_htt",
             "ggH_htt",
             "ggH_VBFTOPO_JET3VETO_htt",
             "ggH_VBFTOPO_JET3_htt",
@@ -140,7 +140,6 @@ namespace ch {
             "ggH_GE2J_PTH_GT200_htt"
         };
         std::vector<std::string> ggH_sig_procs_125 = {
-            "ggH_fwd_htt125",
             "ggH_htt125",
             "ggH_VBFTOPO_JET3VETO_htt125",
             "ggH_VBFTOPO_JET3_htt125",
