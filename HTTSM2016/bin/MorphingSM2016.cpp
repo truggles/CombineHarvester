@@ -254,7 +254,7 @@ int main(int argc, char** argv) {
     //  - HTXS Stage 1 categorization
     // HTXS details see https://svnweb.cern.ch/cern/wsvn/lhchiggsxs/repository/TemplateXS/HiggsTemplateCrossSections.h for rivet code mappings
     vector<string> sig_procs = {"ggH_htt","qqH_htt","WH_htt","ZH_htt"};
-    vector<string> ttbar_sig_procs = {"ggH_htt","qqH_htt"}; // Keep the 2 which do not have unique Stage-0 breakdowns
+    vector<string> ttbar_sig_procs = {"ggH_htt","qqH_htt","WH_htt","ZH_htt"}; // Keep the 2 which do not have unique Stage-0 breakdowns
 
     vector<string> sig_procs_stage0 = {
         "ggH_htt",
