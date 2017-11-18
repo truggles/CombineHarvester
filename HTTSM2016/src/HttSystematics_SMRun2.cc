@@ -318,20 +318,13 @@ namespace ch {
         // MET Systematic shapes
         cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt","em"}).bin_id({1,2,3}).AddSyst(cb,
                                                   "CMS_scale_met_clustered_$ERA", "shape", SystMap<>::init(1.00));
+        // Had bogus normalization for this HTXS process WH_had_VBFTOPO_JET3VETO_htt, chose 5% as a reasonable guess
+        cb.cp().process({"WH_had_VBFTOPO_JET3VETO_htt"}).channel({"mt"}).bin_id({3}).AddSyst(cb,
+                                                  "CMS_scale_met_unclustered_$ERA", "lnN", SystMap<>::init(1.05));
         cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt","em"}).bin_id({1,2,3}).AddSyst(cb,
                                                   "CMS_scale_met_unclustered_$ERA", "shape", SystMap<>::init(1.00));
         
         
-        // Standard JES, factorized 27 JES implementation below
-        // only use 1 at a time.
-        // full 27 JES...
-//        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt"}).bin_id({1,2,3}).AddSyst(cb,
- //                                            "CMS_scale_j_$ERA", "shape", SystMap<>::init(1.00));
- //           cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"QCD"}})).bin_id({1,2,3}).channel({"em"}).AddSyst(cb,
- //                                          "CMS_scale_j_$ERA", "shape", SystMap<>::init(1.00));
-        
-//        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, {"ZTT","TT","W","VV", "ZL", "QCD"}})).channel({"ttbar"}).AddSyst(cb,
-//                                             "CMS_scale_j_$ERA", "shape", SystMap<>::init(1.00));
 
         // JES factorization test tautau        
         std::vector< std::string > uncertNames = {
@@ -392,7 +385,7 @@ namespace ch {
             //"Closure", // Closure Measure, don't include
         }; // end uncertNames
         // Uncomment below for 27 JES
-        //
+
         
         /*for (string uncert:uncertNames){
          cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"tt","mt"}).AddSyst(cb,
@@ -408,10 +401,13 @@ namespace ch {
          
          cb.cp().process({"ZTT","TT","W","VV", "ZL", "QCD"}).channel({"ttbar"}).AddSyst(cb,
          "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
-         
-         
          }*/
+
+        // Chose a value in line with other em bin 1 processes
+        cb.cp().process({"ZH_had_VBFTOPO_JET3VETO_htt"}).channel({"em"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativeBal_$ERA", "lnN", SystMap<>::init(0.99));
         for (string uncert:uncertNames){
+            // This HTXS Stage-1 signal is small an will not help constrain the uncertainty, just leave it out in EMu
+            cb.cp().process({"ZH_had_VH2JET_htt"}).channel({"em"}).bin_id({1,2,3}).AddSyst(cb,"CMS_scale_j_"+uncert+"_$ERA", "lnN", SystMap<>::init(1.00));
             
             cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et"}).bin_id({10,11,14}).AddSyst(cb,
                                                                                                 "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
@@ -425,21 +421,8 @@ namespace ch {
             cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"tt"}).bin_id({10,11,12}).AddSyst(cb,
                                                                                                  "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
 
-            // Normal old JES for signals, at least try it for HTXS samples
-            if (uncert == "RelativeBal") {
-                // The only HTXS signal JES giving problems is EMu VBF category VH_had_VBFTOPO_JET3VETO_htt, 
-                // systematic CMS_scale_j_RelativeBal_13TeV, so set it to lnN
-                // 0.98 choosen to align with UP being a lower number like below, and same order as the below ones
-                cb.cp().process({"VH_had_VBFTOPO_JET3VETO_htt"}).channel({"em"}).bin_id({3}).AddSyst(cb,"CMS_scale_j_RelativeBal_$ERA", "lnN", SystMap<>::init(0.98));
-                cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage_sans_VH_had_VBFTOPO_JET3VETO})).channel({"em"}).bin_id({1,2,3}).AddSyst(cb,
-                        "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
-                cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1})).channel({"et","mt","tt"}).bin_id({1,2,3}).AddSyst(cb,
-                        "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
-            }
-            else {
-                cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1})).channel({"et","mt","em","tt"}).bin_id({1,2,3}).AddSyst(cb,
-                        "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
-            }
+            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1})).channel({"et","mt","em","tt"}).bin_id({1,2,3}).AddSyst(cb,
+                    "CMS_scale_j_"+uncert+"_$ERA", "shape", SystMap<>::init(1.00));
         }
         
         
