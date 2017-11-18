@@ -85,6 +85,7 @@ int main(int argc, char** argv) {
     bool do_nominal_signals = false;
     bool do_stage0_signals = false;
     bool do_stage1_signals = false;
+    bool do_all_masses = true;
     po::variables_map vm;
     po::options_description config("configuration");
     config.add_options()
@@ -112,7 +113,8 @@ int main(int argc, char** argv) {
     ("w_weighting", po::value<bool>(&do_w_weighting)->default_value(false))
     ("do_nominal_signals", po::value<bool>(&do_nominal_signals)->default_value(true))
     ("do_stage0_signals", po::value<bool>(&do_stage0_signals)->default_value(false))
-    ("do_stage1_signals", po::value<bool>(&do_stage1_signals)->default_value(false));
+    ("do_stage1_signals", po::value<bool>(&do_stage1_signals)->default_value(false))
+    ("do_all_masses", po::value<bool>(&do_all_masses)->default_value(true));
 
     po::store(po::command_line_parser(argc, argv).options(config).run(), vm);
     po::notify(vm);
@@ -305,9 +307,11 @@ int main(int argc, char** argv) {
         "ZH_lep_PTV_GT250_htt"
     };
 
-    vector<string> masses = {"110","120","125","130","140"};
-//    vector<string> masses = {"120","125","130"};
-//    vector<string> masses = {"125"};
+    vector<string> masses;
+    if (do_all_masses)
+       masses = {"110","120","125","130","140"};
+    else
+       masses = {"125"};
     
     using ch::syst::bin_id;
     
