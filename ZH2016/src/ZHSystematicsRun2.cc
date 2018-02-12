@@ -38,6 +38,9 @@ namespace ch {
             "ZZ",
             "TriBoson",
             "ttZ",
+            "DYJ",
+            "WZ",
+            "TT",
             "ggH_hzz125",
             "ZH_hww125",
             };
@@ -45,6 +48,9 @@ namespace ch {
             "ZZ",
             "TriBoson",
             "ttZ",
+            "DYJ",
+            "WZ",
+            "TT",
             "ggH_hzz125",
             "ZH_hww125",
             };
@@ -83,6 +89,15 @@ namespace ch {
 
         cb.cp().process({"ttZ"}).AddSyst(cb,
                 "CMS_htt_zh_ttZ_scale_$ERA", "lnN", SystMap<>::init(1.3));
+
+        cb.cp().process({"DYJ"}).AddSyst(cb,
+                "CMS_htt_zh_ZTT_scale_$ERA", "lnN", SystMap<>::init(1.1));
+
+        cb.cp().process({"WZ"}).AddSyst(cb,
+                "CMS_htt_zh_WZ_scale_$ERA", "lnN", SystMap<>::init(1.1));
+
+        cb.cp().process({"TT"}).AddSyst(cb,
+                "CMS_htt_zh_TT_scale_$ERA", "lnN", SystMap<>::init(1.1));
 
         cb.cp().process({"WH_htt125"}).AddSyst(cb,
                 "CMS_htt_zh_wh_htt_scale_$ERA", "lnN", SystMap<>::init(1.2));
