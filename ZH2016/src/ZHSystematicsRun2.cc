@@ -82,19 +82,19 @@ namespace ch {
 
 
         cb.cp().process({"ZZ"}).AddSyst(cb,
-                "CMS_htt_zh_ZZ_scale_$ERA", "lnN", SystMap<>::init(1.1));
+                "CMS_htt_zzXsec_$ERA", "lnN", SystMap<>::init(1.048));
 
         cb.cp().process({"TriBoson"}).AddSyst(cb,
                 "CMS_htt_zh_triBoson_scale_$ERA", "lnN", SystMap<>::init(1.2));
 
         cb.cp().process({"ttZ"}).AddSyst(cb,
-                "CMS_htt_zh_ttZ_scale_$ERA", "lnN", SystMap<>::init(1.3));
+                "CMS_htt_ttzXsec_$ERA", "lnN", SystMap<>::init(1.25));
 
         cb.cp().process({"DYJ"}).AddSyst(cb,
                 "CMS_htt_zh_ZTT_scale_$ERA", "lnN", SystMap<>::init(1.1));
 
         cb.cp().process({"WZ"}).AddSyst(cb,
-                "CMS_htt_zh_WZ_scale_$ERA", "lnN", SystMap<>::init(1.1));
+                "CMS_htt_wzXsec_$ERA", "lnN", SystMap<>::init(1.055));
 
         cb.cp().process({"TT"}).AddSyst(cb,
                 "CMS_htt_zh_TT_scale_$ERA", "lnN", SystMap<>::init(1.1));
@@ -131,12 +131,12 @@ namespace ch {
         //##############################################################################
 
         // Fully correlated
-        cb.cp().AddSyst(cb, "CMS_eff_m_$ERA", "lnN", SystMap<channel, process>::init
+        cb.cp().AddSyst(cb, "CMS_eff_m", "lnN", SystMap<channel, process>::init
                 ({"eemt","eeem"}, JoinStr({sig_procs, all_mc_bkgs}),  1.02)
                 ({"emmt","mmtt"}, JoinStr({sig_procs, all_mc_bkgs}),  1.04)
                 ({"mmmt","emmm"}, JoinStr({sig_procs, all_mc_bkgs}),  1.06) );
         
-        cb.cp().AddSyst(cb, "CMS_eff_e_$ERA", "lnN", SystMap<channel, process>::init
+        cb.cp().AddSyst(cb, "CMS_eff_e", "lnN", SystMap<channel, process>::init
                 ({"emmt","emmm"}, JoinStr({sig_procs, all_mc_bkgs}),  1.02)
                 ({"eemt","eett"}, JoinStr({sig_procs, all_mc_bkgs}),  1.04)
                 ({"eeet","eeem"}, JoinStr({sig_procs, all_mc_bkgs}),  1.06) );
