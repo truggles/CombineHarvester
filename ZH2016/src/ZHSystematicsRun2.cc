@@ -36,6 +36,7 @@ namespace ch {
         std::vector<std::string> all_bkgs = {
             "RedBkg",
             "ZZ",
+            "ggZZ",
             "TriBoson",
             "ttZ",
             "DYJ",
@@ -46,6 +47,7 @@ namespace ch {
             };
         std::vector<std::string> all_mc_bkgs = {
             "ZZ",
+            "ggZZ",
             "TriBoson",
             "ttZ",
             "DYJ",
@@ -83,6 +85,9 @@ namespace ch {
 
         cb.cp().process({"ZZ"}).AddSyst(cb,
                 "CMS_htt_zzXsec_$ERA", "lnN", SystMap<>::init(1.048));
+
+        cb.cp().process({"ggZZ"}).AddSyst(cb,
+                "CMS_htt_ggzzXsec_$ERA", "lnN", SystMap<>::init(1.1));
 
         cb.cp().process({"TriBoson"}).AddSyst(cb,
                 "CMS_htt_zh_triBoson_scale_$ERA", "lnN", SystMap<>::init(1.2));
@@ -211,7 +216,7 @@ namespace ch {
                 "CMS_htt_eff_b_$ERA", "lnN", SystMap<>::init(1.045));
         
         // Light flavor
-        cb.cp().process(JoinStr({sig_procs, {"ZZ","TriBoson","DYJ","WZ","TT","ggH_hzz125","ZH_hww125"}})).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, {"ZZ","ggZZ","TriBoson","DYJ","WZ","TT","ggH_hzz125","ZH_hww125"}})).AddSyst(cb,
                 "CMS_htt_eff_b_$ERA", "lnN", SystMap<>::init(1.001));
 
 
