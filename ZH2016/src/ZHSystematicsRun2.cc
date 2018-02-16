@@ -206,16 +206,13 @@ namespace ch {
         //  b tag and mistag rate  efficiencies
         //##############################################################################
         
-        //cb.cp().AddSyst(cb, "CMS_htt_eff_b_$ERA", "lnN", SystMap<channel, bin_id, process>::init
-        //        ({"em"}, {1}, {"TTJ","TTT","TT"}, 1.035));
-
-        //cb.cp().AddSyst(cb, "CMS_htt_eff_b_$ERA", "lnN", SystMap<channel, bin_id, process>::init
-        //        ({"em"}, {2,3}, {"TTJ","TTT","TT"}, 1.05));
-
-        //cb.cp().AddSyst(cb, "CMS_htt_eff_b_$ERA", "lnN", SystMap<channel, bin_id, process>::init
-        //        ({"em"}, {2, 3}, {"VV","VVT","VVJ"}, 1.015)); // Mainly SingleTop
+        // Heavy flavor
+        cb.cp().process({"ttZ"}).AddSyst(cb,
+                "CMS_htt_eff_b_$ERA", "lnN", SystMap<>::init(1.045));
         
-        
+        // Light flavor
+        cb.cp().process(JoinStr({sig_procs, {"ZZ","TriBoson","DYJ","WZ","TT","ggH_hzz125","ZH_hww125"}})).AddSyst(cb,
+                "CMS_htt_eff_b_$ERA", "lnN", SystMap<>::init(1.001));
 
 
         //##############################################################################
