@@ -192,11 +192,11 @@ namespace ch {
         cb.cp().process({"RedBkg"}).channel({"eeet","emmt"}).AddSyst(cb,
                 "CMS_htt_zh_reducible_bkg_scale_LLET_$ERA", "lnN", SystMap<>::init(1.5));
         cb.cp().process({"RedBkg"}).channel({"eemt","mmmt"}).AddSyst(cb,
-                "CMS_htt_zh_reducible_bkg_scale_LLMT_$ERA", "lnN", SystMap<>::init(1.07));
+                "CMS_htt_zh_reducible_bkg_scale_LLMT_$ERA", "lnN", SystMap<>::init(1.25));
         cb.cp().process({"RedBkg"}).channel({"eeem","emmm"}).AddSyst(cb,
                 "CMS_htt_zh_reducible_bkg_scale_LLEM_$ERA", "lnN", SystMap<>::init(1.7));
         cb.cp().process({"RedBkg"}).channel({"eett","mmtt"}).AddSyst(cb,
-                "CMS_htt_zh_reducible_bkg_scale_LLTT_$ERA", "lnN", SystMap<>::init(1.15));
+                "CMS_htt_zh_reducible_bkg_scale_LLTT_$ERA", "lnN", SystMap<>::init(1.4));
 
 
         cb.cp().process({"RedBkg"}).channel({"eeet","eemt","eeem","emmt","mmmt","emmm"}).AddSyst(cb,
