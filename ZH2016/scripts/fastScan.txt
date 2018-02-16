@@ -1,0 +1,8 @@
+
+
+
+It's quite new so you might need to update the ComineHarvester master branch, but then it's just a case of:
+
+combineTool.py -M FastScan -w cmb/125/workspace.root:w -f multidimfit_initialFit_Test.root:fit_mdf
+
+where -w is the path to the workspace you want to run on, and -f points to an optional RooFitResult to centre the nuisances on, e.g. mlfit.root:fit_s.
