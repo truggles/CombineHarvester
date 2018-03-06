@@ -64,7 +64,6 @@ int main(int argc, char** argv) {
     string output_folder = "sm_run2";
     string input_folder="UW_TR/";
     string postfix="";
-    bool azh = false;
     po::variables_map vm;
     po::options_description config("configuration");
     config.add_options()
@@ -73,7 +72,6 @@ int main(int argc, char** argv) {
     ("input_folder", po::value<string>(&input_folder)->default_value("USCMS"))
     
     ("postfix", po::value<string>(&postfix)->default_value(""))
-    ("azh", po::value<bool>(&azh)->default_value(false))
     ("output_folder", po::value<string>(&output_folder)->default_value("sm_run2"));
 
     po::store(po::command_line_parser(argc, argv).options(config).run(), vm);
@@ -99,20 +97,11 @@ int main(int argc, char** argv) {
     vector<string> sig_procs;
     vector<string> masses;
 
-    if (!azh) {
-        bkg_procs = {"RedBkg", "ZZ", "ggZZ", "TriBoson", "ttZ", "DYJ", "WZ", "TT", "ggH_hzz125", "ZH_hww125"};
-        sig_procs = {"ZH_htt", "WH_htt", "ggH_htt", "qqH_htt"};
-        masses = {"110","120","125","130","140"};
-        //masses = {"120","125","130"}; // Only NNNL cross sections provided for these 3
-        //masses = {"125"};
-    }
-    if (azh) {
-        bkg_procs = {"RedBkg", "ZZ", "ggZZ", "TriBoson", "ttZ", "DYJ", "WZ", "TT", "WH_htt125", "ggH_hzz125",
-            "ZH_hww125", "ggH_htt125", "qqH_htt125", "ZH_htt125"};
-        sig_procs = {"azh"};
-        masses = {"220", "240", "260", "280", "300", "320", "340", "350", "400"};
-        //masses = {"300"};
-    }
+    bkg_procs = {"RedBkg", "ZZ", "ggZZ", "TriBoson", "ttZ", "DYJ", "WZ", "TT", "ggH_hzz125", "ZH_hww125"};
+    sig_procs = {"ZH_htt", "WH_htt", "ggH_htt", "qqH_htt"};
+    masses = {"110","120","125","130","140"};
+    //masses = {"120","125","130"}; // Only NNNL cross sections provided for these 3
+    //masses = {"125"};
     
     
     
@@ -157,16 +146,14 @@ int main(int argc, char** argv) {
     
     
     
-    ch::AddZHRun2Systematics(cb, azh);
+    ch::AddZHRun2Systematics(cb);
     
     
         
     
     
     //! [part7]
-    string analysis;
-    if (azh) analysis = "mssm";
-    if (!azh) analysis = "sm";
+    string analysis = "sm";
     
     for (string chn:chns){
         cb.cp().channel({chn}).backgrounds().ExtractShapes(

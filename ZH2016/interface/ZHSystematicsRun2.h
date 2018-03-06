@@ -5,7 +5,7 @@
 namespace ch {
 // Run2 SM analysis and AZh analysis systematics
 // Implemented in src/ZHSystematicsRun2.cc
-void AddZHRun2Systematics(CombineHarvester& cb, bool& azh);
+void AddZHRun2Systematics(CombineHarvester& cb);
 }
 
 #endif

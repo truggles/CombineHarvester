@@ -18,15 +18,10 @@ namespace ch {
     using ch::syst::bin;
     using ch::JoinStr;
     
-    void AddZHRun2Systematics(CombineHarvester & cb, bool & azh) {
+    void AddZHRun2Systematics(CombineHarvester & cb) {
         
         std::vector<std::string> sig_procs;
-        if (azh) {
-            sig_procs = {"azh"};
-        }
-        if (!azh) {
-            sig_procs = {"ggH_htt","qqH_htt","WH_htt","ZH_htt"};
-        }
+        sig_procs = {"ggH_htt","qqH_htt","WH_htt","ZH_htt"};
         
         // N.B. when adding this list of backgrounds to a nuisance, only
         // the backgrounds that are included in the background process
@@ -110,13 +105,6 @@ namespace ch {
         cb.cp().process({"ggH_hzz125"}).AddSyst(cb,
                 "CMS_htt_zh_hzz_scale_$ERA", "lnN", SystMap<>::init(1.2));
 
-        if (azh) {
-            cb.cp().process({"ZH_htt125"}).AddSyst(cb,
-                    "CMS_htt_zh_zh_scale_$ERA", "lnN", SystMap<>::init(1.2));
-
-            cb.cp().process({"WH_htt125"}).AddSyst(cb,
-                    "CMS_htt_zh_wh_htt_scale_$ERA", "lnN", SystMap<>::init(1.2));
-        }
 
         //##############################################################################
         //  trigger   ##FIXME   the values have been chosen rather arbitrarily
@@ -274,31 +262,15 @@ namespace ch {
         cb.cp().process(sig_procs).AddSyst(cb,"BR_htt_PU_alphas", "lnN", SystMap<>::init(1.0062));
         
         
-        if (azh) {
-            cb.cp().process({"ggH_htt125"}).AddSyst(cb,"QCDScale_ggH", "lnN", SystMap<>::init(1.039));
-            cb.cp().process({"qqH_htt125"}).AddSyst(cb,"QCDScale_qqH", "lnN", SystMap<>::init(1.004));
-            cb.cp().process({"WH_htt125"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.007));
-            cb.cp().process({"ZH_htt125"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.038));
-        }
-        else {
-            cb.cp().process({"ggH_htt"}).AddSyst(cb,"QCDScale_ggH", "lnN", SystMap<>::init(1.039));
-            cb.cp().process({"qqH_htt"}).AddSyst(cb,"QCDScale_qqH", "lnN", SystMap<>::init(1.004));
-            cb.cp().process({"WH_htt"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.007));
-            cb.cp().process({"ZH_htt"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.038));
-        }
+        cb.cp().process({"ggH_htt"}).AddSyst(cb,"QCDScale_ggH", "lnN", SystMap<>::init(1.039));
+        cb.cp().process({"qqH_htt"}).AddSyst(cb,"QCDScale_qqH", "lnN", SystMap<>::init(1.004));
+        cb.cp().process({"WH_htt"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.007));
+        cb.cp().process({"ZH_htt"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.038));
         
-        if (azh) {
-            cb.cp().process({"ggH_htt125"}).AddSyst(cb,"pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
-            cb.cp().process({"qqH_htt125"}).AddSyst(cb,"pdf_Higgs_qq", "lnN", SystMap<>::init(1.021));
-            cb.cp().process({"WH_htt125"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.019));
-            cb.cp().process({"ZH_htt125"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.016));
-        }
-        else {
-            cb.cp().process({"ggH_htt"}).AddSyst(cb,"pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
-            cb.cp().process({"qqH_htt"}).AddSyst(cb,"pdf_Higgs_qq", "lnN", SystMap<>::init(1.021));
-            cb.cp().process({"WH_htt"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.019));
-            cb.cp().process({"ZH_htt"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.016));
-        }
+        cb.cp().process({"ggH_htt"}).AddSyst(cb,"pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
+        cb.cp().process({"qqH_htt"}).AddSyst(cb,"pdf_Higgs_qq", "lnN", SystMap<>::init(1.021));
+        cb.cp().process({"WH_htt"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.019));
+        cb.cp().process({"ZH_htt"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.016));
         
     }
 }
