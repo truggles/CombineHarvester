@@ -19,7 +19,7 @@
 #include "CombineHarvester/CombineTools/interface/Algorithm.h"
 #include "CombineHarvester/CombineTools/interface/AutoRebin.h"
 #include "CombineHarvester/CombinePdfs/interface/MorphFunctions.h"
-#include "CombineHarvester/ZH2016/interface/ZHSystematicsRun2.h"
+#include "CombineHarvester/ZH2016/interface/VHSystematicsRun2.h"
 #include "RooWorkspace.h"
 #include "RooRealVar.h"
 #include "TH2.h"
@@ -92,13 +92,20 @@ int main(int argc, char** argv) {
     
     
     
-    VString chns = {"eeet", "eemt", "eeem", "eett", "emmt", "mmmt", "emmm", "mmtt"};
-    VString bkg_procs;
-    vector<string> sig_procs;
+    VString zh_chns = {"eeet", "eemt", "eeem", "eett", "emmt", "mmmt", "emmm", "mmtt"};
+    VString wh_chns = {"mtt","ett","mmt","emt"};
+    VString wh_lep_chns = {"mmt","emt"};
+    VString wh_had_chns = {"mtt","ett"};
+    VString all_chns = {"mtt","ett","mmt","emt", "eeet", "eemt", "eeem", "eett", "emmt", "mmmt", "emmm", "mmtt"};
+    vector<string> zh_sig_procs;
+    vector<string> wh_sig_procs;
     vector<string> masses;
 
-    bkg_procs = {"RedBkg", "ZZ", "ggZZ", "TriBoson", "ttZ", "DYJ", "WZ", "TT", "ggH_hzz125", "ZH_hww125"};
-    sig_procs = {"ZH_htt", "WH_htt", "ggH_htt", "qqH_htt"};
+    VString zh_bkg_procs = {"RedBkg", "ZZ", "ggZZ", "TriBoson", "ttZ", "DYJ", "WZ", "TT", "ggH_hzz125", "ZH_hww125"};
+    VString wh_lep_bkg_procs = {"TT","allFakes","DY","WZ","ZZ","ttW","ttZ","WH_hww125","ZH_hww125"};//VV
+    VString wh_had_bkg_procs = {"jetFakes","WZ","ZZ","ttW","ttZ","WH_hww125","ZH_hww125"};//VV
+    zh_sig_procs = {"ZH_htt", "WH_htt", "ggH_htt", "qqH_htt"};
+    wh_sig_procs = {"ZH_htt", "WH_htt"};
     masses = {"110","120","125","130","140"};
     //masses = {"120","125","130"}; // Only NNNL cross sections provided for these 3
     //masses = {"125"};
@@ -110,9 +117,13 @@ int main(int argc, char** argv) {
     
     
     map<string,Categories> cats;
-    for (auto chn : chns) {
+    for (auto chn : zh_chns) {
         cats[chn] = { {1, chn+"_inclusive"} };
     }
+    cats["emt"] = { {1, "emt_high"} };
+    cats["mmt"] = { {1, "mmt_high"} };
+    cats["ett"] = { {1, "ett"} };
+    cats["mtt"] = { {1, "mtt"} };
     
     
     
@@ -121,32 +132,27 @@ int main(int argc, char** argv) {
     using ch::syst::bin_id;
     
     //! [part2]
-    for (auto chn : chns) {
+    for (auto chn : zh_chns) {
         cb.AddObservations({"*"}, {"htt"}, {"13TeV"}, {chn},            cats[chn]);
-        cb.AddProcesses(   {"*"}, {"htt"}, {"13TeV"}, {chn}, bkg_procs, cats[chn], false);
-        cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, sig_procs, cats[chn], true);
-        //Needed to add ewkz and W as these are not not available/Negative in qcd cR
+        cb.AddProcesses(   {"*"}, {"htt"}, {"13TeV"}, {chn}, zh_bkg_procs, cats[chn], false);
+        cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, zh_sig_procs, cats[chn], true);
+    }
+    for (auto chn : wh_had_chns) {
+        cb.AddObservations({"*"}, {"htt"}, {"13TeV"}, {chn},            cats[chn]);
+        cb.AddProcesses(   {"*"}, {"htt"}, {"13TeV"}, {chn}, wh_had_bkg_procs, cats[chn], false);
+        cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, wh_sig_procs, cats[chn], true);
+    }
+    for (auto chn : wh_lep_chns) {
+        cb.AddObservations({"*"}, {"htt"}, {"13TeV"}, {chn},            cats[chn]);
+        cb.AddProcesses(   {"*"}, {"htt"}, {"13TeV"}, {chn}, wh_lep_bkg_procs, cats[chn], false);
+        cb.AddProcesses(masses,   {"htt"}, {"13TeV"}, {chn}, wh_sig_procs, cats[chn], true);
     }
     
     
     
-    //! [part4]
     
-    
-    //Some of the code for this is in a nested namespace, so
-    // we'll make some using declarations first to simplify things a bit.
-    //    using ch::syst::SystMap;
-    //    using ch::syst::era;
-    //    using ch::syst::channel;
-    //    using ch::syst::bin_id;
-    //    using ch::syst::process;
-    
-    
-    
-    
-    
-    
-    ch::AddZHRun2Systematics(cb);
+    // Add the systematic model
+    ch::AddVHRun2Systematics(cb);
     
     
         
@@ -155,13 +161,23 @@ int main(int argc, char** argv) {
     //! [part7]
     string analysis = "sm";
     
-    for (string chn:chns){
+    for (string chn:zh_chns){
         cb.cp().channel({chn}).backgrounds().ExtractShapes(
-                input_dir + "htt_zh.inputs-"+analysis+"-13TeV"+postfix+".root",
+                input_dir + "htt_zh.inputs-"+analysis+"-13TeV_svFitMass"+postfix+".root",
                 "$BIN/$PROCESS",
                 "$BIN/$PROCESS_$SYSTEMATIC");
-        cb.cp().channel({chn}).process(sig_procs).ExtractShapes(
-                input_dir + "htt_zh.inputs-"+analysis+"-13TeV"+postfix+".root",
+        cb.cp().channel({chn}).process(zh_sig_procs).ExtractShapes(
+                input_dir + "htt_zh.inputs-"+analysis+"-13TeV_svFitMass"+postfix+".root",
+                "$BIN/$PROCESS$MASS",
+                "$BIN/$PROCESS$MASS_$SYSTEMATIC");
+    }
+    for (string chn:wh_chns){
+        cb.cp().channel({chn}).backgrounds().ExtractShapes(
+                input_dir + "htt_wh.inputs-"+analysis+"-13TeV_"+chn+postfix+".root",
+                "$BIN/$PROCESS",
+                "$BIN/$PROCESS_$SYSTEMATIC");
+        cb.cp().channel({chn}).process(zh_sig_procs).ExtractShapes(
+                input_dir + "htt_wh.inputs-"+analysis+"-13TeV_"+chn+postfix+".root",
                 "$BIN/$PROCESS$MASS",
                 "$BIN/$PROCESS$MASS_$SYSTEMATIC");
     }
@@ -283,7 +299,7 @@ int main(int argc, char** argv) {
     //    writer.SetVerbosity(1);
     
     writer.WriteCards("cmb", cb);
-    for (auto chn : chns) {
+    for (auto chn : all_chns) {
         // And per-channel-category
         writer.WriteCards(chn, cb.cp().channel({chn}).bin_id({1})); // 1st argument is the folder name, see $TAG above
         
