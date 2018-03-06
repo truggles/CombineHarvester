@@ -90,7 +90,7 @@ namespace ch {
                 "CMS_htt_ggzzXsec_$ERA", "lnN", SystMap<>::init(1.1));
 
         cb.cp().process({"TriBoson"}).AddSyst(cb,
-                "CMS_htt_zh_triBoson_scale_$ERA", "lnN", SystMap<>::init(1.2));
+                "CMS_htt_zh_triBoson_scale_$ERA", "lnN", SystMap<>::init(1.25));
 
         cb.cp().process({"ttZ"}).AddSyst(cb,
                 "CMS_htt_ttzXsec_$ERA", "lnN", SystMap<>::init(1.25));
@@ -104,9 +104,6 @@ namespace ch {
         cb.cp().process({"TT"}).AddSyst(cb,
                 "CMS_htt_zh_TT_scale_$ERA", "lnN", SystMap<>::init(1.1));
 
-        cb.cp().process({"WH_htt125"}).AddSyst(cb,
-                "CMS_htt_zh_wh_htt_scale_$ERA", "lnN", SystMap<>::init(1.2));
-
         cb.cp().process({"ZH_hww125"}).AddSyst(cb,
                 "CMS_htt_zh_zh_hww_scale_$ERA", "lnN", SystMap<>::init(1.2));
 
@@ -116,6 +113,9 @@ namespace ch {
         if (azh) {
             cb.cp().process({"ZH_htt125"}).AddSyst(cb,
                     "CMS_htt_zh_zh_scale_$ERA", "lnN", SystMap<>::init(1.2));
+
+            cb.cp().process({"WH_htt125"}).AddSyst(cb,
+                    "CMS_htt_zh_wh_htt_scale_$ERA", "lnN", SystMap<>::init(1.2));
         }
 
         //##############################################################################
@@ -194,7 +194,7 @@ namespace ch {
         cb.cp().process({"RedBkg"}).channel({"eemt","mmmt"}).AddSyst(cb,
                 "CMS_htt_zh_reducible_bkg_scale_LLMT_$ERA", "lnN", SystMap<>::init(1.25));
         cb.cp().process({"RedBkg"}).channel({"eeem","emmm"}).AddSyst(cb,
-                "CMS_htt_zh_reducible_bkg_scale_LLEM_$ERA", "lnN", SystMap<>::init(1.7));
+                "CMS_htt_zh_reducible_bkg_scale_LLEM_$ERA", "lnN", SystMap<>::init(2.0));
         cb.cp().process({"RedBkg"}).channel({"eett","mmtt"}).AddSyst(cb,
                 "CMS_htt_zh_reducible_bkg_scale_LLTT_$ERA", "lnN", SystMap<>::init(1.4));
 
