@@ -35,24 +35,22 @@ namespace ch {
             "ttW",
             "WH_hww125",
             // new above / old below
-            "RedBkg",
             "ZZ",
             "ggZZ",
             "TriBoson",
             "ttZ",
-            "DYJ",
             "WZ",
             "TT",
             "ggH_hzz125",
             "ZH_hww125",
             };
         std::vector<std::string> all_zh_bkgs = {
-            "RedBkg",
+            "allFakes",
             "ZZ",
             "ggZZ",
             "TriBoson",
             "ttZ",
-            "DYJ",
+            "DY",
             "WZ",
             "TT",
             "ggH_hzz125",
@@ -67,7 +65,6 @@ namespace ch {
             "ggZZ",
             "TriBoson",
             "ttZ",
-            "DYJ",
             "WZ",
             "TT",
             "ggH_hzz125",
@@ -116,9 +113,8 @@ namespace ch {
         cb.cp().process({"ttW"}).AddSyst(cb,
                 "CMS_htt_ttwXsec_13TeV", "lnN", SystMap<>::init(1.25));
 
-        cb.cp().process({"DYJ"}).AddSyst(cb,
-                "CMS_htt_zh_ZTT_scale_$ERA", "lnN", SystMap<>::init(1.1));
-        cb.cp().process({"DY"}).AddSyst(cb, "CMS_htt_zXsec_13TeV", "lnN", SystMap<>::init(1.03));
+        cb.cp().process({"DY"}).AddSyst(cb,
+                "CMS_htt_zXsec_13TeV", "lnN", SystMap<>::init(1.03));
 
         cb.cp().process({"WZ"}).AddSyst(cb,
                 "CMS_htt_wzXsec_$ERA", "lnN", SystMap<>::init(1.055));
@@ -195,46 +191,46 @@ namespace ch {
         //##############################################################################
         
         // Modified Run-I Fake Rate uncertainty Method
-        //cb.cp().process({"RedBkg"}).channel({"eeet","emmt"}).AddSyst(cb,
+        //cb.cp().process({"allFakes"}).channel({"eeet","emmt"}).AddSyst(cb,
         //        "CMS_htt_zh_reducible_bkg_scale_e_$ERA", "lnN", SystMap<>::init(1.1));
-        //cb.cp().process({"RedBkg"}).channel({"eeet","emmt"}).AddSyst(cb,
+        //cb.cp().process({"allFakes"}).channel({"eeet","emmt"}).AddSyst(cb,
         //        "CMS_htt_zh_reducible_bkg_scale_t_$ERA", "lnN", SystMap<>::init(1.2));
 
-        //cb.cp().process({"RedBkg"}).channel({"eemt","mmmt"}).AddSyst(cb,
+        //cb.cp().process({"allFakes"}).channel({"eemt","mmmt"}).AddSyst(cb,
         //        "CMS_htt_zh_reducible_bkg_scale_m_$ERA", "lnN", SystMap<>::init(1.1));
-        //cb.cp().process({"RedBkg"}).channel({"eemt","mmmt"}).AddSyst(cb,
+        //cb.cp().process({"allFakes"}).channel({"eemt","mmmt"}).AddSyst(cb,
         //        "CMS_htt_zh_reducible_bkg_scale_t_$ERA", "lnN", SystMap<>::init(1.2));
 
-        //cb.cp().process({"RedBkg"}).channel({"eeem","emmm"}).AddSyst(cb,
+        //cb.cp().process({"allFakes"}).channel({"eeem","emmm"}).AddSyst(cb,
         //        "CMS_htt_zh_reducible_bkg_scale_e_$ERA", "lnN", SystMap<>::init(1.1));
-        //cb.cp().process({"RedBkg"}).channel({"eeem","emmm"}).AddSyst(cb,
+        //cb.cp().process({"allFakes"}).channel({"eeem","emmm"}).AddSyst(cb,
         //        "CMS_htt_zh_reducible_bkg_scale_m_$ERA", "lnN", SystMap<>::init(1.1));
 
-        //cb.cp().process({"RedBkg"}).channel({"eett","mmtt"}).AddSyst(cb,
+        //cb.cp().process({"allFakes"}).channel({"eett","mmtt"}).AddSyst(cb,
         //        "CMS_htt_zh_reducible_bkg_scale_t_$ERA", "lnN", SystMap<>::init(1.15));
 
         // New FR Uncerts, Data-Prompt MC Method
-        cb.cp().process({"RedBkg"}).channel({"eeet","emmt"}).AddSyst(cb,
+        cb.cp().process({"allFakes"}).channel({"eeet","emmt"}).AddSyst(cb,
                 "CMS_htt_zh_reducible_bkg_scale_LLET_$ERA", "lnN", SystMap<>::init(1.5));
-        cb.cp().process({"RedBkg"}).channel({"eemt","mmmt"}).AddSyst(cb,
+        cb.cp().process({"allFakes"}).channel({"eemt","mmmt"}).AddSyst(cb,
                 "CMS_htt_zh_reducible_bkg_scale_LLMT_$ERA", "lnN", SystMap<>::init(1.25));
-        cb.cp().process({"RedBkg"}).channel({"eeem","emmm"}).AddSyst(cb,
+        cb.cp().process({"allFakes"}).channel({"eeem","emmm"}).AddSyst(cb,
                 "CMS_htt_zh_reducible_bkg_scale_LLEM_$ERA", "lnN", SystMap<>::init(2.0));
-        cb.cp().process({"RedBkg"}).channel({"eett","mmtt"}).AddSyst(cb,
+        cb.cp().process({"allFakes"}).channel({"eett","mmtt"}).AddSyst(cb,
                 "CMS_htt_zh_reducible_bkg_scale_LLTT_$ERA", "lnN", SystMap<>::init(1.4));
 
 
-        cb.cp().process({"RedBkg"}).channel({"eeet","eemt","eeem","emmt","mmmt","emmm"}).AddSyst(cb,
+        cb.cp().process({"allFakes"}).channel({"eeet","eemt","eeem","emmt","mmmt","emmm"}).AddSyst(cb,
                 "CMS_scale_fake_rate_prompt_MC_EandM_$ERA", "shape", SystMap<>::init(1.00));
 
-        cb.cp().process({"RedBkg"}).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
+        cb.cp().process({"allFakes"}).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
                 "CMS_scale_fake_rate_prompt_MC_Tau_$ERA", "shape", SystMap<>::init(1.00));
 
         // WH Reducible
         cb.cp().process({"allFakes","jetFakes"}).channel(whChans).AddSyst(cb, "reducible_norm_$CHANNEL", "lnN", SystMap<>::init(1.20));
 
         cb.cp().process({"allFakes"}).channel({"emt"}).AddSyst(cb,"CMS_fakeEle_PromptSubtraction_13TeV", "shape", SystMap<>::init(1.00));
-        cb.cp().process({"allFakes"}).channel({"emt"}).AddSyst(cb,"CMS_fakeMu_PromptSubtraction_13TeV", "shape", SystMap<>::init(1.00));
+        cb.cp().process({"allFakes"}).channel({"emt","mmt"}).AddSyst(cb,"CMS_fakeMu_PromptSubtraction_13TeV", "shape", SystMap<>::init(1.00));
 
         // WH Tau per bin Fake Rate shifts
         std::vector<std::string> tau_dms = {"dm0","dm1","dm10"};
@@ -267,7 +263,7 @@ namespace ch {
                 "CMS_htt_eff_b_$ERA", "lnN", SystMap<>::init(1.045));
         
         // Light flavor
-        cb.cp().process(JoinStr({sig_procs, {"ZZ","ggZZ","TriBoson","DYJ","DY","WZ","TT","ggH_hzz125","ZH_hww125","WH_hww125"}})).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, {"ZZ","ggZZ","TriBoson","DYJ","WZ","TT","ggH_hzz125","ZH_hww125","WH_hww125"}})).AddSyst(cb,
                 "CMS_htt_eff_b_$ERA", "lnN", SystMap<>::init(1.0015));
 
         // emt

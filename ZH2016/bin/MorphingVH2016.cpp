@@ -101,7 +101,7 @@ int main(int argc, char** argv) {
     vector<string> wh_sig_procs;
     vector<string> masses;
 
-    VString zh_bkg_procs = {"RedBkg", "ZZ", "ggZZ", "TriBoson", "ttZ", "DYJ", "WZ", "TT", "ggH_hzz125", "ZH_hww125"};
+    VString zh_bkg_procs = {"allFakes", "ZZ", "ggZZ", "TriBoson", "ttZ", "DY", "WZ", "TT", "ggH_hzz125", "ZH_hww125"};
     VString wh_lep_bkg_procs = {"TT","allFakes","DY","WZ","ZZ","ttW","ttZ","WH_hww125","ZH_hww125"};//VV
     VString wh_had_bkg_procs = {"jetFakes","WZ","ZZ","ttW","ttZ","WH_hww125","ZH_hww125"};//VV
     zh_sig_procs = {"ZH_htt", "WH_htt", "ggH_htt", "qqH_htt"};
@@ -236,8 +236,8 @@ int main(int argc, char** argv) {
     .SetFixNorm(false)  // contrary to signal region, bbb *should* change yield here
     .SetVerbosity(1);
     // Will merge but only for non Reducible Bkg processes, to be on the safe side
-    bbb_ctl.MergeBinErrors(cb.cp().process({"RedBkg"}, false).FilterProcs(BinIsNotControlRegion));
-    bbb_ctl.AddBinByBin(cb.cp().process({"RedBkg"}, false).FilterProcs(BinIsNotControlRegion), cb);
+    bbb_ctl.MergeBinErrors(cb.cp().process({"allFakes"}, false).FilterProcs(BinIsNotControlRegion));
+    bbb_ctl.AddBinByBin(cb.cp().process({"allFakes"}, false).FilterProcs(BinIsNotControlRegion), cb);
     cout << "\nDone with BBB\n";
 
     
