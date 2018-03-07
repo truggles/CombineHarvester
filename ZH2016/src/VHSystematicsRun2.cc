@@ -105,7 +105,7 @@ namespace ch {
                 "CMS_htt_ggzzXsec_$ERA", "lnN", SystMap<>::init(1.1));
 
         cb.cp().process({"TriBoson"}).AddSyst(cb,
-                "CMS_htt_zh_triBoson_scale_$ERA", "lnN", SystMap<>::init(1.25));
+                "CMS_htt_vvvXsec_$ERA", "lnN", SystMap<>::init(1.25));
 
         cb.cp().process({"ttZ"}).AddSyst(cb,
                 "CMS_htt_ttzXsec_$ERA", "lnN", SystMap<>::init(1.25));
@@ -120,17 +120,7 @@ namespace ch {
                 "CMS_htt_wzXsec_$ERA", "lnN", SystMap<>::init(1.055));
 
         cb.cp().process({"TT"}).AddSyst(cb,
-                "CMS_htt_zh_TT_scale_$ERA", "lnN", SystMap<>::init(1.1));
-        cb.cp().process({"TT"}).AddSyst(cb, "CMS_htt_tjXsec_13TeV", "lnN", SystMap<>::init(1.06));
-
-        cb.cp().process({"ZH_hww125"}).AddSyst(cb,
-                "CMS_htt_zh_zh_hww_scale_$ERA", "lnN", SystMap<>::init(1.2));
-
-        cb.cp().process({"ggH_hzz125"}).AddSyst(cb,
-                "CMS_htt_zh_hzz_scale_$ERA", "lnN", SystMap<>::init(1.2));
-
-        cb.cp().process({"WH_hww125"}).AddSyst(cb,
-                "CMS_htt_wh_hww_scale_$ERA", "lnN", SystMap<>::init(1.2));
+                "CMS_htt_tjXsec_13TeV", "lnN", SystMap<>::init(1.06));
 
 
         //##############################################################################
@@ -263,29 +253,9 @@ namespace ch {
                 "CMS_htt_eff_b_$ERA", "lnN", SystMap<>::init(1.045));
         
         // Light flavor
-        cb.cp().process(JoinStr({sig_procs, {"ZZ","ggZZ","TriBoson","DYJ","WZ","TT","ggH_hzz125","ZH_hww125","WH_hww125"}})).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, {"ZZ","ggZZ","TriBoson","DY","WZ","ggH_hzz125","ZH_hww125","WH_hww125"}})).AddSyst(cb,
                 "CMS_htt_eff_b_$ERA", "lnN", SystMap<>::init(1.0015));
 
-        // emt
-        // cb.cp().process({"TT","ttW","ttZ"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.045));
-        // cb.cp().process({"DY","WZ","WH_htt","WH_hww125"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.0015));
-        // cb.cp().process({"ZH_htt","ZH_hww125"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.004));
-        // cb.cp().process({"ZZ"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.0022));
-        // ett
-        // cb.cp().process({"ttW","ttZ"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.055));
-        // cb.cp().process({"WZ","WH_htt","WH_hww125"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.001));
-        // cb.cp().process({"ZH_htt","ZH_hww125"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.003));
-        // cb.cp().process({"ZZ"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.001));
-        // mmt
-        // cb.cp().process({"TT","ttW","ttZ"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.045));
-        // cb.cp().process({"DY","WZ","WH_htt","WH_hww125"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.0015));
-        // cb.cp().process({"ZH_htt","ZH_hww125"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.004));
-        // cb.cp().process({"ZZ"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.0022));
-        // mtt
-        // cb.cp().process({"ttW","ttZ"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.055));
-        // cb.cp().process({"WZ","WH_htt","WH_hww125"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.001));
-        // cb.cp().process({"ZH_htt","ZH_hww125"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.003));
-        // cb.cp().process({"ZZ"}).AddSyst(cb, "CMS_htt_eff_b", "lnN", SystMap<>::init(1.001));
 
 
         //##############################################################################
@@ -298,8 +268,8 @@ namespace ch {
 
 
         // Muon
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"emt","mmt"}).AddSyst(cb,
-                "CMS_scale_m_$ERA", "shape", SystMap<>::init(1.00));
+        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"emt","mmt"}).AddSyst(cb,
+        //        "CMS_scale_m_$ERA", "shape", SystMap<>::init(1.00));
 
 
         // Decay Mode based TES Settings
@@ -341,8 +311,7 @@ namespace ch {
         // jet to elec/mu/tau fake for triggering lepton in WH
         //##############################################################################
 
-        cb.cp().process({"TT","DY"}).channel(whChans).AddSyst(cb, "CMS_htt_jetFakeLep_13TeV", "lnN", SystMap<>::init(1.20));
-
+        cb.cp().process({"TT","DY"}).channel({"emt","mmt"}).AddSyst(cb, "CMS_htt_jetFakeLep_13TeV", "lnN", SystMap<>::init(1.20));
 
 
 
