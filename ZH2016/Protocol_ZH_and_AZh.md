@@ -5,7 +5,7 @@
     cd CMSSW_7_4_7/src
     cmsenv
     git clone -b 74x-root6 https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
-    git clone -b ZH2016 https://github.com/truggles/CombineHarvester.git CombineHarvester
+    git clone -b SM2016-VH https://github.com/truggles/CombineHarvester.git CombineHarvester
     scram b -j 8
 
 # Getting data cards
