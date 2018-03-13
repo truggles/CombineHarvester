@@ -10,7 +10,7 @@
 
 # Getting data cards
 
-    Current DCs here - /afs/cern.ch/work/t/truggles/public/VH_DCs/20180307/
+    Current DCs here - /afs/cern.ch/work/t/truggles/public/VH_DCs/20180313/
 
 Make a directory to store the above files depending on which analysis you care about:
 
