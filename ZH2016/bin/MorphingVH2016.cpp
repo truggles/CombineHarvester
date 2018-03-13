@@ -118,7 +118,8 @@ int main(int argc, char** argv) {
     
     map<string,Categories> cats;
     for (auto chn : zh_chns) {
-        cats[chn] = { {1, chn+"_inclusive"} };
+        //cats[chn] = { {1, chn+"_inclusive"} };
+        cats[chn] = { {1, chn+"_LT2D"} };
     }
     cats["emt"] = { {1, "emt_high"} };
     cats["mmt"] = { {1, "mmt_high"} };
