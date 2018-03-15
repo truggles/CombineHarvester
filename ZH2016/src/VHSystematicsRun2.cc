@@ -89,7 +89,7 @@ namespace ch {
         //##############################################################################
         
         cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).AddSyst(cb,
-                "lumi_2016_$ERA", "lnN", SystMap<>::init(1.025));
+                "lumi_13TeV_2016", "lnN", SystMap<>::init(1.025));
 
 
 
@@ -250,11 +250,11 @@ namespace ch {
         
         // Heavy flavor
         cb.cp().process({"TT","ttW","ttZ"}).AddSyst(cb,
-                "CMS_htt_eff_b_$ERA", "lnN", SystMap<>::init(1.045));
+                "CMS_eff_b_$ERA", "lnN", SystMap<>::init(1.045));
         
         // Light flavor
         cb.cp().process(JoinStr({sig_procs, {"ZZ","ggZZ","TriBoson","DY","WZ","ggH_hzz125","ZH_hww125","WH_hww125"}})).AddSyst(cb,
-                "CMS_htt_eff_b_$ERA", "lnN", SystMap<>::init(1.0015));
+                "CMS_eff_b_$ERA", "lnN", SystMap<>::init(1.0015));
 
 
 
