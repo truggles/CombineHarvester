@@ -43,6 +43,8 @@ namespace ch {
             "TT",
             "ggH_hzz125",
             "ZH_hww125",
+            "ttHnonBB",
+            "ttH_other125",
             };
         std::vector<std::string> all_zh_bkgs = {
             "allFakes",
@@ -266,7 +268,8 @@ namespace ch {
                 "CMS_eff_b_$ERA", "lnN", SystMap<>::init(1.045));
         
         // Light flavor
-        cb.cp().process(JoinStr({sig_procs, {"ZZ","ggZZ","TriBoson","DY","WZ","ggH_hzz125","ZH_hww125","WH_hww125"}})).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, {"ZZ","ggZZ","TriBoson","DY","WZ","ggH_hzz125",
+                "ZH_hww125","WH_hww125","ttHnonBB","ttH_other125"}})).AddSyst(cb,
                 "CMS_eff_b_$ERA", "lnN", SystMap<>::init(1.0015));
 
 
@@ -345,11 +348,12 @@ namespace ch {
         cb.cp().process({"qqH_htt"}).AddSyst(cb,"QCDScale_qqH", "lnN", SystMap<>::init(1.004));
         cb.cp().process({"WH_htt","WH_hww125"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.007));
         cb.cp().process({"ZH_htt","ZH_hww125"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.038));
+        cb.cp().process({"ttHnonBB","ttH_other125"}).AddSyst(cb,"QCDScale_ttH", "lnN", SystMap<>::init(1.075)); // Avg of + and - scale
         
         cb.cp().process({"ggH_htt","ggH_hzz125"}).AddSyst(cb,"pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
         cb.cp().process({"qqH_htt"}).AddSyst(cb,"pdf_Higgs_qq", "lnN", SystMap<>::init(1.021));
         cb.cp().process({"WH_htt","WH_hww125"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.019));
         cb.cp().process({"ZH_htt","ZH_hww125"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.016));
-
+        cb.cp().process({"ttHnonBB","ttH_other125"}).AddSyst(cb,"pdf_Higgs_ttH", "lnN", SystMap<>::init(1.036));
     }
 }

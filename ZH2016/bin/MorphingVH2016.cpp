@@ -101,10 +101,10 @@ int main(int argc, char** argv) {
     vector<string> wh_sig_procs;
     vector<string> masses;
 
-    VString zh_bkg_procs = {"allFakes", "ZZ", "ggZZ", "TriBoson", "ttZ", "DY", "WZ", "TT", "ggH_hzz125", "ZH_hww125"};
-    VString wh_lep_bkg_procs = {"TT","allFakes","DY","WZ","ZZ","ttW","ttZ","WH_hww125","ZH_hww125"};//VV
-    VString wh_had_bkg_procs = {"jetFakes","WZ","ZZ","ttW","ttZ","WH_hww125","ZH_hww125"};//VV
-    zh_sig_procs = {"ZH_htt", "WH_htt", "ggH_htt", "qqH_htt"};
+    VString zh_bkg_procs = {"allFakes", "ZZ", "ggZZ", "TriBoson", "ttZ", "DY", "WZ", "TT", "ggH_hzz125", "ZH_hww125", "ttH_other125"};
+    VString wh_lep_bkg_procs = {"TT","allFakes","DY","WZ","ZZ","ttW","ttZ","WH_hww125","ZH_hww125","ttHnonBB"};//VV
+    VString wh_had_bkg_procs = {"jetFakes","WZ","ZZ","ttW","ttZ","WH_hww125","ZH_hww125","ttHnonBB"};//VV
+    zh_sig_procs = {"ZH_htt", "WH_htt"}; //, "ggH_htt", "qqH_htt"}; In the final DCs, no ggH is present, only MMMT has a qqH, so ignore it
     wh_sig_procs = {"ZH_htt", "WH_htt"};
     masses = {"110","120","125","130","140"};
     //masses = {"120","125","130"}; // Only NNNL cross sections provided for these 3
