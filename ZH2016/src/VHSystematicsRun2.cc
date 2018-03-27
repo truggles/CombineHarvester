@@ -327,7 +327,7 @@ namespace ch {
         // jet to elec/mu/tau fake for triggering lepton in WH
         //##############################################################################
 
-        cb.cp().process({"TT","DY"}).channel({"emt","mmt"}).AddSyst(cb, "CMS_htt_jetFakeLep_13TeV", "lnN", SystMap<>::init(1.20));
+        cb.cp().process({"TT","DY"}).channel({"emt","mmt","ett","mtt"}).AddSyst(cb, "CMS_htt_jetFakeLep_13TeV", "lnN", SystMap<>::init(1.20));
 
 
 

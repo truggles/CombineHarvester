@@ -10,7 +10,7 @@
 
 # Getting data cards
 
-    Current DCs here - /afs/cern.ch/work/t/truggles/public/VH_DCs/20180313/
+    Current DCs here - /afs/cern.ch/work/t/truggles/public/VH_DCs/20180327/
 
 Make a directory to store the above files depending on which analysis you care about:
 
@@ -27,6 +27,14 @@ You will need to adjust the --postfix selection below. If you data card root fil
 
     newFolder=Blinded20170611
     MorphingVH2016 --output_folder=${newFolder} --postfix="_new" --input_folder="TEST"
+
+# Move to CMSSW 81X
+Before proceeding below, you need to move the workspace to CMSSW 81X newer combine area, v7
+so that you pick up the ability to use autoMCStats.  All text DCs need
+
+    * autoMCStats 0
+
+appened to the last line.
 
 # make workspaces
 
