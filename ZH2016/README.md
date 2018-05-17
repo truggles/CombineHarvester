@@ -44,17 +44,21 @@ Expected significance for AZh signal with M=300
     combineTool.py -M Asymptotic -t -1 -d */*/workspace.root --rMin 0.25 --rMax 2.0 --there -n .limit --parallel 16
     combineTool.py -M CollectLimits */*/*.limit.* --use-dirs -o limits.json
 
-    python ../scripts/plotLimits_SM2.py zh_limits.json --auto-style --cms-sub Preliminary  -o lim_zh_compare
-    python ../scripts/plotLimits_SM2.py {llet,llmt,lltt,llem,cmb}_zh_limits.json:exp0 --auto-style --cms-sub Preliminary  -o lim_zh_higgs_final_states
-    python ../scripts/plotLimits_SM2.py azh_limits.json --auto-style --cms-sub Preliminary  -o lim_azh_compare --limit-on "95% CL limit on #sigma(ggA)xB(A#rightarrowZh#rightarrowLL#tau#tau) (fb)"
+    python ../../scripts/plotLimits_SM2.py limits_{cmb,eeet,eemt,eett,eeem,emmt,mmmt,mmtt,emmm}.json:exp0 --auto-style --cms-sub Preliminary  -o lim_zh_higgs_final_states
+    python ../../scripts/plotLimits_SM2.py limits_cmb.json --auto-style --cms-sub Preliminary  -o lim_azh_compare --limit-on "95% CL limit on #sigma(ggA)xB(A#rightarrowZh#rightarrowLL#tau#tau) (fb)" --show="exp"
 
 
 # estimate mu
 
-    combine -M MaxLikelihoodFit -m 300 300_all_workspace.root -t -1 --expectSignal=1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --minimizerTolerance=0.01 --rMin=-20 --rMax=20
+    combine -M MaxLikelihoodFit -m 300 cmb/300/workspace.root -t -1 --expectSignal=1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --minimizerTolerance=0.01 --rMin=-20 --rMax=20
 
 # example run script
 
     source runAZH.sh
 
+# Removing bkgs
+There are currently many listed bkgs in the model, you can remove them by commenting out the lines in bin/MorphingZH2016.cpp where `bkg_procs` is defined. You do not need to comment them out in src/ZHSystematicsRun2.cc
+
+# To Do
+We need to add the "shape" systematics back in, find their naming in src/ZHSystematicsRun2.cc and grep for "shape"
 
