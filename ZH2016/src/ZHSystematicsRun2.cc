@@ -18,15 +18,10 @@ namespace ch {
     using ch::syst::bin;
     using ch::JoinStr;
     
-    void AddZHRun2Systematics(CombineHarvester & cb, bool & azh) {
+    void AddZHRun2Systematics(CombineHarvester & cb) {
         
         std::vector<std::string> sig_procs;
-        if (azh) {
-            sig_procs = {"azh"};
-        }
-        if (!azh) {
-            sig_procs = {"ggH_htt","qqH_htt","WH_htt","ZH_htt"};
-        }
+        sig_procs = {"azh"};
         
         // N.B. when adding this list of backgrounds to a nuisance, only
         // the backgrounds that are included in the background process
@@ -34,27 +29,37 @@ namespace ch {
         // This is a list of all MC based backgrounds
         // QCD is explicitly excluded
         std::vector<std::string> all_bkgs = {
-            "RedBkg",
+            "allFakes",
             "ZZ",
             "ggZZ",
             "TriBoson",
             "ttZ",
-            "DYJ",
+            "DY",
             "WZ",
             "TT",
             "ggH_hzz125",
             "ZH_hww125",
+            "WH_hww125",
+            "ggH_htt125",
+            "qqH_htt125",
+            "WH_htt125",
+            "ZH_htt125",
             };
         std::vector<std::string> all_mc_bkgs = {
             "ZZ",
             "ggZZ",
             "TriBoson",
             "ttZ",
-            "DYJ",
+            "DY",
             "WZ",
             "TT",
             "ggH_hzz125",
             "ZH_hww125",
+            "WH_hww125",
+            "ggH_htt125",
+            "qqH_htt125",
+            "WH_htt125",
+            "ZH_htt125",
             };
         std::vector<std::string> eeChans = {
             "eeet",
@@ -95,28 +100,15 @@ namespace ch {
         cb.cp().process({"ttZ"}).AddSyst(cb,
                 "CMS_htt_ttzXsec_$ERA", "lnN", SystMap<>::init(1.25));
 
-        cb.cp().process({"DYJ"}).AddSyst(cb,
-                "CMS_htt_zh_ZTT_scale_$ERA", "lnN", SystMap<>::init(1.1));
+        cb.cp().process({"DY"}).AddSyst(cb,
+                "CMS_htt_zh_ZTT_scale_$ERA", "lnN", SystMap<>::init(1.03));
 
         cb.cp().process({"WZ"}).AddSyst(cb,
                 "CMS_htt_wzXsec_$ERA", "lnN", SystMap<>::init(1.055));
 
         cb.cp().process({"TT"}).AddSyst(cb,
-                "CMS_htt_zh_TT_scale_$ERA", "lnN", SystMap<>::init(1.1));
+                "CMS_htt_zh_TT_scale_$ERA", "lnN", SystMap<>::init(1.06));
 
-        cb.cp().process({"ZH_hww125"}).AddSyst(cb,
-                "CMS_htt_zh_zh_hww_scale_$ERA", "lnN", SystMap<>::init(1.2));
-
-        cb.cp().process({"ggH_hzz125"}).AddSyst(cb,
-                "CMS_htt_zh_hzz_scale_$ERA", "lnN", SystMap<>::init(1.2));
-
-        if (azh) {
-            cb.cp().process({"ZH_htt125"}).AddSyst(cb,
-                    "CMS_htt_zh_zh_scale_$ERA", "lnN", SystMap<>::init(1.2));
-
-            cb.cp().process({"WH_htt125"}).AddSyst(cb,
-                    "CMS_htt_zh_wh_htt_scale_$ERA", "lnN", SystMap<>::init(1.2));
-        }
 
         //##############################################################################
         //  trigger   ##FIXME   the values have been chosen rather arbitrarily
@@ -169,41 +161,23 @@ namespace ch {
         //  Fake Rate Uncertainties on the Reducible Background
         //##############################################################################
         
-        // Modified Run-I Fake Rate uncertainty Method
-        //cb.cp().process({"RedBkg"}).channel({"eeet","emmt"}).AddSyst(cb,
-        //        "CMS_htt_zh_reducible_bkg_scale_e_$ERA", "lnN", SystMap<>::init(1.1));
-        //cb.cp().process({"RedBkg"}).channel({"eeet","emmt"}).AddSyst(cb,
-        //        "CMS_htt_zh_reducible_bkg_scale_t_$ERA", "lnN", SystMap<>::init(1.2));
-
-        //cb.cp().process({"RedBkg"}).channel({"eemt","mmmt"}).AddSyst(cb,
-        //        "CMS_htt_zh_reducible_bkg_scale_m_$ERA", "lnN", SystMap<>::init(1.1));
-        //cb.cp().process({"RedBkg"}).channel({"eemt","mmmt"}).AddSyst(cb,
-        //        "CMS_htt_zh_reducible_bkg_scale_t_$ERA", "lnN", SystMap<>::init(1.2));
-
-        //cb.cp().process({"RedBkg"}).channel({"eeem","emmm"}).AddSyst(cb,
-        //        "CMS_htt_zh_reducible_bkg_scale_e_$ERA", "lnN", SystMap<>::init(1.1));
-        //cb.cp().process({"RedBkg"}).channel({"eeem","emmm"}).AddSyst(cb,
-        //        "CMS_htt_zh_reducible_bkg_scale_m_$ERA", "lnN", SystMap<>::init(1.1));
-
-        //cb.cp().process({"RedBkg"}).channel({"eett","mmtt"}).AddSyst(cb,
-        //        "CMS_htt_zh_reducible_bkg_scale_t_$ERA", "lnN", SystMap<>::init(1.15));
-
         // New FR Uncerts, Data-Prompt MC Method
-        cb.cp().process({"RedBkg"}).channel({"eeet","emmt"}).AddSyst(cb,
+        cb.cp().process({"allFakes"}).channel({"eeet","emmt"}).AddSyst(cb,
                 "CMS_htt_zh_reducible_bkg_scale_LLET_$ERA", "lnN", SystMap<>::init(1.5));
-        cb.cp().process({"RedBkg"}).channel({"eemt","mmmt"}).AddSyst(cb,
+        cb.cp().process({"allFakes"}).channel({"eemt","mmmt"}).AddSyst(cb,
                 "CMS_htt_zh_reducible_bkg_scale_LLMT_$ERA", "lnN", SystMap<>::init(1.25));
-        cb.cp().process({"RedBkg"}).channel({"eeem","emmm"}).AddSyst(cb,
+        cb.cp().process({"allFakes"}).channel({"eeem","emmm"}).AddSyst(cb,
                 "CMS_htt_zh_reducible_bkg_scale_LLEM_$ERA", "lnN", SystMap<>::init(2.0));
-        cb.cp().process({"RedBkg"}).channel({"eett","mmtt"}).AddSyst(cb,
+        cb.cp().process({"allFakes"}).channel({"eett","mmtt"}).AddSyst(cb,
                 "CMS_htt_zh_reducible_bkg_scale_LLTT_$ERA", "lnN", SystMap<>::init(1.4));
 
 
-        cb.cp().process({"RedBkg"}).channel({"eeet","eemt","eeem","emmt","mmmt","emmm"}).AddSyst(cb,
-                "CMS_scale_fake_rate_prompt_MC_EandM_$ERA", "shape", SystMap<>::init(1.00));
+        // ADD ME BACK IN - FIXME
+        //cb.cp().process({"allFakes"}).channel({"eeet","eemt","eeem","emmt","mmmt","emmm"}).AddSyst(cb,
+        //        "CMS_scale_fake_rate_prompt_MC_EandM_$ERA", "shape", SystMap<>::init(1.00));
 
-        cb.cp().process({"RedBkg"}).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
-                "CMS_scale_fake_rate_prompt_MC_Tau_$ERA", "shape", SystMap<>::init(1.00));
+        //cb.cp().process({"allFakes"}).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
+        //        "CMS_scale_fake_rate_prompt_MC_Tau_$ERA", "shape", SystMap<>::init(1.00));
 
         
         
@@ -212,93 +186,70 @@ namespace ch {
         //##############################################################################
         
         // Heavy flavor
-        cb.cp().process({"ttZ"}).AddSyst(cb,
-                "CMS_htt_eff_b_$ERA", "lnN", SystMap<>::init(1.045));
+        cb.cp().process({"TT","ttZ"}).AddSyst(cb,
+                "CMS_eff_b_$ERA", "lnN", SystMap<>::init(1.045));
         
         // Light flavor
-        cb.cp().process(JoinStr({sig_procs, {"ZZ","ggZZ","TriBoson","DYJ","WZ","TT","ggH_hzz125","ZH_hww125"}})).AddSyst(cb,
-                "CMS_htt_eff_b_$ERA", "lnN", SystMap<>::init(1.001));
+        cb.cp().process(JoinStr({sig_procs, {"ZZ","ggZZ","TriBoson","DY","WZ","ggH_hzz125",
+                "ZH_hww125","WH_hww125","ttHnonBB","ttH_other125"}})).AddSyst(cb,
+                "CMS_eff_b_$ERA", "lnN", SystMap<>::init(1.0015));
 
 
         //##############################################################################
         //  Electron and tau energy Scale
         //##############################################################################
         
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","eeem","emmt","emmm"}).AddSyst(cb,
-                "CMS_scale_e_$ERA", "shape", SystMap<>::init(1.00));
+        // ADD ME BACK IN - FIXME
+        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","eeem","emmt","emmm"}).AddSyst(cb,
+        //        "CMS_scale_e_$ERA", "shape", SystMap<>::init(1.00));
 
 
-        // Decay Mode based TES Settings
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
-                "CMS_scale_t_1prong_$ERA", "shape", SystMap<>::init(1.00));
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
-                "CMS_scale_t_1prong1pizero_$ERA", "shape", SystMap<>::init(1.00));
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
-                "CMS_scale_t_3prong_$ERA", "shape", SystMap<>::init(1.00));
+        // ADD ME BACK IN - FIXME
+        //// Decay Mode based TES Settings
+        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
+        //        "CMS_scale_t_1prong_$ERA", "shape", SystMap<>::init(1.00));
+        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
+        //        "CMS_scale_t_1prong1pizero_$ERA", "shape", SystMap<>::init(1.00));
+        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
+        //        "CMS_scale_t_3prong_$ERA", "shape", SystMap<>::init(1.00));
         
 
         ////##############################################################################
         ////  jet and met energy Scale
         ////##############################################################################
  
-        // MET Systematic shapes
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).AddSyst(cb,
-                "CMS_scale_met_clustered_$ERA", "shape", SystMap<>::init(1.00));
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).AddSyst(cb,
-                "CMS_scale_met_unclustered_$ERA", "shape", SystMap<>::init(1.00));
+        // ADD ME BACK IN - FIXME
+        //// MET Systematic shapes
+        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).AddSyst(cb,
+        //        "CMS_scale_met_clustered_$ERA", "shape", SystMap<>::init(1.00));
+        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).AddSyst(cb,
+        //        "CMS_scale_met_unclustered_$ERA", "shape", SystMap<>::init(1.00));
         
         
 
         
-        //##############################################################################
-        // jet  to tau fake only in tt, mt and et channels
-        //##############################################################################
-        
-        //cb.cp().process( {"TTJ","ZJ","VVJ","W_rest","ZJ_rest","TTJ_rest","VVJ_rest"}).channel({"tt","mt","et"}).AddSyst(cb,
-        //        "CMS_htt_jetToTauFake_$ERA", "shape", SystMap<>::init(1.00));
-        
-        //cb.cp().process( {"W"}).channel({"tt","mt","et"}).bin_id({1,2,3,13,14,15}).AddSyst(cb,
-        //        "CMS_htt_jetToTauFake_$ERA", "shape", SystMap<>::init(1.00));
-        
-
-
-
         //##############################################################################
         // Theoretical Uncertainties on signal
         //##############################################################################
         
-        
         //    Uncertainty on BR for HTT @ 125 GeV
-        cb.cp().process(sig_procs).AddSyst(cb,"BR_htt_THU", "lnN", SystMap<>::init(1.017));
-        cb.cp().process(sig_procs).AddSyst(cb,"BR_htt_PU_mq", "lnN", SystMap<>::init(1.0099));
-        cb.cp().process(sig_procs).AddSyst(cb,"BR_htt_PU_alphas", "lnN", SystMap<>::init(1.0062));
+        //    Adding AZh process here because we study it through H-->tautau decays
+        cb.cp().process(JoinStr({sig_procs,{"ggH_htt125","qqH_htt125","WH_htt125","ZH_htt125"}})).AddSyst(cb,"BR_htt_THU", "lnN", SystMap<>::init(1.017));
+        cb.cp().process(JoinStr({sig_procs,{"ggH_htt125","qqH_htt125","WH_htt125","ZH_htt125"}})).AddSyst(cb,"BR_htt_PU_mq", "lnN", SystMap<>::init(1.0099));
+        cb.cp().process(JoinStr({sig_procs,{"ggH_htt125","qqH_htt125","WH_htt125","ZH_htt125"}})).AddSyst(cb,"BR_htt_PU_alphas", "lnN", SystMap<>::init(1.0062));
         
         
-        if (azh) {
-            cb.cp().process({"ggH_htt125"}).AddSyst(cb,"QCDScale_ggH", "lnN", SystMap<>::init(1.039));
-            cb.cp().process({"qqH_htt125"}).AddSyst(cb,"QCDScale_qqH", "lnN", SystMap<>::init(1.004));
-            cb.cp().process({"WH_htt125"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.007));
-            cb.cp().process({"ZH_htt125"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.038));
-        }
-        else {
-            cb.cp().process({"ggH_htt"}).AddSyst(cb,"QCDScale_ggH", "lnN", SystMap<>::init(1.039));
-            cb.cp().process({"qqH_htt"}).AddSyst(cb,"QCDScale_qqH", "lnN", SystMap<>::init(1.004));
-            cb.cp().process({"WH_htt"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.007));
-            cb.cp().process({"ZH_htt"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.038));
-        }
+        cb.cp().process({"ggH_hzz125","ggH_htt125"}).AddSyst(cb,"QCDScale_ggH", "lnN", SystMap<>::init(1.039));
+        cb.cp().process({"qqH_htt125"}).AddSyst(cb,"QCDScale_qqH", "lnN", SystMap<>::init(1.004));
+        cb.cp().process({"WH_htt125","WH_hww125"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.007));
+        cb.cp().process({"ZH_htt125","ZH_hww125"}).AddSyst(cb,"QCDScale_VH", "lnN", SystMap<>::init(1.038));
+        cb.cp().process({"ttHnonBB","ttH_other125"}).AddSyst(cb,"QCDScale_ttH", "lnN", SystMap<>::init(1.075)); // Avg of + and - scale
         
-        if (azh) {
-            cb.cp().process({"ggH_htt125"}).AddSyst(cb,"pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
-            cb.cp().process({"qqH_htt125"}).AddSyst(cb,"pdf_Higgs_qq", "lnN", SystMap<>::init(1.021));
-            cb.cp().process({"WH_htt125"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.019));
-            cb.cp().process({"ZH_htt125"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.016));
-        }
-        else {
-            cb.cp().process({"ggH_htt"}).AddSyst(cb,"pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
-            cb.cp().process({"qqH_htt"}).AddSyst(cb,"pdf_Higgs_qq", "lnN", SystMap<>::init(1.021));
-            cb.cp().process({"WH_htt"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.019));
-            cb.cp().process({"ZH_htt"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.016));
-        }
+        cb.cp().process({"ggH_htt125","ggH_htt125"}).AddSyst(cb,"pdf_Higgs_gg", "lnN", SystMap<>::init(1.032));
+        cb.cp().process({"qqH_htt125"}).AddSyst(cb,"pdf_Higgs_qq", "lnN", SystMap<>::init(1.021));
+        cb.cp().process({"WH_htt125","WH_hww125"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.019));
+        cb.cp().process({"ZH_htt125","ZH_hww125"}).AddSyst(cb,"pdf_Higgs_VH", "lnN", SystMap<>::init(1.016));
+        cb.cp().process({"ttHnonBB","ttH_other125"}).AddSyst(cb,"pdf_Higgs_ttH", "lnN", SystMap<>::init(1.036));
         
     }
 }

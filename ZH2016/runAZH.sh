@@ -3,9 +3,9 @@
 
 #### Standard Work Flow
 ### creating datacards
-newFolder=Blinded20170908_azh
-MorphingZH2016 --output_folder=${newFolder} --azh="true" --postfix="_AMass_new" --input_folder="UW_TR"
-##### Building the workspaces:
+newFolder=Blinded20180517x_azh
+MorphingZH2016 --output_folder=${newFolder} --postfix="_4LMass_new" --input_folder="UW_TR"
+#### Building the workspaces:
 cd output/${newFolder}
 
 combineCards.py {eeet,emmt}/300/htt_*_1_13TeV.txt > llet_cmb.txt
