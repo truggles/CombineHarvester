@@ -9,11 +9,11 @@
     scram b -j 8
 
 # Getting data cards
-We will get a GitLab repo in the future, but try these to start:
-AZh analysis - https://github.com/truggles/2016-sync/blob/azhSync/UW/azh_dc_sync.txt#L7
-Zh analysis - https://github.com/truggles/2016-sync/blob/azhSync/UW/zh_dc_sync.txt#L8
+We will get a GitLab repo in the future, but try either of these:
 
-Make a directory to store the above files depending on which analysis you care about:
+    https://github.com/truggles/2016-sync/blob/azhSync/UW/azh_dc_sync.txt#L66-L67
+
+Make a directory to store the above files:
 
     mkdir -p shapes/UW_TR/
 
@@ -23,10 +23,8 @@ and copy the data card of choice into there.
 
 
 # creating datacards
-You can toggel between ZH and AZh analysis using: --azh="true" in the MorphingZH2016 command below
-
 You will need to adjust the --postfix selection below. If you data card root file is called
-"htt_zh.inputs-sm-13TeV_svFitMass_new.root" you will need --postfix="_svFitMass_new"
+"htt_zh.inputs-mssm-13TeV_4LMass_new.root" you will need --postfix="_4LMass_new.root"
 
     newFolder=Blinded20170611
     MorphingZH2016 --output_folder=${newFolder} --postfix="_4LMass_new" --input_folder="UW_TR"
@@ -37,8 +35,9 @@ You will need to adjust the --postfix selection below. If you data card root fil
     combineTool.py -M T2W -i {cmb,eeet,eemt,eeem,eett,emmt,mmmt,emmm,mmtt}/* -o workspace.root --parallel 16
 
 # estimated significance
+Expected significance for AZh signal with M=300
 
-    combine -M ProfileLikelihood --significance cmb/125/workspace.root -t -1 --expectSignal=1
+    combine -M ProfileLikelihood --significance cmb/300/workspace.root -t -1 --expectSignal=1
 
 # estimated limits
 
@@ -52,11 +51,10 @@ You will need to adjust the --postfix selection below. If you data card root fil
 
 # estimate mu
 
-    combine -M MaxLikelihoodFit -m 125 125_all_workspace.root -t -1 --expectSignal=1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --minimizerTolerance=0.01 --rMin=-20 --rMax=20
+    combine -M MaxLikelihoodFit -m 300 300_all_workspace.root -t -1 --expectSignal=1 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --minimizerTolerance=0.01 --rMin=-20 --rMax=20
 
-# estimate significance
+# example run script
 
-    combine -M ProfileLikelihood --significance -m 125 125_all_workspace.root -t -1 --expectSignal=1
-
+    source runAZH.sh
 
 
