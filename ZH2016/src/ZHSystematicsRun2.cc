@@ -140,21 +140,27 @@ namespace ch {
         
 
         // Tau Efficiency applied to all MC
-        // We have channel specific components and fully correlated components
+        // We have fully correlated components
+        // And components based on anti-e / anti-mu discriminants used
 
-        // ETau & MuTau
+        // Single Tau Final States
         cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","emmt","mmmt"}).AddSyst(cb,
                 "CMS_eff_t_$ERA", "lnN", SystMap<>::init(1.045));
-        
-        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","emmt","mmmt"}).AddSyst(cb,
-                "CMS_eff_t_$CHANNEL_$ERA", "lnN", SystMap<>::init(1.02));
-
         // TauTau
         cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eett","mmtt"}).AddSyst(cb,
                 "CMS_eff_t_$ERA", "lnN", SystMap<>::init(1.09));
         
+        
+        // Categorize by exact anti-e / anti-mu discriminants
+        // e VL, m T
+        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eemt","mmmt"}).AddSyst(cb,
+                "CMS_eff_t_eVLmuT_$ERA", "lnN", SystMap<>::init(1.02));
+        // e T, m L
+        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","emmt"}).AddSyst(cb,
+                "CMS_eff_t_eTmuL_$ERA", "lnN", SystMap<>::init(1.02));
+        // e VL, m L
         cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eett","mmtt"}).AddSyst(cb,
-                "CMS_eff_t_$CHANNEL_$ERA", "lnN", SystMap<>::init(1.04));
+                "CMS_eff_t_eVLmuL_$ERA", "lnN", SystMap<>::init(1.04));
         
         
         //##############################################################################
