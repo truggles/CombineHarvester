@@ -3,21 +3,44 @@
 
 #### Standard Work Flow
 ### creating datacards
-newFolder=Blinded20180517x_azh
-MorphingZH2016 --output_folder=${newFolder} --postfix="_4LMass_new" --input_folder="UW_TR"
-#### Building the workspaces:
+newFolder=Blinded20180719_azh
+MorphingZH2016 --output_folder=${newFolder} --postfix="_AMassConst_new" --input_folder="July19"
+##### Building the workspaces:
 cd output/${newFolder}
 
-combineCards.py {eeet,emmt}/300/htt_*_1_13TeV.txt > llet_cmb.txt
-combineCards.py {eemt,mmmt}/300/htt_*_1_13TeV.txt > llmt_cmb.txt
-combineCards.py {eett,mmtt}/300/htt_*_1_13TeV.txt > lltt_cmb.txt
-combineCards.py {eeem,emmm}/300/htt_*_1_13TeV.txt > llem_cmb.txt
-
-for CHANS in llet llmt lltt llem; do
-    combineTool.py -M T2W -i ${CHANS}_cmb.txt -m 300 -o ${CHANS}_workspace.root
-    combineTool.py -M Asymptotic -m 300 -t -1 ${CHANS}_workspace.root --rMin 0.25 --rMax 2.0 -n .limit_${CHANS}
-    combineTool.py -M CollectLimits *.limit_${CHANS}.* -o ${CHANS}_limits.json
+#for MASS in 220; do # 240 260 280 300 320 340 350 400; do
+#    
+#    for CHANS in eeet eemt eett eeem emmt mmmt mmtt emmm; do
+#
+#        echo ""
+#        echo ${MASS}
+#        echo ${CHANS}
+#        echo ""
+#
+#        combineTool.py -M T2W -i ${CHANS}/${MASS}/htt_${CHANS}_1_13TeV.txt -m ${MASS} -o ${CHANS}_${MASS}_workspace.root
+#        combineTool.py -M Asymptotic -m ${MASS} -t -1 ${CHANS}/${MASS}/${CHANS}_${MASS}_workspace.root -n .limit_${CHANS}
+#    done
+#done
+for MASS in 220 240 260 280 300 320 340 350 400; do
+    combineCards.py {eeet,emmt}/${MASS}/htt_*_1_13TeV.txt > llet_${MASS}_cmb.txt
+    combineCards.py {eemt,mmmt}/${MASS}/htt_*_1_13TeV.txt > llmt_${MASS}_cmb.txt
+    combineCards.py {eett,mmtt}/${MASS}/htt_*_1_13TeV.txt > lltt_${MASS}_cmb.txt
+    combineCards.py {eeem,emmm}/${MASS}/htt_*_1_13TeV.txt > llem_${MASS}_cmb.txt
+    combineCards.py cmb/${MASS}/htt_*_1_13TeV.txt > cmb_${MASS}_cmb.txt
+    
+    for CHANS in cmb llet llmt lltt llem; do
+        combineTool.py -M T2W -i ${CHANS}_${MASS}_cmb.txt -m ${MASS} -o ${CHANS}_${MASS}_workspace.root
+        combineTool.py -M Asymptotic -m ${MASS} -t -1 ${CHANS}_${MASS}_workspace.root -n .limit_${CHANS}
+        #combineTool.py -M CollectLimits *.limit_${CHANS}.* -o ${CHANS}_limits.json
+    done
 done
+
+
+
+
+
+
+
 
 ##combineTool.py -M T2W -i {cmb,eeet,eemt,eeem,eett,emmt,mmmt,emmm,mmtt}/* -o workspace.root --parallel 16
 #

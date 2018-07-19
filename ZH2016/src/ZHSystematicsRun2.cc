@@ -178,12 +178,11 @@ namespace ch {
                 "CMS_htt_zh_reducible_bkg_scale_LLTT_$ERA", "lnN", SystMap<>::init(1.4));
 
 
-        // ADD ME BACK IN - FIXME
-        //cb.cp().process({"allFakes"}).channel({"eeet","eemt","eeem","emmt","mmmt","emmm"}).AddSyst(cb,
-        //        "CMS_scale_fake_rate_prompt_MC_EandM_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process({"allFakes"}).channel({"eeet","eemt","eeem","emmt","mmmt","emmm"}).AddSyst(cb,
+                "CMS_scale_fake_rate_prompt_MC_EandM_$ERA", "shape", SystMap<>::init(1.00));
 
-        //cb.cp().process({"allFakes"}).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
-        //        "CMS_scale_fake_rate_prompt_MC_Tau_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process({"allFakes"}).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
+                "CMS_scale_fake_rate_prompt_MC_Tau_$ERA", "shape", SystMap<>::init(1.00));
 
         
         
@@ -205,31 +204,28 @@ namespace ch {
         //  Electron and tau energy Scale
         //##############################################################################
         
-        // ADD ME BACK IN - FIXME
-        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","eeem","emmt","emmm"}).AddSyst(cb,
-        //        "CMS_scale_e_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","eeem","emmt","emmm"}).AddSyst(cb,
+                "CMS_scale_e_$ERA", "shape", SystMap<>::init(1.00));
 
 
-        // ADD ME BACK IN - FIXME
-        //// Decay Mode based TES Settings
-        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
-        //        "CMS_scale_t_1prong_$ERA", "shape", SystMap<>::init(1.00));
-        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
-        //        "CMS_scale_t_1prong1pizero_$ERA", "shape", SystMap<>::init(1.00));
-        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
-        //        "CMS_scale_t_3prong_$ERA", "shape", SystMap<>::init(1.00));
+        // Decay Mode based TES Settings
+        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
+                "CMS_scale_t_1prong_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
+                "CMS_scale_t_1prong1pizero_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).channel({"eeet","eemt","eett","emmt","mmmt","mmtt"}).AddSyst(cb,
+                "CMS_scale_t_3prong_$ERA", "shape", SystMap<>::init(1.00));
         
 
         ////##############################################################################
         ////  jet and met energy Scale
         ////##############################################################################
  
-        // ADD ME BACK IN - FIXME
-        //// MET Systematic shapes
-        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).AddSyst(cb,
-        //        "CMS_scale_met_clustered_$ERA", "shape", SystMap<>::init(1.00));
-        //cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).AddSyst(cb,
-        //        "CMS_scale_met_unclustered_$ERA", "shape", SystMap<>::init(1.00));
+        // MET Systematic shapes
+        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).AddSyst(cb,
+                "CMS_scale_met_clustered_$ERA", "shape", SystMap<>::init(1.00));
+        cb.cp().process(JoinStr({sig_procs, all_mc_bkgs})).AddSyst(cb,
+                "CMS_scale_met_unclustered_$ERA", "shape", SystMap<>::init(1.00));
         
         
 

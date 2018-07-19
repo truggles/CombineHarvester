@@ -97,10 +97,14 @@ int main(int argc, char** argv) {
     vector<string> sig_procs;
     vector<string> masses;
 
-    bkg_procs = {"allFakes", "ZZ", "ggZZ", "TriBoson", "ttZ", "DY", "WZ", "TT", 
+    //bkg_procs = {"allFakes", "ZZ", "ggZZ", "TriBoson", "ttZ", "DY", "WZ", "TT", 
+    //    "ggH_hzz125",
+    //    "ZH_hww125", "WH_hww125",
+    //    "ggH_htt125", "qqH_htt125", "WH_htt125", "ZH_htt125"};
+    bkg_procs = {"allFakes", "ZZ", "ggZZ", "TriBoson", "ttZ", "WZ",
         "ggH_hzz125",
         "ZH_hww125", "WH_hww125",
-        "ggH_htt125", "qqH_htt125", "WH_htt125", "ZH_htt125"};
+        "WH_htt125", "ZH_htt125"};
     sig_procs = {"azh"};
     masses = {"220", "240", "260", "280", "300", "320", "340", "350", "400"};
     //masses = {"300"};
