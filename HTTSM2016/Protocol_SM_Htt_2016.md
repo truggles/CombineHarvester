@@ -4,28 +4,34 @@
 
 
 # Checkout the CombineHarvester
-    export SCRAM_ARCH=slc6_amd64_gcc481 (bash) or  setnev SCRAM_ARCH slc6_amd64_gcc481 (tcsh)
-    scram project CMSSW CMSSW_7_4_7
-    cd CMSSW_7_4_7/src
-    cmsenv
-    git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
-    //Check the recommended tag on link above, a tag &gt;= v5.0.2 is sufficient
-    cd HiggsAnalysis/CombinedLimit
-    git fetch origin
-    git checkout v6.3.1
-    cd ../..
-    git clone https://github.com/cms-analysis/CombineHarvester.git CombineHarvester
-    cd CombineHarvester
-    git checkout SM2016-dev
-    scram b -j 8
+```
+export SCRAM_ARCH=slc6_amd64_gcc530
+scram project CMSSW CMSSW_8_1_0
+cd CMSSW_8_1_0/src
+cmsenv
+git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
 
+# Update to a reccomended tag - currently the reccomended tag is v7.0.12
+pushd $CMSSW_BASE/src/HiggsAnalysis/CombinedLimit
+git fetch origin
+git checkout v7.0.12
+popd
+
+# Currently base off of truggles HTXS 81X branch
+git clone -b SM2016-HTXS git@github.com:truggles/CombineHarvester.git
+
+scram b -j 8
+
+cd CombineHarvester/HTTSM2016
+```    
     
-    
-#Get the shape
-    cd CombineHarvester/HTTSM2016
-    git clone https://:@gitlab.cern.ch:8443/cms-htt/SM-PAS-2016.git shapes  (from lxplus)
-    git clone https://gitlab.cern.ch/cms-htt/SM-PAS-2016.git shapes      (from elsewhere)
-    git pull --rebase 
+# Get the shape
+```
+cd CombineHarvester/HTTSM2016
+git clone https://:@gitlab.cern.ch:8443/cms-htt/SM-PAS-2016.git shapes  (from lxplus)
+git clone https://gitlab.cern.ch/cms-htt/SM-PAS-2016.git shapes      (from elsewhere)
+git pull --rebase 
+```
 
 # creating datacards
     
