@@ -1,19 +1,19 @@
-## Documentation:
-# Link to the CombineHarvester twiki:
+# Documentation:
+## Link to the CombineHarvester twiki:
 [CombineHarvester twiki](http://cms-analysis.github.io/CombineHarvester/index.html)
 
-# For checkout instructions see README file
+## For checkout instructions see README file
 Including checking out the code with a fresh CMSSW in 81X and fetching the GitLab repository with root files
 
 
-## Running the code:
-# creating datacards
+# Running the code:
+## creating datacards
 ```    
 MorphingSM2016 --output_folder="myDirectory" --postfix="-2D-HTXS" --control_region=1 --manual_rebin=false --real_data=false --mm_fit=false --ttbar_fit=true --do_all_masses=false
 ```
 
 
-# Automatic Bin Statistics
+## Automatic Bin Statistics
 Before creating the workspace you mush add auto bin statistics.  This replaces the pervious bin-by-bin method. Based on our directory structure:
 ```
 cd output/myDirectory
@@ -24,13 +24,13 @@ done
 ```
 
 
-# Building the workspaces:
+## Building the workspaces:
 ```
 combineTool.py -M T2W -i {cmb,em,et,mt,tt}/* -o workspace.root --parallel 18
 ```
 
 
-# Basic examples of above processing
+## Basic examples of above processing
 Please see some of the scripts for running the different HTXS stages listed as:
 ```
 HTXS_Nominal.sh
@@ -38,23 +38,23 @@ HTXS_Stage0.sh
 HTXS_Stage1.sh
 ```
 
-# HTXS basics
+## HTXS basics
 The Higgs Template Cross Section method creates multiple signal POIs depending on the topology of the ggH/VBF/WH/ZH event at generator level. You can find the list of the different resulting POIs in the above three files. For more full documentation see: https://twiki.cern.ch/twiki/bin/view/CMS/HiggsTemplateCrossSection
 
 
-# run FitDiagnostics
+## run FitDiagnostics
 ```
 combine -M FitDiagnostics cmb/125/workspace.root --robustFit=1 --rMin 0.5 --rMax 1.5 
 ``` 
 
 
-# making the pulls
+## making the pulls
 ```
 python ../../../../../HiggsAnalysis/CombinedLimit/test/diffNuisances.py  mlfit.root -A -a --stol 0.99 --stol 0.99 --vtol 99. --vtol2 99. -f text mlfit.root > mlfit.txt
 ```
 
 
-# Computing the Impact
+## Computing the Impact
 
     [Blinded]combineTool.py -M Impacts -d cmb/125/workspace.root -m 125 --doInitialFit --robustFit 1 -t -1 --rMin 0.5 --rMax 1.5 --expectSignal=1 --parallel 8
     [UnBlinded]combineTool.py -M Impacts -d cmb/125/workspace.root -m 125 --doInitialFit --robustFit 1 --rMin 0.5 --rMax 1.5  --parallel 8
@@ -76,31 +76,31 @@ python ../../../../../HiggsAnalysis/CombinedLimit/test/diffNuisances.py  mlfit.r
     plotImpacts.py -i impacts.json -o impacts
 
 
-# Computing the expected significance:
+## Computing the expected significance:
 
     [PreFit Asimov]combine -M ProfileLikelihood --significance cmb/125/workspace.root -t -1 --expectSignal=1
     [PostFit Asimov]combine -M ProfileLikelihood --significance cmb/125/workspace.root -t -1 --toysFrequentist --expectSignal 1
     [PostFit]combine -M ProfileLikelihood --significance cmb/125/workspace.root 
 
-# Computing the expected significance per channel per category (including constraints from all channels)
+## Computing the expected significance per channel per category (including constraints from all channels)
 
     cd scripts
     sh channelCompatibilityCheck.sh
 
 
-# postfit plots
+## postfit plots
 
     PostFitShapes -o postfit_shapes.root -m 125 -f mlfit.root:fit_s --postfit --sampling --print -d cmb/125/combined.txt.cmb
     
 
 
 
-# Making the pvalue plot:
+## Making the pvalue plot:
 
     cp ../../../scripts/runPvalue.sh .
     sh  runPvalue.sh .
 
-# Making the S/S+B weighted plot
+## Making the S/S+B weighted plot
 
     cp ../../../scripts/runSBWeighted.sh .
     sh runSBWeighted.sh
