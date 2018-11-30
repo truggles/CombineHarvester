@@ -4,19 +4,18 @@
 
 
 # Checkout the CombineHarvester
+These instructions have changed slightly because of newer master branches of CombineHarvester and CombinedLimit.  Additionally, the specifically grab the HTXS branch which is the most up-to-date version of the HIG-16-043 analysis.
     export SCRAM_ARCH=slc6_amd64_gcc481 (bash) or  setnev SCRAM_ARCH slc6_amd64_gcc481 (tcsh)
     scram project CMSSW CMSSW_7_4_7
     cd CMSSW_7_4_7/src
     cmsenv
-    git clone https://github.com/cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
-    //Check the recommended tag on link above, a tag &gt;= v5.0.2 is sufficient
-    git clone https://github.com/cms-analysis/CombineHarvester.git CombineHarvester
-    git checkout SM2016-dev
+    git clone -b 74x-root6 git@github.com:cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
+    git clone -b SM2016-HTXS git@github.com:truggles/CombineHarvester.git
     scram b -j 8
 
     
     
-#Get the shape
+# Get the shape
     cd CombineHarvester/HTTSM2016
     git clone https://:@gitlab.cern.ch:8443/cms-htt/SM-PAS-2016.git shapes  (from lxplus)
     git clone https://gitlab.cern.ch/cms-htt/SM-PAS-2016.git shapes      (from elsewhere)
@@ -24,7 +23,7 @@
 
 # creating datacards
     
-    MorphingSM2016 --output_folder="Blinded25112016" --postfix="-2D" --control_region=1 --manual_rebin=false --real_data=false --mm_fit=false --ttbar_fit=true
+    MorphingSM2016 --output_folder="Test_2018Nov" --postfix="-2D-HTXS" --control_region=1 --manual_rebin=false --real_data=true --mm_fit=false --ttbar_fit=true
 
 
 # Building the workspaces:
