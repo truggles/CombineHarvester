@@ -23,7 +23,7 @@ def read(scan, param, files, chop, remove_near_min, rezero, remove_delta = None,
     limit = plot.MakeTChain(goodfiles, 'limit')
     # require quantileExpected > -0.5 to avoid the final point which is always committed twice
     # (even if the fit fails)
-    graph = plot.TGraphFromTree(limit, param, '2*deltaNLL', 'quantileExpected > -0.5')
+    graph = plot.TGraphFromTree(limit, param, '2*deltaNLL', 'quantileExpected > -1.5')
     graph.SetName(scan)
     graph.Sort()
     plot.RemoveGraphXDuplicates(graph)
@@ -96,6 +96,7 @@ def BuildScan(scan, param, files, color, yvals, chop, remove_near_min = None, re
         graph = pregraph
     bestfit = None
     for i in xrange(graph.GetN()):
+        print graph.GetY()[i]
         if graph.GetY()[i] == 0.:
             bestfit = graph.GetX()[i]
     if envelope: plot.RemoveGraphYAll(graph, 0.)
@@ -177,8 +178,8 @@ parser.add_argument('--relax-safety', default=0, type=int, help='line and marker
 parser.add_argument('--others', nargs='*', help='add secondary scans processed as main: FILE:LABEL:COLOR')
 parser.add_argument('--breakdown', help='do quadratic error subtraction using --others')
 parser.add_argument('--meta', default='', help='Other metadata to save in format KEY:VAL,KEY:VAL')
-parser.add_argument('--logo', default='#it{ATLAS}#bf{ and }CMS')
-parser.add_argument('--logo-sub', default='#it{LHC Run 1 Internal}')
+parser.add_argument('--logo', default='CMS')
+parser.add_argument('--logo-sub', default='Internal')
 args = parser.parse_args()
 if args.pub: args.no_input_label = True
 
@@ -225,7 +226,10 @@ canv = ROOT.TCanvas(args.output, args.output)
 pads = plot.OnePad()
 if args.pub: main_scan['graph'].SetMarkerSize(0)
 main_scan['graph'].SetMarkerColor(1)
-main_scan['graph'].Draw('AP')
+main_scan['graph'].SetLineColor(ROOT.kBlue)
+main_scan['graph'].SetLineStyle(2)
+main_scan['graph'].SetLineWidth(3)
+main_scan['graph'].Draw('APL')
 # main_scan['graph'].Fit('pol4')
 # polfunc = main_scan['graph'].GetFunction('pol4')
 # print 'Function min at %f' % polfunc.GetMinimumX(0.05, 0.25)
@@ -273,6 +277,7 @@ for yval in yvals:
             if cr['valid_hi']: line.DrawLine(cr['hi'], 0, cr['hi'], yval)
 
 main_scan['func'].Draw('same')
+main_scan['graph'].Draw('PLSAME')
 for other in other_scans:
     if args.breakdown is not None:
         other['func'].SetLineStyle(2)
@@ -463,18 +468,18 @@ if 'atlas_' in args.output: collab = 'ATLAS'
 plot.DrawCMSLogo(pads[0], args.logo, args.logo_sub, 11, 0.045, 0.035, 1.2,  cmsTextSize = 1.)
 # plot.DrawCMSLogo(pads[0], '#it{ATLAS}#bf{ and }CMS', '#it{LHC Run 1 Preliminary}', 11, 0.025, 0.035, 1.1, cmsTextSize = 1.)
 
-if not args.no_input_label: plot.DrawTitle(pads[0], '#bf{Input:} %s' % collab, 3)
-plot.DrawTitle(pads[0], '2.3-2.7 fb^{-1} (13 TeV)', 3)
-plot.DrawTitle(pads[0], 'm_{H} = 125 GeV', 1)
+#if not args.no_input_label: plot.DrawTitle(pads[0], '#bf{Input:} %s' % collab, 3)
+plot.DrawTitle(pads[0], '35.9 fb^{-1} (13 TeV)', 3)
+#plot.DrawTitle(pads[0], 'm_{H} = 125 GeV', 1)
 
-info = ROOT.TPaveText(0.59, 0.75, 0.95, 0.91, 'NDCNB')
-info.SetTextFont(42)
-info.SetTextAlign(12)
-info.AddText('#bf{ttH combination}')
-info.AddText('HIG-15-005 H#rightarrow#gamma#gamma')
-info.AddText('HIG-15-008 H#rightarrowleptons')
-info.AddText('HIG-16-004 H#rightarrowbb')
-info.Draw()
+#info = ROOT.TPaveText(0.59, 0.75, 0.95, 0.91, 'NDCNB')
+#info.SetTextFont(42)
+#info.SetTextAlign(12)
+#info.AddText('#bf{ttH combination}')
+#info.AddText('HIG-15-005 H#rightarrow#gamma#gamma')
+#info.AddText('HIG-15-008 H#rightarrowleptons')
+#info.AddText('HIG-16-004 H#rightarrowbb')
+#info.Draw()
 # legend_l = 0.70 if len(args) >= 4 else 0.73
 legend_l = 0.69
 if len(other_scans) > 0:

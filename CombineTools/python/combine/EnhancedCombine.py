@@ -37,7 +37,7 @@ class EnhancedCombine(CombineToolBase):
         group.add_argument('--name', '-n', default='.Test',
                            help='Name used to label the combine output file, can be modified by other options')
         group.add_argument(
-            '--setPhysicsModelParameterRanges', help='Some other options will modify or add to the list of parameter ranges')
+            '--setParameterRanges', help='Some other options will modify or add to the list of parameter ranges')
 
 
     def attach_args(self, group):
@@ -50,6 +50,8 @@ class EnhancedCombine(CombineToolBase):
                            help='When used in conjunction with --points will create multiple combine calls that each run at most the number of points specified here.')
         group.add_argument(
             '--boundlist', help='Name of json-file which contains the ranges of physical parameters depending on the given mass and given physics model')
+        group.add_argument(
+            '--generate', nargs='*', default=[], help='Generate sets of options')
 
     def set_args(self, known, unknown):
         CombineToolBase.set_args(self, known, unknown)
@@ -82,6 +84,40 @@ class EnhancedCombine(CombineToolBase):
             subbed_vars[('SEED',)] = [(sval,) for sval in seed_vals]
             self.passthru.extend(['-s', '%(SEED)s'])
 
+        for i, generate in enumerate(self.args.generate):
+            split_char = ':' if '::' in generate else ';'
+            gen_header, gen_content = generate.split(split_char*2)
+            print gen_header
+            print gen_content
+            gen_headers = gen_header.split(split_char)
+            gen_entries = gen_content.split(split_char)
+            key = tuple()
+            arglist = []
+            for header in gen_headers:
+                if header == 'n' or header == 'name':
+                    self.args.name += '.%(GENNAME' + str(i) + ')s'
+                    key += ('GENNAME' + str(i),)
+                else:
+                    self.passthru.extend(['%(' + header + ')s'])
+                    key += (header,)
+            for entry in gen_entries:
+                if ',,' in entry:
+                    split_entry = entry.split(',,')
+                else:
+                    split_entry = entry.split(',')
+                final_arg = []
+                for header, e in zip(gen_headers, split_entry):
+                    argname = '-%s' % header if len(header) == 1 else '--%s' % header
+                    if header == 'n' or header == 'name':
+                        final_arg.append(e)
+                    elif len(e) and e != '!':
+                        final_arg.append('%s %s' % (argname, e))
+                    else:
+                        final_arg.append('')
+                arglist.append(tuple(final_arg))
+            subbed_vars[key] = arglist
+
+
         if len(self.args.datacard) >= 1:
             # Two lists of tuples, one which does specify the mass, and one
             # which doesn't
@@ -113,7 +149,7 @@ class EnhancedCombine(CombineToolBase):
         # elif len(self.args.datacard) == 1:
         #     self.passthru.extend(['-d', self.args.datacard[0]])
 
-        current_ranges = self.args.setPhysicsModelParameterRanges
+        current_ranges = self.args.setParameterRanges
         put_back_ranges = current_ranges is not None
 
         if self.args.boundlist is not None:
@@ -164,11 +200,11 @@ class EnhancedCombine(CombineToolBase):
             # and replace it with the updated one
             del subbed_vars[dict_key]
             subbed_vars[new_key] = new_list
-            self.passthru.extend(['--setPhysicsModelParameterRanges',  '%(MODELBOUND)s'])
+            self.passthru.extend(['--setParameterRanges',  '%(MODELBOUND)s'])
 
-        # We might need to put the intercepted --setPhysicsModelParameterRanges arg back in
+        # We might need to put the intercepted --setParameterRanges arg back in
         if put_back_ranges:
-            self.put_back_arg('setPhysicsModelParameterRanges', '--setPhysicsModelParameterRanges')
+            self.put_back_arg('setParameterRanges', '--setParameterRanges')
 
         if self.args.points is not None:
             self.passthru.extend(['--points', self.args.points])
@@ -179,7 +215,7 @@ class EnhancedCombine(CombineToolBase):
             split = self.args.split_points
             start = 0
             ranges = []
-            while (start + (split - 1)) <= points:
+            while (start + (split - 1)) < points:
             #    filename = "higgsCombine"+self.args.name+".POINTS."+str(start)+"."+str(start+(split-1))+".MultiDimFit.mH"+str(self.args.mass)+".root"
             #    if (not os.path.isfile(filename)) or (os.path.getsize(filename)<1024):
             #        # Send job, if the file it's supposed to create doesn't exist yet
