@@ -38,21 +38,21 @@ text2workspace.py -P HiggsAnalysis.CombinedLimit.PhysicsModel:multiSignalModel -
 for SIGNAL in r_em r_et r_mt r_tt; do
     echo ""
     echo "group: Channel " ${SIGNAL}
-    combine -M MaxLikelihoodFit   workspace_channel_breakdown.root  --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -1 --rMax 3  --setPhysicsModelParameters r_em=1,r_et=1,r_mt=1,r_tt=1 --redefineSignalPOIs ${SIGNAL} -n _Mu${SIGNAL}
+    combine -M FitDiagnostics   workspace_channel_breakdown.root  --robustFit=1 --rMin -1 --rMax 3  --setPhysicsModelParameters r_em=1,r_et=1,r_mt=1,r_tt=1 --redefineSignalPOIs ${SIGNAL} -n _Mu${SIGNAL}
 done
 
 # Run for each category
 for SIGNAL in r_0jet r_boosted r_vbf; do
     echo ""
     echo "group: Category " ${SIGNAL}
-    combine -M MaxLikelihoodFit   workspace_category_breakdown.root --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -1 --rMax 3  --setPhysicsModelParameters r_0jet=1,r_boosted=1,r_vbf=1 --redefineSignalPOIs ${SIGNAL} -n _Mu${SIGNAL}
+    combine -M FitDiagnostics   workspace_category_breakdown.root --robustFit=1 --rMin -1 --rMax 3  --setPhysicsModelParameters r_0jet=1,r_boosted=1,r_vbf=1 --redefineSignalPOIs ${SIGNAL} -n _Mu${SIGNAL}
 done
 
 done
 
 echo ""
 echo "group: Combined"
-combine -M MaxLikelihoodFit  cmb/125/workspace.root  --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin -1 --rMax 3  -n _MuCombined
+combine -M FitDiagnostics  cmb/125/workspace.root  --robustFit=1 --rMin -1 --rMax 3  -n _MuCombined
 
 
 

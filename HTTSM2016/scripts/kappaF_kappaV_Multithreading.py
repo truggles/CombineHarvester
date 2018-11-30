@@ -42,7 +42,6 @@ def runFit(points, toys, j) :
     #toRun.append('-t')
     #toRun.append('-1')
     #toRun.append('--expectSignal=1')
-    toRun.append('--minimizerAlgoForMinos=Minuit2,Migrad')
     toRun.append('--firstPoint')
     toRun.append('%i' % bottom)
     toRun.append('--lastPoint')

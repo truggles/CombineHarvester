@@ -2,8 +2,8 @@
 ## Nominal
 #pushd htxs_nom_fits
 #for SIGNAL in r_ggH r_qqH r_WH r_ZH r_cmb; do
-#    combineTool.py -M CollectLimits higgsCombine_Mu_${SIGNAL}.MaxLikelihoodFit.mH120.root -o Mu_${SIGNAL}.json
-#    combineTool.py -M CollectLimits higgsCombine_Mu_${SIGNAL}_blind.MaxLikelihoodFit.mH120.root -o Mu_${SIGNAL}_blind.json
+#    combineTool.py -M CollectLimits higgsCombine_Mu_${SIGNAL}.FitDiagnostics.mH120.root -o Mu_${SIGNAL}.json
+#    combineTool.py -M CollectLimits higgsCombine_Mu_${SIGNAL}_blind.FitDiagnostics.mH120.root -o Mu_${SIGNAL}_blind.json
 #done
 #popd
 
@@ -11,8 +11,8 @@
 ##pushd htxs_s0_fits
 ##for SIGNAL in r_VH_had r_VH_had_fwd r_WH_lep r_WH_lep_fwd r_ZH_lep r_cmb r_ggH r_qqH wFrozen_r_VH_had wFrozen_r_ZH_lep wFrozen_r_ggH wFrozen_r_qqH; do
 for SIGNAL in r_VH_had r_VH_had_fwd r_WH_lep r_WH_lep_fwd r_ZH_lep r_cmb r_ggH r_qqH; do
-    combineTool.py -M CollectLimits higgsCombine_Mu_${SIGNAL}.MaxLikelihoodFit.mH120.root -o Mu_${SIGNAL}.json
-    combineTool.py -M CollectLimits higgsCombine_Mu_${SIGNAL}_blind.MaxLikelihoodFit.mH120.root -o Mu_${SIGNAL}_blind.json
+    combineTool.py -M CollectLimits higgsCombine_Mu_${SIGNAL}.FitDiagnostics.mH120.root -o Mu_${SIGNAL}.json
+    combineTool.py -M CollectLimits higgsCombine_Mu_${SIGNAL}_blind.FitDiagnostics.mH120.root -o Mu_${SIGNAL}_blind.json
 done
 ##popd
 

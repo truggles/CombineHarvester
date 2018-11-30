@@ -21,13 +21,13 @@ echo "TO UNDO THIS"
 
 # From Combine Tutorial
 # First perform the fit and save a copy of the workspace in the output file with a "snapshot" of the best- fit model parameters included
-combine -M MultiDimFit -m 125 --algo grid --points 101 --rMin 0.057 --rMax 2.057 cmb/125/workspace.root -n nominal  --minimizerAlgoForMinos Minuit2,Migrad --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
-combine -M MultiDimFit --algo none --rMin 0.057 --rMax 2.057 cmb/125/workspace.root -m 125 -n bestfit --saveWorkspace  --minimizerAlgoForMinos Minuit2,Migrad --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
+combine -M MultiDimFit -m 125 --algo grid --points 101 --rMin 0.057 --rMax 2.057 cmb/125/workspace.root -n nominal  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
+combine -M MultiDimFit --algo none --rMin 0.057 --rMax 2.057 cmb/125/workspace.root -m 125 -n bestfit --saveWorkspace  --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
 
 # Can then repeat the scan by first loading this snapshot, then freezing all the nuisance parameters. The uncertainty from this scan gives us the statistical component of the uncertainty. By defining: sigma_total^2 = sigma_stat^2 + sigma_syst^2 we can infer the systematic component.
 combine -M MultiDimFit --algo grid --points 101 --rMin 0.057 --rMax 2.057 -m 125 -n stat \
 higgsCombinebestfit.MultiDimFit.mH125.root --snapshotName MultiDimFit --freezeNuisances all \
---minimizerAlgoForMinos Minuit2,Migrad --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
+--X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
 
 python ./plot1DScan.py --main higgsCombinenominal.MultiDimFit.mH125.root \
 --POI r -o cms_output_freeze_All \
@@ -39,7 +39,7 @@ python ./plot1DScan.py --main higgsCombinenominal.MultiDimFit.mH125.root \
 # Repeat again singling out Theory Uncertainties
 combine -M MultiDimFit --algo grid --points 101 --rMin 0.057 --rMax 2.057 -m 125 -n Theory \
 higgsCombinebestfit.MultiDimFit.mH125.root --snapshotName MultiDimFit --freezeNuisanceGroups Theory \
---minimizerAlgoForMinos Minuit2,Migrad --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
+--X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
 
 
 python ./plot1DScan.py --main higgsCombinenominal.MultiDimFit.mH125.root \
@@ -53,11 +53,11 @@ python ./plot1DScan.py --main higgsCombinenominal.MultiDimFit.mH125.root \
 # Repeat again singling out Bin-by-Bin uncertainties
 combine -M MultiDimFit --algo grid --points 101 --rMin 0.057 --rMax 2.057 -m 125 -n BinByBin \
 higgsCombinebestfit.MultiDimFit.mH125.root --snapshotName MultiDimFit --freezeNuisanceGroups BinByBin \
---minimizerAlgoForMinos Minuit2,Migrad --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
+--X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
 
 combine -M MultiDimFit --algo grid --points 101 --rMin 0.057 --rMax 2.057 -m 125 -n TheoryAndBBB \
 higgsCombinebestfit.MultiDimFit.mH125.root --snapshotName MultiDimFit --freezeNuisanceGroups TheoryAndBBB \
---minimizerAlgoForMinos Minuit2,Migrad --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
+--X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
 
 
 python ./plot1DScan.py --main higgsCombinenominal.MultiDimFit.mH125.root \

@@ -45,14 +45,14 @@ combineTool.py -M T2W -m 125 -P HiggsAnalysis.CombinedLimit.HiggsCouplings:cVcFH
 ###combine -M MultiDimFit -m 125 --setPhysicsModelParameterRanges CV=0.0,5.0:CF=0.0,5.0 kappaWorkspace.root --algo=singles --robustFit=1 -t -1 # From Combine Tutorial
 
 # For better fit convergence
-combine -M MultiDimFit -m 125 --setPhysicsModelParameterRanges CV=0.0,2.0:CF=0.0,2.0 kappaWorkspace.root --algo=singles --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad --preFitValue=1. --X-rtd FITTER_NEW_CROSSING_ALGO --minimizerToleranceForMinos=0.1 --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --minimizerAlgo=Minuit2 --minimizerStrategy=0 --minimizerTolerance=0.1 --cminFallbackAlgo \"Minuit2,0:1.\"
+combine -M MultiDimFit -m 125 --setPhysicsModelParameterRanges CV=0.0,2.0:CF=0.0,2.0 kappaWorkspace.root --algo=singles --robustFit=1 --preFitValue=1. --X-rtd FITTER_NEW_CROSSING_ALGO --minimizerToleranceForMinos=0.1 --X-rtd FITTER_NEVER_GIVE_UP --X-rtd FITTER_BOUND --minimizerAlgo=Minuit2 --minimizerStrategy=0 --minimizerTolerance=0.1 --cminFallbackAlgo \"Minuit2,0:1.\"
 
 # Perform 2D scan in CV vs. CF
 # Uncomment the following line to run this scan on 1 core.
 # This can be sped up by running multicored, see
 # scripts/kappaF_kappaV_Multithreading.py
 #
-#combineTool.py -n CvCf -M MultiDimFit -m 125 --setPhysicsModelParameterRanges CV=0.0,2.0:CF=0.0,2.0 kappaWorkspace.root --algo=grid --points=200 -t -1 --expectSignal=1 --minimizerAlgoForMinos=Minuit2,Migrad
+#combineTool.py -n CvCf -M MultiDimFit -m 125 --setPhysicsModelParameterRanges CV=0.0,2.0:CF=0.0,2.0 kappaWorkspace.root --algo=grid --points=200 -t -1 --expectSignal=1
 #
 echo "python ../../../../scripts/kappaF_kappaV_Multithreading.py"
 #XXX python ../../../../scripts/kappaF_kappaV_Multithreading.py

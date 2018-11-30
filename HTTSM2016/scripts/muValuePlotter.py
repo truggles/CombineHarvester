@@ -5,25 +5,25 @@
 
 #Before that one need to run the maxlikelihoodfit for each category and then collect the output such as the following:
 #
-#combineTool.py -M CollectLimits  higgsCombineTest.MaxLikelihoodFit.mH120_0jet.root  -o Mu_0jet.json
-#combineTool.py -M CollectLimits  higgsCombineTest.MaxLikelihoodFit.mH120_boosted.root   -o Mu_boosted.json
-#combineTool.py -M CollectLimits  higgsCombineTest.MaxLikelihoodFit.mH120_vbf.root    -o Mu_vbf.json
-#combineTool.py -M CollectLimits  higgsCombineTest.MaxLikelihoodFit.mH120_em.root   -o Mu_em.json
-#combineTool.py -M CollectLimits  higgsCombineTest.MaxLikelihoodFit.mH120_tt.root    -o Mu_tt.json
-#combineTool.py -M CollectLimits  higgsCombineTest.MaxLikelihoodFit.mH120_et.root    -o Mu_et.json
-#combineTool.py -M CollectLimits  higgsCombineTest.MaxLikelihoodFit.mH120_mt.root     -o Mu_mt.json
-#combineTool.py -M CollectLimits  higgsCombineTest.MaxLikelihoodFit.mH120_cmb.root   -o Mu_cmb.json
+#combineTool.py -M CollectLimits  higgsCombineTest.FitDiagnostics.mH120_0jet.root  -o Mu_0jet.json
+#combineTool.py -M CollectLimits  higgsCombineTest.FitDiagnostics.mH120_boosted.root   -o Mu_boosted.json
+#combineTool.py -M CollectLimits  higgsCombineTest.FitDiagnostics.mH120_vbf.root    -o Mu_vbf.json
+#combineTool.py -M CollectLimits  higgsCombineTest.FitDiagnostics.mH120_em.root   -o Mu_em.json
+#combineTool.py -M CollectLimits  higgsCombineTest.FitDiagnostics.mH120_tt.root    -o Mu_tt.json
+#combineTool.py -M CollectLimits  higgsCombineTest.FitDiagnostics.mH120_et.root    -o Mu_et.json
+#combineTool.py -M CollectLimits  higgsCombineTest.FitDiagnostics.mH120_mt.root     -o Mu_mt.json
+#combineTool.py -M CollectLimits  higgsCombineTest.FitDiagnostics.mH120_cmb.root   -o Mu_cmb.json
 
 
 
-#combineTool.py -M CollectLimits  higgsCombine_Mur_0jet.MaxLikelihoodFit.mH120.root  -o Mu_0jet.json
-#combineTool.py -M CollectLimits  higgsCombine_Mur_boosted.MaxLikelihoodFit.mH120.root   -o Mu_boosted.json
-#combineTool.py -M CollectLimits  higgsCombine_Mur_vbf.MaxLikelihoodFit.mH120.root   -o Mu_vbf.json
+#combineTool.py -M CollectLimits  higgsCombine_Mur_0jet.FitDiagnostics.mH120.root  -o Mu_0jet.json
+#combineTool.py -M CollectLimits  higgsCombine_Mur_boosted.FitDiagnostics.mH120.root   -o Mu_boosted.json
+#combineTool.py -M CollectLimits  higgsCombine_Mur_vbf.FitDiagnostics.mH120.root   -o Mu_vbf.json
 #
-#combineTool.py -M CollectLimits  higgsCombine_Mur_em.MaxLikelihoodFit.mH120.root  -o Mu_em.json
-#combineTool.py -M CollectLimits  higgsCombine_Mur_et.MaxLikelihoodFit.mH120.root   -o Mu_et.json
-#combineTool.py -M CollectLimits  higgsCombine_Mur_mt.MaxLikelihoodFit.mH120.root    -o Mu_mt.json
-#combineTool.py -M CollectLimits  higgsCombine_Mur_tt.MaxLikelihoodFit.mH120.root   -o Mu_tt.json
+#combineTool.py -M CollectLimits  higgsCombine_Mur_em.FitDiagnostics.mH120.root  -o Mu_em.json
+#combineTool.py -M CollectLimits  higgsCombine_Mur_et.FitDiagnostics.mH120.root   -o Mu_et.json
+#combineTool.py -M CollectLimits  higgsCombine_Mur_mt.FitDiagnostics.mH120.root    -o Mu_mt.json
+#combineTool.py -M CollectLimits  higgsCombine_Mur_tt.FitDiagnostics.mH120.root   -o Mu_tt.json
 
 
 

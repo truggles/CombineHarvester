@@ -35,7 +35,7 @@ git pull --rebase
 
 # creating datacards
     
-    MorphingSM2016 --output_folder="Blinded25112016" --postfix="-2D" --control_region=1 --manual_rebin=false --real_data=false --mm_fit=false --ttbar_fit=true
+    MorphingSM2016 --output_folder="Blinded25112016" --postfix="-2D-HTXS" --control_region=1 --manual_rebin=false --real_data=false --mm_fit=false --ttbar_fit=true
 
 
 # Building the workspaces:
@@ -63,9 +63,9 @@ git pull --rebase
     python ../../../plotLimits_SM2.py limits_em.json  --auto-style --cms-sub Preliminary     -o lim_expected_em
 
 
-# run MaxLikelihoodFit
+# run FitDiagnostics
 
-    combine -M MaxLikelihoodFit cmb/125/workspace.root --robustFit=1 --minimizerAlgoForMinos=Minuit2,Migrad  --rMin 0.5 --rMax 1.5 
+    combine -M FitDiagnostics cmb/125/workspace.root --robustFit=1 --rMin 0.5 --rMax 1.5 
     
 
 
@@ -88,12 +88,12 @@ git pull --rebase
     [UnBlinded]combineTool.py -M Impacts -d cmb/125/workspace.root -m 125 --robustFit 1 --doFits -t -1 --rMin 0.5 --rMax 1.5 --expectSignal=1 --parallel 8 --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
 
     *Note*: Instead of the above line one can run the jobs via lxbatch:
-    combineTool.py -M Impacts -d cmb/125/workspace.root -m 125 --robustFit 1 --minimizerAlgoForMinos Minuit2,Migrad --doFits -t -1 --rMin 0.5 --rMax 1.5 --expectSignal=1 --job-mode lxbatch --task-name lxbatch-test --sub-opts='-q 8nh' --merge 10 --dry-run   (--dry-run option let you check how the jobs will look like before submiting to lxbatch)  
-    combineTool.py -M Impacts -d cmb/125/workspace.root -m 125 --robustFit 1 --minimizerAlgoForMinos Minuit2,Migrad --doFits --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --rMin 0.5 --rMax 1.5  --job-mode lxbatch --task-name lxbatch-test --sub-opts='-q 8nh' --merge 5 
+    combineTool.py -M Impacts -d cmb/125/workspace.root -m 125 --robustFit 1 --doFits -t -1 --rMin 0.5 --rMax 1.5 --expectSignal=1 --job-mode lxbatch --task-name lxbatch-test --sub-opts='-q 8nh' --merge 10 --dry-run   (--dry-run option let you check how the jobs will look like before submiting to lxbatch)  
+    combineTool.py -M Impacts -d cmb/125/workspace.root -m 125 --robustFit 1 --doFits --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP --rMin 0.5 --rMax 1.5  --job-mode lxbatch --task-name lxbatch-test --sub-opts='-q 8nh' --merge 5 
     ---------------------------
     # Impact for limited number of nuisance parameters 
 
-   combineTool.py -M Impacts -d cmb/125/workspace.root -m 125 --robustFit 1 --doFits  --minimizerAlgoForMinos Minuit2,Migrad --rMin 0.5 --rMax 1.5  --parallel 18 --named CMS_scale_t_et_13TeV,CMS_scale_t_mt_13TeV --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
+   combineTool.py -M Impacts -d cmb/125/workspace.root -m 125 --robustFit 1 --doFits  --rMin 0.5 --rMax 1.5  --parallel 18 --named CMS_scale_t_et_13TeV,CMS_scale_t_mt_13TeV --X-rtd FITTER_NEW_CROSSING_ALGO --X-rtd FITTER_NEVER_GIVE_UP
 
     ---------------------------
 
