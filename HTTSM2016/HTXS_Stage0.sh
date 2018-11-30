@@ -5,8 +5,15 @@ newFolder=Stage0_20171116_htxs
 MorphingSM2016 --output_folder=${newFolder} --postfix="-2D-HTXS" --do_nominal_signals=false  --do_stage0_signals=true --control_region=1 --manual_rebin=false --real_data=true --mm_fit=false --ttbar_fit=true
 
 
-### Building the workspaces:
 cd output/${newFolder}
+
+echo "Adding autoMCStats"
+for i in ./*/*/*.txt
+do
+    echo "* autoMCStats 0" >> $i
+done
+
+### Building the workspaces:
 combineTool.py -M T2W -i {cmb,em,et,mt,tt}/* -o workspace.root --parallel 12
 
 

@@ -2,14 +2,21 @@
 # See: https://twiki.cern.ch/twiki/bin/viewauth/CMS/SWGuideHiggsAnalysisCombinedLimit#MultiSignalModel_ready_made_mode
 
 
-newFolder=Nominal20171116_htxs
+newFolder=Nominal20171116_htxs2
 
 # Nominal
-MorphingSM2016 --output_folder=${newFolder} --postfix="-2D-HTXS" --control_region=1 --manual_rebin=false --real_data=true --mm_fit=false --ttbar_fit=true
+MorphingSM2016 --output_folder=${newFolder} --postfix="-2D-HTXS" --control_region=1 --manual_rebin=false --real_data=true --mm_fit=false --ttbar_fit=true --do_all_masses=false
 
+
+cd output/${newFolder}
+
+echo "Adding autoMCStats"
+for i in ./*/*/*.txt
+do
+    echo "* autoMCStats 0" >> $i
+done
 
 ### Building the workspaces:
-cd output/${newFolder}
 combineTool.py -M T2W -i {cmb,em,et,mt,tt}/* -o workspace.root --parallel 12
 
 
