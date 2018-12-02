@@ -13,8 +13,7 @@ git fetch origin
 git checkout v7.0.12
 popd
 
-# Currently base off of truggles HTXS 81X branch
-git clone -b SM2016-HTXS git@github.com:truggles/CombineHarvester.git
+git clone -b SM-HTT_81X_dev git@github.com:US-HTT/CombineHarvester.git
 
 scram b -j 8
 
