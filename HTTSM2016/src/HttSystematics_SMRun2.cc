@@ -193,26 +193,25 @@ namespace ch {
         cb.cp().process({"W"}).channel({"tt","em","mm","ttbar"}).AddSyst(cb,
                                             "lumi_13TeV_2016", "lnN", SystMap<>::init(1.025));
 
-	if (!ttbar_fit){
-          cb.cp().process({"TTT","TTJ"}).AddSyst(cb,"lumi_13TeV_2016", "lnN", SystMap<>::init(1.025));
-	}
+        if (!ttbar_fit){
+              cb.cp().process({"TTT","TTJ"}).AddSyst(cb,"lumi_13TeV_2016", "lnN", SystMap<>::init(1.025));
+        }
         
         //##############################################################################
-        //  trigger   ##FIXME   the values have been chosen rather arbitrarily
+        //  trigger
         //##############################################################################
         
-        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs_no_W})).channel({"mt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs_no_W, {"embedded"}})).channel({"mt"}).AddSyst(cb,
                                              "CMS_eff_trigger_$CHANNEL_$ERA", "lnN", SystMap<>::init(1.02));
         
-        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs_no_W})).channel({"et"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs_no_W, {"embedded"}})).channel({"et"}).AddSyst(cb,
                                              "CMS_eff_trigger_$CHANNEL_$ERA", "lnN", SystMap<>::init(1.02));
         
-        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"em","ttbar"}).AddSyst(cb,
-                                             // hard coding channel here keeps "em" and "ttbar" correlated
+        // hard coding channel here keeps "em" and "ttbar" correlated
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"embedded"}})).channel({"em","ttbar"}).AddSyst(cb,
                                              "CMS_eff_trigger_em_$ERA", "lnN", SystMap<>::init(1.02));
 
-        // New
-        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"tt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"embedded"}})).channel({"tt"}).AddSyst(cb,
                                             "CMS_eff_trigger_$CHANNEL_$ERA", "lnN", SystMap<>::init(1.10));
 
 
@@ -238,17 +237,17 @@ namespace ch {
         // We also have channel specific components and fully correlated components
         //
         // ETau & MuTau
-        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"embedded"}})).channel({"et","mt"}).AddSyst(cb,
                                              "CMS_eff_t_$ERA", "lnN", SystMap<>::init(1.045));
         
-        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"embedded"}})).channel({"et","mt"}).AddSyst(cb,
                                              "CMS_eff_t_$CHANNEL_$ERA", "lnN", SystMap<>::init(1.02));
 
         // TauTau - 2 real taus
-        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, {"ZTT","VV","VVT","TTT","EWKZ"}})).channel({"tt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, {"embedded","ZTT","VV","VVT","TTT","EWKZ"}})).channel({"tt"}).AddSyst(cb,
                                              "CMS_eff_t_$ERA", "lnN", SystMap<>::init(1.09));
         
-        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, {"ZTT","VV","VVT","TTT","EWKZ"}})).channel({"tt"}).AddSyst(cb,
+        cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, {"embedded", "ZTT","VV","VVT","TTT","EWKZ"}})).channel({"tt"}).AddSyst(cb,
                                              "CMS_eff_t_$CHANNEL_$ERA", "lnN", SystMap<>::init(1.04));
 
         // TauTau - 1+ jet to tau fakes
@@ -261,15 +260,17 @@ namespace ch {
         
         
         
-        //######################## Tau Id shape uncertainty (added March 08)
+        //##############################################################################
+        //  Tau Id shape uncertainty (added March 08)
+        //##############################################################################
         
         if (do_shape_systematics) {
-            cb.cp().process({"ZTT"}).channel({"et","mt"}).bin_id({1}).AddSyst(cb,
-                                                                "CMS_tauDMReco_1prong_$ERA", "shape", SystMap<>::init(1.00));
-            cb.cp().process({"ZTT"}).channel({"et","mt"}).bin_id({1}).AddSyst(cb,
-                                                                              "CMS_tauDMReco_1prong1pizero_$ERA", "shape", SystMap<>::init(1.00));
-            cb.cp().process({"ZTT"}).channel({"et","mt"}).bin_id({1}).AddSyst(cb,
-                                                                              "CMS_tauDMReco_3prong_$ERA", "shape", SystMap<>::init(1.00));
+            cb.cp().process({"embedded", "ZTT"}).channel({"et","mt"}).bin_id({1}).AddSyst(cb,
+                                             "CMS_tauDMReco_1prong_$ERA", "shape", SystMap<>::init(1.00));
+            cb.cp().process({"embedded", "ZTT"}).channel({"et","mt"}).bin_id({1}).AddSyst(cb,
+                                             "CMS_tauDMReco_1prong1pizero_$ERA", "shape", SystMap<>::init(1.00));
+            cb.cp().process({"embedded", "ZTT"}).channel({"et","mt"}).bin_id({1}).AddSyst(cb,
+                                             "CMS_tauDMReco_3prong_$ERA", "shape", SystMap<>::init(1.00));
         }
         
         
@@ -292,7 +293,7 @@ namespace ch {
         //##############################################################################
         
         if (do_shape_systematics) {
-            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"QCD"}})).channel({"em"}).AddSyst(cb,
+            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"embedded", "QCD"}})).channel({"em"}).AddSyst(cb,
                                                  "CMS_scale_e_$CHANNEL_$ERA", "shape", SystMap<>::init(1.00));
         }
         
@@ -300,11 +301,11 @@ namespace ch {
 
         // Decay Mode based TES Settings
         if (do_shape_systematics) {
-            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt"}).AddSyst(cb,
+            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"embedded"}})).channel({"et","mt","tt"}).AddSyst(cb,
                                                       "CMS_scale_t_1prong_$ERA", "shape", SystMap<>::init(1.00));
-            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt"}).AddSyst(cb,
+            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"embedded"}})).channel({"et","mt","tt"}).AddSyst(cb,
                                                       "CMS_scale_t_1prong1pizero_$ERA", "shape", SystMap<>::init(1.00));
-            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs})).channel({"et","mt","tt"}).AddSyst(cb,
+            cb.cp().process(JoinStr({sig_procs, sig_procs_stage0, sig_procs_stage1, all_mc_bkgs, {"embedded"}})).channel({"et","mt","tt"}).AddSyst(cb,
                                                       "CMS_scale_t_3prong_$ERA", "shape", SystMap<>::init(1.00));
         }
         
@@ -359,7 +360,15 @@ namespace ch {
 
 
         
+
         
+        //##############################################################################
+        //  normalization uncertaintie for the embedded samples
+        //##############################################################################
+
+        cb.cp().process({"embedded"}).AddSyst(cb,"CMS_htt_embedded_13TeV", "lnN", SystMap<>::init(1.04));
+
+
         
         
         //##############################################################################
@@ -371,8 +380,8 @@ namespace ch {
                                         "CMS_htt_vvXsec_13TeV", "lnN", SystMap<>::init(1.05));
         if (! ttbar_fit){
         //   ttbar Normalisation - fully correlated
-	    cb.cp().process({"TT","TTT","TTJ","TTJ_rest"}).AddSyst(cb,
-					  "CMS_htt_tjXsec_13TeV", "lnN", SystMap<>::init(1.06));}
+        cb.cp().process({"TT","TTT","TTJ","TTJ_rest"}).AddSyst(cb,
+                      "CMS_htt_tjXsec_13TeV", "lnN", SystMap<>::init(1.06));}
 
         // W norm, just for em, tt and the mm region where MC norm is from MC
 //        cb.cp().process({"W","W_rest"}).channel({"tt","em","mm"}).AddSyst(cb,
@@ -973,7 +982,7 @@ namespace ch {
             cb.SetFlag("filters-use-regex", false);
         }
 
-	//jet fakes: shape uncertainties
+        //jet fakes: shape uncertainties
         if (do_shape_systematics) {
             cb.cp().process({"jetFakes"}).channel({"mt","et","tt"}).AddSyst(cb, "CMS_htt_norm_ff_qcd_1prong_njet0_$CHANNEL_stat_13TeV", "shape", SystMap<>::init(1.00));
             cb.cp().process({"jetFakes"}).channel({"mt","et","tt"}).AddSyst(cb, "CMS_htt_norm_ff_qcd_1prong_njet1_$CHANNEL_stat_13TeV", "shape", SystMap<>::init(1.00));
@@ -1000,7 +1009,7 @@ namespace ch {
         }
 
         //jet fakes: stat norm unc
-	cb.cp().process({"jetFakes"}).channel({"mt","et","tt"}).AddSyst(cb, "CMS_htt_ff_norm_stat_$CHANNEL_$BIN_13TeV", "lnN", SystMap<channel, bin_id>::init
+        cb.cp().process({"jetFakes"}).channel({"mt","et","tt"}).AddSyst(cb, "CMS_htt_ff_norm_stat_$CHANNEL_$BIN_13TeV", "lnN", SystMap<channel, bin_id>::init
                                                                         ({"mt"}, {1}, 1.04)
                                                                         ({"mt"}, {2}, 1.03)
                                                                         ({"mt"}, {3}, 1.045)
@@ -1033,7 +1042,7 @@ namespace ch {
                                                                         ({"et"}, {3}, 1.04)
                                                                         ({"tt"}, {1}, 1.06)
                                                                         ({"tt"}, {2}, 1.04)
-									                                    );
+                                                                        );
 
         
     }

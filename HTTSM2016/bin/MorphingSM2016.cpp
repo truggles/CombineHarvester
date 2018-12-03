@@ -80,6 +80,7 @@ int main(int argc, char** argv) {
     bool do_stage1_signals = false;
     bool do_all_masses = true;
     bool do_shape_systematics = true;
+    bool do_embedded = false;
     po::variables_map vm;
     po::options_description config("configuration");
     config.add_options()
@@ -103,7 +104,8 @@ int main(int argc, char** argv) {
     ("do_stage0_signals", po::value<bool>(&do_stage0_signals)->default_value(false))
     ("do_stage1_signals", po::value<bool>(&do_stage1_signals)->default_value(false))
     ("do_all_masses", po::value<bool>(&do_all_masses)->default_value(false))
-    ("do_shape_systematics", po::value<bool>(&do_shape_systematics)->default_value(true));
+    ("do_shape_systematics", po::value<bool>(&do_shape_systematics)->default_value(true))
+    ("do_embedded", po::value<bool>(&do_embedded)->default_value(false));
 
     po::store(po::command_line_parser(argc, argv).options(config).run(), vm);
     po::notify(vm);
@@ -135,24 +137,41 @@ int main(int argc, char** argv) {
     
     
     VString chns = {"mt","et","tt","em"};
- //VString chns = {"tt"};
     if (mm_fit) chns.push_back("mm");
     if (ttbar_fit) chns.push_back("ttbar");
+
     
+
     map<string, VString> bkg_procs;
     if (do_fake_factor_method){
-      bkg_procs["et"] = {"ZTT",   "ZL", "TTT", "VVT", "EWKZ", "jetFakes"};
-      bkg_procs["mt"] = {"ZTT",   "ZL", "TTT", "VVT", "EWKZ", "jetFakes"};
-      bkg_procs["tt"] = {"ZTT",   "ZL", "TTT", "VVT", "EWKZ", "jetFakes", "W_rest", "ZJ_rest", "TTJ_rest","VVJ_rest"};
-    }else{
-      bkg_procs["et"] = {"ZTT",   "QCD", "ZL", "ZJ","TTT","TTJ",   "VV", "EWKZ"};
-      bkg_procs["mt"] = {"ZTT",   "QCD", "ZL", "ZJ","TTT","TTJ",   "VV", "EWKZ"};
-      bkg_procs["tt"] = {"ZTT",  "W", "QCD", "ZL", "ZJ","TTT","TTJ",  "VVT","VVJ", "EWKZ"};
+      bkg_procs["et"] = {"ZL", "TTT", "VVT", "EWKZ", "jetFakes"};
+      bkg_procs["mt"] = {"ZL", "TTT", "VVT", "EWKZ", "jetFakes"};
+      bkg_procs["tt"] = {"ZL", "TTT", "VVT", "EWKZ", "jetFakes", "W_rest", "ZJ_rest", "TTJ_rest","VVJ_rest"};
     }
-    bkg_procs["em"] = {"ZTT", "W", "QCD", "ZL", "TT", "VV", "EWKZ", "ggH_hww125", "qqH_hww125"};
+    else {
+      bkg_procs["et"] = {"QCD", "ZL", "ZJ","TTT","TTJ",   "VV", "EWKZ"};
+      bkg_procs["mt"] = {"QCD", "ZL", "ZJ","TTT","TTJ",   "VV", "EWKZ"};
+      bkg_procs["tt"] = {"W", "QCD", "ZL", "ZJ","TTT","TTJ",  "VVT","VVJ", "EWKZ"};
+    }
+
+    bkg_procs["em"] = {"W", "QCD", "ZL", "TT", "VV", "EWKZ", "ggH_hww125", "qqH_hww125"};
+    bkg_procs["ttbar"] = {"W", "QCD", "ZL", "TT", "VV", "EWKZ"};
     bkg_procs["mm"] = {"W", "ZL", "TT", "VV"};
-    bkg_procs["ttbar"] = {"ZTT", "W", "QCD", "ZL", "TT", "VV", "EWKZ"};
     
+    if (do_embedded) {
+      bkg_procs["et"].push_back("embedded");
+      bkg_procs["mt"].push_back("embedded");
+      bkg_procs["tt"].push_back("embedded");
+      bkg_procs["em"].push_back("embedded");
+      bkg_procs["ttbar"].push_back("embedded");
+    }
+    else {
+      bkg_procs["et"].push_back("ZTT");
+      bkg_procs["mt"].push_back("ZTT");
+      bkg_procs["tt"].push_back("ZTT");
+      bkg_procs["em"].push_back("ZTT");
+      bkg_procs["ttbar"].push_back("ZTT");
+    }
     
     
     ch::CombineHarvester cb;
