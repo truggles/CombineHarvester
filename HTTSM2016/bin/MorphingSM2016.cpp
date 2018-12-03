@@ -114,7 +114,7 @@ int main(int argc, char** argv) {
     ("do_nominal_signals", po::value<bool>(&do_nominal_signals)->default_value(true))
     ("do_stage0_signals", po::value<bool>(&do_stage0_signals)->default_value(false))
     ("do_stage1_signals", po::value<bool>(&do_stage1_signals)->default_value(false))
-    ("do_all_masses", po::value<bool>(&do_all_masses)->default_value(true));
+    ("do_all_masses", po::value<bool>(&do_all_masses)->default_value(false));
 
     po::store(po::command_line_parser(argc, argv).options(config).run(), vm);
     po::notify(vm);
