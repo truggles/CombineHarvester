@@ -86,6 +86,7 @@ int main(int argc, char** argv) {
     bool do_stage0_signals = false;
     bool do_stage1_signals = false;
     bool do_all_masses = true;
+    bool do_shape_systematics = true;
     po::variables_map vm;
     po::options_description config("configuration");
     config.add_options()
@@ -114,7 +115,8 @@ int main(int argc, char** argv) {
     ("do_nominal_signals", po::value<bool>(&do_nominal_signals)->default_value(true))
     ("do_stage0_signals", po::value<bool>(&do_stage0_signals)->default_value(false))
     ("do_stage1_signals", po::value<bool>(&do_stage1_signals)->default_value(false))
-    ("do_all_masses", po::value<bool>(&do_all_masses)->default_value(false));
+    ("do_all_masses", po::value<bool>(&do_all_masses)->default_value(false))
+    ("do_shape_systematics", po::value<bool>(&do_shape_systematics)->default_value(true));
 
     po::store(po::command_line_parser(argc, argv).options(config).run(), vm);
     po::notify(vm);
@@ -379,7 +381,7 @@ int main(int argc, char** argv) {
     }
     
     
-    ch::AddSMRun2Systematics(cb, control_region, mm_fit, ttbar_fit);
+    ch::AddSMRun2Systematics(cb, control_region, mm_fit, ttbar_fit, do_shape_systematics);
     
     
         
