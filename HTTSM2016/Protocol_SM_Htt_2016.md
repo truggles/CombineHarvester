@@ -11,8 +11,9 @@ Including checking out the code with a fresh CMSSW in 81X and fetching the GitLa
 There are multiple helpful flags to alter the processing conditions:
 do_shape_systematics=false will disable the requirement for shape systematics (default = true)
 do_all_masses=true will have combine search for all input masses: 110, 120, 125, 130, 140 (default = false)
+do_fake_factor_method=true/false toggel between using the Fake Factor method and its associated uncertainties (default = false)
 ```    
-MorphingSM2016 --output_folder="myDirectory" --postfix="-2D-HTXS" --control_region=1 --manual_rebin=false --real_data=false --mm_fit=false --ttbar_fit=true --do_all_masses=false
+MorphingSM2016 --output_folder="myDirectory" --postfix="-2D-HTXS" --control_region=1 --mm_fit=false --ttbar_fit=true
 ```
 
 

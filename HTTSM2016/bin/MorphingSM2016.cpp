@@ -22,8 +22,6 @@
 #include "CombineHarvester/HTTSM2016/interface/HttSystematics_SMRun2.h"
 #include "RooWorkspace.h"
 #include "RooRealVar.h"
-#include "TH2.h"
-#include "TF1.h"
 
 using namespace std;
 using boost::starts_with;
@@ -60,8 +58,6 @@ bool BinIsNotControlRegion(ch::Object const* obj)
 int main(int argc, char** argv) {
     // First define the location of the "auxiliaries" directory where we can
     // source the input files containing the datacard shapes
-    string SM125= "";
-    string mass = "mA";
     string output_folder = "sm_run2";
     // TODO: option to pick up cards from different dirs depending on channel?
     // ^ Something like line 90?
@@ -72,16 +68,13 @@ int main(int argc, char** argv) {
     string input_folder_mm="USCMS/";
     string input_folder_ttbar="USCMS/";
     string postfix="";
-    bool auto_rebin = false;
-    bool manual_rebin = false;
-    bool real_data = false;
     int control_region = 0;
     bool check_neg_bins = false;
     bool poisson_bbb = false;
     bool do_w_weighting = false;
     bool mm_fit = false;
     bool ttbar_fit = false;
-    bool do_jetfakes = false;
+    bool do_fake_factor_method = false;
     bool do_nominal_signals = false;
     bool do_stage0_signals = false;
     bool do_stage1_signals = false;
@@ -90,8 +83,6 @@ int main(int argc, char** argv) {
     po::variables_map vm;
     po::options_description config("configuration");
     config.add_options()
-    ("mass,m", po::value<string>(&mass)->default_value(mass))
-    
     ("input_folder_em", po::value<string>(&input_folder_em)->default_value("USCMS"))
     ("input_folder_et", po::value<string>(&input_folder_et)->default_value("USCMS"))
     ("input_folder_mt", po::value<string>(&input_folder_mt)->default_value("USCMS"))
@@ -100,15 +91,11 @@ int main(int argc, char** argv) {
     ("input_folder_ttbar", po::value<string>(&input_folder_ttbar)->default_value("USCMS"))
     
     ("postfix", po::value<string>(&postfix)->default_value(""))
-    ("auto_rebin", po::value<bool>(&auto_rebin)->default_value(false))
-    ("real_data", po::value<bool>(&real_data)->default_value(false))
-    ("manual_rebin", po::value<bool>(&manual_rebin)->default_value(false))
     ("output_folder", po::value<string>(&output_folder)->default_value("sm_run2"))
-    ("SM125,h", po::value<string>(&SM125)->default_value(SM125))
     ("control_region", po::value<int>(&control_region)->default_value(0))
     ("mm_fit", po::value<bool>(&mm_fit)->default_value(true))
     ("ttbar_fit", po::value<bool>(&ttbar_fit)->default_value(true))
-    ("jetfakes", po::value<bool>(&do_jetfakes)->default_value(false))
+    ("do_fake_factor_method", po::value<bool>(&do_fake_factor_method)->default_value(false))
     ("check_neg_bins", po::value<bool>(&check_neg_bins)->default_value(false))
     ("poisson_bbb", po::value<bool>(&poisson_bbb)->default_value(false))
     ("w_weighting", po::value<bool>(&do_w_weighting)->default_value(false))
@@ -153,7 +140,7 @@ int main(int argc, char** argv) {
     if (ttbar_fit) chns.push_back("ttbar");
     
     map<string, VString> bkg_procs;
-    if (do_jetfakes){
+    if (do_fake_factor_method){
       bkg_procs["et"] = {"ZTT",   "ZL", "TTT", "VVT", "EWKZ", "jetFakes"};
       bkg_procs["mt"] = {"ZTT",   "ZL", "TTT", "VVT", "EWKZ", "jetFakes"};
       bkg_procs["tt"] = {"ZTT",   "ZL", "TTT", "VVT", "EWKZ", "jetFakes", "W_rest", "ZJ_rest", "TTJ_rest","VVJ_rest"};
@@ -349,7 +336,7 @@ int main(int argc, char** argv) {
       cb.AddProcesses(   {"*"}, {"htt"}, {"13TeV"}, {"mt"}, {"W"}, {{1, "mt_0jet"},{2, "mt_boosted"},{3, "mt_vbf"},
                                     {10, "mt_wjets_0jet_cr"},{11, "mt_wjets_boosted_cr"},
                                     {13, "mt_antiiso_0jet_cr"},{14, "mt_antiiso_boosted_cr"}}, false);
-    }else if (!do_jetfakes){
+    }else if (!do_fake_factor_method){
       cb.AddProcesses(   {"*"}, {"htt"}, {"13TeV"}, {"et"}, {"W"}, {{1, "et_0jet"},{2, "et_boosted"},{3, "et_vbf"}}, false);
       cb.AddProcesses(   {"*"}, {"htt"}, {"13TeV"}, {"mt"}, {"W"}, {{1, "mt_0jet"},{2, "mt_boosted"},{3, "mt_vbf"}}, false);
     }
